@@ -3,16 +3,15 @@ const Users = require("./user")
 const extendSchema = require("mongoose-extend-schema")
 
 const TeacherSchema = extendSchema(Users,{
-    CouresOwned:[{
-        type: mongoose.Schema.Types.ObjectId,
-    }],
-    Coures:[{
-        type: mongoose.Schema.Types.ObjectId,
-    }]
+    phoneNumber:{
+        type: String,
+        required: true,
+        strim: true,
+    },
 })
 
 TeacherSchema.virtual('CoursesOwned',{
-    ref: 'Students', /// Name of Tasks mongoose
+    ref: 'Courses',
     localField: '_id', //The teacher ID as the primary key
     foreignField: 'owner'
 })

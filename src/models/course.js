@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { virtual } = require("./user")
 
 const CourseSchema = new mongoose.Schema({
     name:{
@@ -15,7 +16,7 @@ const CourseSchema = new mongoose.Schema({
     },
     score:{
         type: Number,
-    }
+    },
 })
 //courses can be registered by many students                                           
 CourseSchema.virtual('StudentsRegistered',{
@@ -38,6 +39,6 @@ CourseSchema.virtual('StudentRated',{
     foreignField: 'course'
 })
 
-const Students = mongoose.model("Admin",StudentSchema)
 
-module.exports = Students
+const Courses = mongoose.model("Courses",CourseSchema)
+module.exports = Courses
