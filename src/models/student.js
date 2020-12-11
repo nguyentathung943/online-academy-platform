@@ -18,11 +18,6 @@ const StudentSchema = extendSchema(Users,{
         ref:"Courses"
     }],
 })
-StudentSchema.virtual("CoursesRated",{
-    ref:"Reviews",
-    localField:"_id",
-    foreignField:"owner",
-})
 
 const Students = mongoose.model("Students",StudentSchema)
 module.exports = Students

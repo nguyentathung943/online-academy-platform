@@ -31,14 +31,11 @@ CourseSchema.virtual('StudentsLiked',{
     localField: '_id',  //The course ID as the primary key
     foreignField: 'CoursesLiked'
 })
-
-//courses can be liked by many students (watch list)
-CourseSchema.virtual('StudentRated',{
-    ref: 'Reviews', /// Name of Tasks mongoose
+CourseSchema.virtual('ReviewList',{
+    ref:"Reviews", /// Name of Tasks mongoose
     localField: '_id',  //The course ID as the primary key
     foreignField: 'course'
 })
-
 
 const Courses = mongoose.model("Courses",CourseSchema)
 module.exports = Courses

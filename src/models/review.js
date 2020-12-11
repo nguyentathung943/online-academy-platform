@@ -11,13 +11,13 @@ const ReviewSchema = new mongoose.Schema({
         min:1,
         max:5,
     },
-    course:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"Courses"
-    },
     owner:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"Students"
+    },
+    course:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Courses"
     }
 })
 const Review = mongoose.model("Reviews",ReviewSchema)
