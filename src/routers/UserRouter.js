@@ -5,68 +5,68 @@ const Teachers = require("../models/teacher")
 
 const router = new express.Router();
 
-router.get("/", async (req,res)=>{
-    res.send("hello")
+router.get("/", async (req, res) => {
+    res.render("index")
+})
+
+router.get("/login", async (req, res) => {
+    res.render("login")
 })
 ////Create
-router.post("/student/create",async(req,res)=>{
-    try{
+router.post("/student/create", async (req, res) => {
+    try {
         const Student = new Students(req.body);
         await Student.save();
         res.send(Student)
-    }
-    catch(e){
+    } catch (e) {
         res.send(e)
     }
 })
-router.post("/teacher/create",async(req,res)=>{
-    try{
+router.post("/teacher/create", async (req, res) => {
+    try {
         const Teacher = new Teachers(req.body);
         await Teacher.save();
         res.send(Teacher)
-    }
-    catch(e){
+    } catch (e) {
         res.send(e)
     }
 })
 
-router.post("/admin/create",async(req,res)=>{
-    try{
+router.post("/admin/create", async (req, res) => {
+    try {
         const admin = new Admin(req.body);
         await admin.save();
         res.send(admin)
-    }
-    catch(e){
+    } catch (e) {
         res.send(e)
     }
 })
 
 ////Read
-router.get("/students",async(req,res)=>{
-    try{
+router.get("/students", async (req, res) => {
+    try {
         const students = await Students.find({})
         res.send(students)
-    }
-    catch(e){
+    } catch (e) {
         res.send(e)
     }
 })
-router.get("/teachers",async(req,res)=>{
-    try{    
+router.get("/teachers", async (req, res) => {
+    try {
         const teachers = await Teachers.find({})
         res.send(teachers)
-    }catch(e){
+    } catch (e) {
         res.send(e)
-    }   
+    }
 
 })
 
-router.get("/admin",async(req,res)=>{
-    try{    
+router.get("/admin", async (req, res) => {
+    try {
         const admin = await Admin.find({})
         res.send(admin)
-    }catch(e){
+    } catch (e) {
         res.send(e)
-    }   
+    }
 })
 module.exports = router
