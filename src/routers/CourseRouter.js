@@ -3,7 +3,6 @@ const express = require("express")
 const Method = require("./Methods")
 const router = new express.Router()
 
-
 router.post("/course/create",async(req,res)=>{  
     try{
         const course = new Courses(req.body)
@@ -12,8 +11,8 @@ router.post("/course/create",async(req,res)=>{
     }catch(e){
         res.send(e)
     }
-
 })
+
 router.post("/course/owner",async(req,res)=>{
     try{
         const courseID = req.query.id;
@@ -23,6 +22,6 @@ router.post("/course/owner",async(req,res)=>{
     }catch(e){
         res.send(e)
     }
-
 })
+
 module.exports = router
