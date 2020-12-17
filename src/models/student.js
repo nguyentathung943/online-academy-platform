@@ -2,6 +2,11 @@ const mongoose = require("mongoose")
 const Users = require("./user")
 const extendSchema = require("mongoose-extend-schema")
 const StudentSchema = extendSchema(Users,{
+    role:{
+        type:String,
+        default: "Student",
+        required: true
+    },
     phoneNumber:{
         type: String,
         required: true,
