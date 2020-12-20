@@ -3,6 +3,7 @@ const Teachers = require("../models/teacher")
 const Admin = require("../models/admin")
 const Courses = require("../models/course")
 const Reviews = require("../models/review")
+const {Chapters, Videos} = require("../models/chapter")
 //GET COURSE OWNER
 const getCourseLecturer = async(CourseID)=> {
     const course = await Courses.findById(CourseID)
@@ -29,6 +30,7 @@ const registerCourse = async(StudentID, CourseID) =>{
         else{
             student.CoursesRegistered = student.CoursesRegistered.concat(course.id)
             course.StudentsRegistered = course.StudentsRegistered.concat(student.id)
+            course.number_of_student = course.number_of_student+1
             await student.save()
             await course.save()
         }
@@ -50,7 +52,20 @@ const getCoursesRegistered = async(StudentID)=>{
     await student.populate('CoursesRegistered').execPopulate()
     return student.CoursesRegistered.toObject()
 }
+//SHOW COURSES' REGISTERED (STUDENT)
+const UnregisteredCourse = async(StudentID, CourseID)=>{
+    const course = await Courses.findById(CourseID)
+    await course.populate('StudentsRegistered').execPopulate()
+    const index = course.StudentsRegistered.indexOf(StudentID)
+    course.StudentsRegistered.splice(index,1)
+    course.number_of_student = number_of_student-1
+    const Student = await Students.findById(StudentID)
+    const index1 = Student.CoursesRegistered.indexOf(CourseID)
+    Student.CoursesRegistered.splice(index1,1)
 
+    await course.save()
+    await Student.save()
+}
 ////////////////////WATCH LIST
 //ADD COURSE TO WATCHLIST (STUDENT)
 const addtCourseToWatchList =async(StudentID, CourseID)=>{
@@ -85,10 +100,15 @@ const RemoveCourseFromWatchList = async(StudentID, CourseID)=>{
         return course.id!=CourseID
     });
     await student.save()
+    const course = await Courses.findById(CourseID)
+    await course.populate('StudentsLiked').execPopulate()
+    const index = course.StudentsLiked.indexOf(StudentID)
+    course.StudentsRegistered.splice(index,1)
+    await course.save()
 }
 
 //////////// REVIEW
-const getStudentReview = async(ReviewID) =>{
+const getStudentSpecs = async(ReviewID) =>{
     const review = await Reviews.findById(ReviewID)
     await review.populate("owner").execPopulate()
     return review.toObject()
@@ -107,7 +127,7 @@ const AddCourseReview = async (text, star,StudentID,CourseID)=> {
     try{
         const check = await Reviews.findOne({owner: StudentID, course: CourseID})
         if(check){
-            throw new Error("Student already reviewed this course")
+            throw("Student already reviewed this course")
         }
         const review =  new Reviews({
             comment: text,
@@ -119,6 +139,7 @@ const AddCourseReview = async (text, star,StudentID,CourseID)=> {
         await course.populate('ReviewList').execPopulate()
         course.ReviewList.concat(review.id)
         UpdateRated(course.id)
+        course.number_of_student = number_of_student+1
         await review.save()
         await course.save()
     }
@@ -133,17 +154,132 @@ const ShowReviewList = async (CourseID)=> {
     const list = course.ReviewList
     return list
 }
+/////// Chapters and Videos (TEACHERS)
+const getChapterSpecs = async (ChapterID)=>{
+    const chapter = await  Chapters.findById(ChapterID)
+    return chapter
+}
+const getVideoSpecs = async (VideoID)=>{
+    const video = await  Videos.findById(VideoID)
+    return video
+}
+const AddChapter = async (CourseID, ChapterName)=>{
+    const course  = await Courses.findById(CourseID)
+    const chapter = new Chapters({
+        name: ChapterName,
+        course: course.id
+    });
+    await course.populate("ChapterList").execPopulate()
+    course.ChapterList.concat(chapter.id)
+    await chapter.save()
+    await course.save()
+}
+const AddVideo = async (ChapterID, VideoName,url)=>{
+    const chapter = await  Chapters.findById(ChapterID)
+    await chapter.populate("VideoList").execPopulate()
+    const video = new Videos({
+        name: VideoName,
+        chapter: chapter.id,
+        url:url
+    })
+    chapter.VideoList.concat(video.id)
+    await video.save()
+    await chapter.save()
+}
+const MarkChapterAsDone = async (ChapterID)=>{
+    const chapter = await  Chapters.findById(ChapterID)
+    chapter.completed = true
+    await chapter.save()
+}
+const viewChapterList = async(CourseID)=>{
+    const course  = await Courses.findById(CourseID)
+    await course.populate("ChapterList").execPopulate()
+    return course.ChapterList
+}
+const viewVideoList = async(ChapterID)=>{
+    const chapter = await  Chapters.findById(ChapterID)
+    await chapter.populate("VideoList").execPopulate()
+    return chapter.VideoList
+}
+const DeleteVideo = async (VideoID)=>{
+    const video = await Videos.findById(VideoID)
+    const chapter = await Chapters.findById(video.chapter)
+    await chapter.populate("VideoList").execPopulate()
+    const index = chapter.VideoList.indexOf(video.id)
+    chapter.VideoList.splice(index,1)
+    await chapter.save()
+    await Videos.findByIdAndDelete(VideoID)
+}
+const DeleteChapter = async(ChapterID)=>{
+    const chapter = await  Chapters.findById(ChapterID)
+    await Videos.deleteMany({chapter: chapter.id})
+    const course = await Courses.findById(chapter.course)
+    await course.populate("ChapterList").execPopulate()
+    const index = course.ChapterList.indexOf(chapter.id)
+    course.ChapterList.splice(index,1)
+    await course.save()
+    await Chapters.findByIdAndDelete(chapter.id)
+}
+const rmRegisList = async(StudentID,CourseID) =>{
+    const student = await Students.findById(StudentID)
+    await student.populate("CoursesRegistered").execPopulate()
+    const index = student.CoursesRegistered.indexOf(CourseID)
+    student.CoursesRegistered.splice(index,1)
+    await student.save()
+}
+const rmWatchList = async(StudentID,CourseID) =>{
+    const student = await Students.findById(StudentID)
+    await student.populate("CoursesLiked").execPopulate()
+    const index = student.CoursesLiked.indexOf(CourseID)
+    student.CoursesLiked.splice(index,1)
+    await student.save()
+}
+const DeleteCourse = async(CourseID) =>{
+    const course = await Courses.findById(CourseID)
+    await course.populate("ChapterList").execPopulate()
+    course.ChapterList.forEach(async(element)=>{
+        await DeleteChapter(element.id)
+    })
 
+    Reviews.deleteMany({course:CourseID})
+
+    await course.populate("StudentsRegistered").execPopulate()
+    await course.populate("StudentsLiked").execPopulate()
+    course.StudentsRegistered.forEach(async(element)=>{
+        await rmRegisList(element)
+    })
+    course.StudentsLiked.forEach(async(element)=>{
+        await rmWatchList(element)
+    })
+    const teacher = await Teachers.findById(course.owner)
+    await teacher.populate("CoursesOwned").execPopulate()
+    const index = teacher.CoursesOwned.indexOf(CourseID)
+    teacher.CoursesOwned.splice(index,1)
+    await teacher.save()
+
+    await Courses.findByIdAndDelete(CourseID)
+}
 module.exports = {
     getCourseLecturer,
     getCoursesOwned,
-    getStudentsRegistered ,
+    getStudentsRegistered,
     registerCourse,
+    UnregisteredCourse,
     getCoursesRegistered,
     addtCourseToWatchList,
     ShowWatchList,
     RemoveCourseFromWatchList,
     AddCourseReview,
     ShowReviewList,
-    getStudentReview,
+    getStudentSpecs,
+    /// CHAPTER,VIDEO,COURSE
+    AddChapter,
+    AddVideo,
+    viewChapterList,
+    viewVideoList,
+    MarkChapterAsDone,
+    DeleteVideo,
+    DeleteChapter,
+    DeleteCourse
 }
+
