@@ -2,26 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ad9cd511-896e-46ae-8042-1776c11e4be5" name="Default Changelist" comment="">
-<<<<<<< HEAD
+      <change afterPath="$PROJECT_DIR$/src/templates/partials/Category.hbs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/partials/Product.hbs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/partials/Review.hbs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/views/register.hbs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/lib/easing/easing.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/lib/easing/easing.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/views/index.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/views/index.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/views/product-detail.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/views/product-detail.hbs" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/admin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/student.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/student.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/teacher.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/teacher.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routers/Methods.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/Methods.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/login/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/login/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routers/AdminRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/AdminRouter.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routers/UserRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/UserRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/views/login2.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/views/login2.hbs" afterDir="false" />
->>>>>>> ab296627ab9ac1fb20146d3453339c12d955358c
+      <change beforePath="$PROJECT_DIR$/src/templates/partials/Header.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/partials/Header.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/views/cart.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/views/cart.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/views/index.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/views/index.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/views/index_init.hbs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/views/login.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/views/login.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/views/login2.hbs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/views/product-detail.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/views/product-detail.hbs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,17 +37,20 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/templates/views" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Admin\Desktop\web-project-dev\src\templates\views" />
-      <recent name="C:\Users\Admin\Desktop\web-project-dev\src\public" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\Desktop\web-project-dev\src\templates\partials" />
+      <recent name="C:\Users\Admin\Desktop\web-project-dev\src\templates\views" />
       <recent name="C:\Users\Admin\Desktop\web-project-dev\src\public\login" />
       <recent name="C:\Users\Admin\Desktop\web-project-dev\src\public" />
       <recent name="C:\Users\Admin\Desktop\web-project-dev\src\templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\Desktop\web-project-dev\src\templates\views" />
+      <recent name="C:\Users\Admin\Desktop\web-project-dev\src\public" />
     </key>
   </component>
   <component name="RunManager">
@@ -69,14 +67,10 @@
       <option name="presentableId" value="Default" />
       <updated>1607777887120</updated>
       <workItem from="1607777888177" duration="10445000" />
-<<<<<<< HEAD
-      <workItem from="1607840306031" duration="2003000" />
-      <workItem from="1608012974071" duration="7734000" />
-=======
       <workItem from="1608105265670" duration="1450000" />
       <workItem from="1608189011032" duration="6273000" />
       <workItem from="1608217644416" duration="1113000" />
->>>>>>> ab296627ab9ac1fb20146d3453339c12d955358c
+      <workItem from="1608484600501" duration="4150000" />
     </task>
     <servers />
   </component>
@@ -84,9 +78,6 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-<<<<<<< HEAD
-    <state x="479" y="145" width="578" height="534" key="find.popup" timestamp="1608013290511">
-=======
     <state x="192" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1608106709170">
       <screen x="0" y="0" width="1474" height="864" />
     </state>
@@ -95,11 +86,10 @@
       <screen x="0" y="0" width="1474" height="864" />
     </state>
     <state x="271" y="157" width="981" height="707" key="SettingsEditor/0.0.1474.864@0.0.1474.864" timestamp="1608217667776" />
-    <state x="479" y="145" width="578" height="534" key="find.popup" timestamp="1607793571025">
->>>>>>> ab296627ab9ac1fb20146d3453339c12d955358c
+    <state x="479" y="145" width="619" height="534" key="find.popup" timestamp="1608485704333">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="479" y="145" width="578" height="534" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1608013290511" />
+    <state x="479" y="145" width="619" height="534" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1608485704333" />
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1607790936858">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
