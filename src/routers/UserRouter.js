@@ -50,7 +50,6 @@ router.post(
         failureFlash: true,
     })
 );
-
 router.get("/profile", async (req, res) => {
     if(!req.isAuthenticated()){
         return res.redirect("/login")
