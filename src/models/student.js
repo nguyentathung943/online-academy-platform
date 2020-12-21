@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const Users = require("./user")
 const extendSchema = require("mongoose-extend-schema")
+const bcrypt = require("bcrypt")
 const StudentSchema = extendSchema(Users,{
     role:{
         type:String,
@@ -23,6 +24,10 @@ const StudentSchema = extendSchema(Users,{
         ref:"Courses"
     }],
 })
-
+StudentSchema.pre("save",async function  (next){
+    const student = this
+    student.password = await bcrypt.hash(student.password,8)
+    next()
+})
 const Students = mongoose.model("Students",StudentSchema)
 module.exports = Students

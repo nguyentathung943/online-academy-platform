@@ -2,19 +2,39 @@ const express = require("express");
 const Students = require("../models/student");
 const Admin = require("../models/admin");
 const Teachers = require("../models/teacher");
-
+const bcrypt = require("bcrypt")
 const passport = require("passport");
 const initializePassport = require("../middleware/passport");
 
 initializePassport(
     passport,
     async (email, password) => {
-        var user = await Teachers.findOne({email, password});
-        if (user != null) return user;
-        user = await Students.findOne({email, password});
-        if (user != null) return user;
-        user = await Admin.findOne({email, password});
-        if (user != null) return user;
+        try{
+            var user = await Teachers.findOne({email});
+            if (user){
+                var Valid = await bcrypt.compare(password,user.password)
+                if(Valid){
+                    return user
+                }
+            }
+            user = await Students.findOne({email});
+            if (user){
+                var Valid = await bcrypt.compare(password,user.password)
+                if(Valid){
+                    return user
+                }
+            }
+            user = await Admin.findOne({email});
+            if (user){
+                var Valid = await bcrypt.compare(password,user.password)
+                if(Valid){
+                    return user
+                }
+            }
+        }catch (e){
+            return null
+        }
+
     },
     async (id, role) => {
         if (role === "Teacher") {
@@ -54,12 +74,100 @@ router.get("/profile", async (req, res) => {
     if(!req.isAuthenticated()){
         return res.redirect("/login")
     }
-    res.render("profile");
+    res.render("profile",{
+        name: req.user.name,
+        mobile: req.user.phoneNumber,
+        email: req.user.email
+    });
 });
 
+router.post("/profile", async(req,res)=>{
+    try{
+    console.log(typeof (req.body.password))
+        if(req.body.o_password.length == 0){
+            console.log(1)
+            const user = req.user
+            user.email = req.body.email
+            user.phoneNumber = req.body.phoneNumber
+            user.name = req.body.name
+            await user.save()
+            res.render("profile",{
+                name: req.user.name,
+                mobile: req.user.phoneNumber,
+                email: req.user.email,
+                success_message:"Information saved"
+            })
+        }
+        else{
+            console.log(2)
+            const user = req.user
+            if(req.body.o_password!==user.password){
+                res.render("profile",{
+                    name: req.user.name,
+                    mobile: req.user.phoneNumber,
+                    email: req.user.email,
+                    error_message:"Wrong password!"
+                })
+            }
+            else if(req.body.new_password!==req.body.confirm_password){
+                res.render("profile",{
+                    name: req.user.name,
+                    mobile: req.user.phoneNumber,
+                    email: req.user.email,
+                    error_message:"Confirm password does not match!"
+                })
+            }
+            else if(req.body.new_password==="" || req.body.confirm_password===""){
+                res.render("profile",{
+                    name: req.user.name,
+                    mobile: req.user.phoneNumber,
+                    email: req.user.email,
+                    error_message:"New password can not be blank"
+                })
+            }
+            else if((req.body.o_password===user.password) && (req.body.new_password===req.body.confirm_password)){
+                user.password = req.body.new_password;
+                await user.save()
+                res.render("profile",{
+                    name: req.user.name,
+                    mobile: req.user.phoneNumber,
+                    email: req.user.email,
+                    success_message:"Information saved"
+                })
+            }
+        }
+    }catch(e){
+        res.send(e)
+    }
+
+})
+
 router.get("/register", async (req, res) => {
-    console.log(req.user);
     res.render("register");
+});
+
+router.post("/register", async (req, res) => {
+    try{
+        if(req.body.password===req.body.confirmPassword){
+            const student = new Students({
+                name: req.body.name,
+                email: req.body.email,
+                phoneNumber: req.body.phone,
+                password: req.body.password,
+            })
+            await student.save();
+            res.render("register",{
+                success_message: "Account created successfully"
+            })
+        }
+        else{
+            res.render("register",{
+                fail_message: "Confirm password does not match"
+            })
+        }
+    }catch(e){
+        res.send(e)
+    }
 });
 
 router.get("/cart", async (req, res) => {
