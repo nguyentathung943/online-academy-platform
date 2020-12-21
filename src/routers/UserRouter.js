@@ -31,7 +31,6 @@ initializePassport(
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
-
     console.log(req.user)
     res.render("index")
 })
@@ -81,6 +80,13 @@ router.get("/wishlist", async (req, res) => {
 router.get('/logout',async(req,res)=>{
     req.logOut()
     return res.redirect("/login")
+})
+
+
+router.get('*',(req,res)=>{
+    res.render('error',{
+        error:'The page you are trying to connect does not exist or you are not authorized to access!',
+    })
 })
 
 module.exports = router
