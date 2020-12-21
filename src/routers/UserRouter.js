@@ -36,20 +36,6 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/login", async (req, res) => {
-  if (req.isAuthenticated()) {
-    return res.redirect("/");
-  }
-  res.render("login");
-});
-
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true,
-  })
-);
     if (req.isAuthenticated()) {
         return res.redirect("/");
     }
@@ -64,11 +50,6 @@ router.post(
         failureFlash: true,
     })
 );
-
-// router.get("/login/", async (req, res) => {
-//     console.log(req.user);
-//     res.render("login");
-// });
 router.get("/profile", async (req, res) => {
     console.log(req.user);
     res.render("profile");
