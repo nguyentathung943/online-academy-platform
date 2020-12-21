@@ -50,29 +50,7 @@ router.post(
     failureFlash: true,
   })
 );
-    if (req.isAuthenticated()) {
-        return res.redirect("/");
-    }
-    res.render("login");
-});
 
-router.post(
-    "/login",
-    passport.authenticate("local", {
-        successRedirect: "/",
-        failureRedirect: "/login",
-        failureFlash: true,
-    })
-);
-
-// router.get("/login/", async (req, res) => {
-//     console.log(req.user);
-//     res.render("login");
-// });
-router.get("/profile", async (req, res) => {
-    console.log(req.user);
-    res.render("profile");
-});
 
 router.get("/register", async (req, res) => {
     console.log(req.user);
@@ -114,9 +92,9 @@ router.get("/logout", async (req, res) => {
 });
 
 
-router.get('*', (req, res) => {
-    res.render('error', {
-        error: 'The page you are trying to connect does not exist or you are not authorized to access!',
+router.get('*',(req,res)=>{
+    res.render('error',{
+        error:'The page you are trying to connect does not exist or you are not authorized to access!',
     })
 })
 
