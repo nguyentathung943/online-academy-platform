@@ -35,27 +35,27 @@ router.get("/", async (req, res) => {
     res.render("index")
 });
 
-// router.get("/login", async (req, res) => {
-//   if (req.isAuthenticated()) {
-//     return res.redirect("/");
-//   }
-//   res.render("login");
-// });
-
-// router.post(
-//   "/login",
-//   passport.authenticate("local", {
-//     successRedirect: "/",
-//     failureRedirect: "/login",
-//     failureFlash: true,
-//   })
-// );
-
-
 router.get("/login", async (req, res) => {
-    console.log(req.user);
-    res.render("login");
+  if (req.isAuthenticated()) {
+    return res.redirect("/");
+  }
+  res.render("login");
 });
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
+
+
+// router.get("/login/", async (req, res) => {
+//     console.log(req.user);
+//     res.render("login");
+// });
 
 router.get("/register", async (req, res) => {
     console.log(req.user);
