@@ -2,7 +2,8 @@ const express = require("express");
 const Students = require("../models/student");
 const Admin = require("../models/admin");
 const Teachers = require("../models/teacher");
-
+const Courses = require("../models/course");
+const Method = require("./Methods")
 const passport = require("passport");
 const initializePassport = require("../middleware/passport");
 
@@ -32,7 +33,15 @@ const router = new express.Router();
 
 router.get("/", async (req, res) => {
     console.log(req.user)
-    res.render("index")
+    const courses = await Courses.find()
+    for (const e of courses) {
+        let index = courses.indexOf(e);
+        const teacher = await Method.getCourseLecturer(e.id);
+        courses[index].owner = teacher
+    }
+    res.render("index", {
+        courses
+    })
 });
 
 router.get("/login", async (req, res) => {
