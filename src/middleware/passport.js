@@ -2,7 +2,7 @@ const { model, find } = require("../models/admin");
 const LocalStategy = require("passport-local").Strategy
 
 function initPassport(passport,findByCredential,findUserByID){
-    const authenticateUser=async (username,password,done)=>{
+    const authenticateUser= async (username,password,done)=>{
         try{
             const user = await findByCredential(username,password)
             if(!user){
