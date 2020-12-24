@@ -42,6 +42,8 @@ const CourseSchema = new mongoose.Schema({
         type: Number,
         required: true
     }
+},{
+    timestamps: true
 })
 //courses can be registered by many students
 CourseSchema.virtual('StudentsRegistered', {
@@ -61,6 +63,7 @@ CourseSchema.virtual('ReviewList', {
     localField: '_id',  //The course ID as the primary key
     foreignField: 'course'
 })
+
 /// CHAPTER LIST
 CourseSchema.virtual('ChapterList', {
     ref: "Chapters",

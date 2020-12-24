@@ -37,7 +37,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(UserRouter) //user methods for admin
+app.use(UserRouter)
 app.use(CourseRouter)
 app.use(TeacherRouter)
 app.use(AdminRouter)

@@ -107,7 +107,7 @@ const RemoveCourseFromWatchList = async (StudentID, CourseID) => {
 const getStudentSpecs = async (ReviewID) => {
     const review = await Reviews.findById(ReviewID)
     await review.populate("owner").execPopulate()
-    return review.toObject()
+    return review
 }
 const UpdateRated = async (CourseID) => {
     const course = await Courses.findById(CourseID)
@@ -119,25 +119,45 @@ const UpdateRated = async (CourseID) => {
     course.score = rate.toFixed(1)
     await course.save()
 }
+const isLiked = async (StudentID,CoursesID) => {
+    const student = await Students.findById(StudentID)
+    await student.populate("CoursesLiked").execPopulate();
+    if (student.CoursesLiked.includes(CoursesID)) {
+        return true
+    }
+    return false
+}
+const isRegistered = async (StudentID,CoursesID) =>{
+    const student = await Students.findById(StudentID)
+    await student.populate("CoursesRegistered").execPopulate();
+    if(student.CoursesRegistered.includes(CoursesID)){
+        return true
+    }
+    return false
+}
+const isReviewed = async (StudentID, CourseID) =>{
+    const review = await Reviews.findOne({owner: StudentID, course: CourseID})
+    if(review) return true
+    else return false
+}
 const AddCourseReview = async (text, star, StudentID, CourseID) => {
     try {
-        const check = await Reviews.findOne({owner: StudentID, course: CourseID})
-        if (check) {
-            throw("Student already reviewed this course")
+        const check = await isReviewed(StudentID, CourseID)
+        if(!check){
+            const review = new Reviews({
+                comment: text,
+                Star: star,
+                course: CourseID,
+                owner: StudentID
+            })
+            const course = await Courses.findById(CourseID)
+            await course.populate('ReviewList').execPopulate()
+            course.ReviewList.concat(review.id)
+            UpdateRated(course.id)
+            course.number_of_reviewer= course.number_of_reviewer + 1
+            await review.save()
+            await course.save()
         }
-        const review = new Reviews({
-            comment: text,
-            Star: star,
-            course: CourseID,
-            owner: StudentID
-        })
-        const course = await Courses.findById(CourseID)
-        await course.populate('ReviewList').execPopulate()
-        course.ReviewList.concat(review.id)
-        UpdateRated(course.id)
-        course.number_of_student = number_of_student + 1
-        await review.save()
-        await course.save()
     } catch (e) {
         console.log(e)
     }
@@ -275,6 +295,10 @@ module.exports = {
     MarkChapterAsDone,
     DeleteVideo,
     DeleteChapter,
-    DeleteCourse
+    DeleteCourse,
+    /// Check
+    isLiked,
+    isReviewed,
+    isRegistered
 }
 
