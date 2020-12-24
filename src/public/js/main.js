@@ -1,5 +1,8 @@
 (function ($) {
     "use strict";
+    $("#exampleModalCenter").on('hidden.bs.modal', function (e) {
+        $("#exampleModalCenter iframe").attr("src", $("#exampleModalCenter iframe").attr("src"));
+    });
 
     // Dropdown on mouse hover
     $(document).ready(function () {
@@ -42,8 +45,19 @@
         slidesToShow: 1,
         slidesToScroll: 1
     });
-
-
+    ////////////////
+    $("input[type='radio']").click(function () {
+        var sim = $("input[type='radio']:checked").val();
+//alert(sim);
+        if (sim < 3) {
+            $('.myratings').css('color', 'red');
+            $(".myratings").text(sim);
+        } else {
+            $('.myratings').css('color', 'green');
+            $(".myratings").text(sim);
+        }
+    });
+///////////////////////////
     // Product Slider 4 Column
     $('.product-slider-4').slick({
         autoplay: true,
@@ -236,4 +250,58 @@
             $('#' + checkbox_id + '-show').slideDown();
         }
     });
+
+    $(document).on({
+        mouseover: function (event) {
+            $(this).find('.far').addClass('star-over');
+            $(this).prevAll().find('.far').addClass('star-over');
+        },
+        mouseleave: function (event) {
+            $(this).find('.far').removeClass('star-over');
+            $(this).prevAll().find('.far').removeClass('star-over');
+        }
+    }, '.rate');
+
+    $(document).on('click', '.rate', function () {
+        if (!$(this).find('.star').hasClass('rate-active')) {
+            $(this).siblings().find('.star').addClass('far').removeClass('fas rate-active');
+            $(this).find('.star').addClass('rate-active fas').removeClass('far star-over');
+            $(this).prevAll().find('.star').addClass('fas').removeClass('far star-over');
+        }
+        let listStar = ["one", "two", "three", "four", "five"];
+        let star = 0
+        for (let i = 0; i < 5; i++)
+            if ($('.rate-active').attr('class').includes(listStar[i])) {
+                star = i + 1
+                break;
+            }
+        console.log("Star " + star)
+    });
+
 })(jQuery);
+// $(function () {
+//
+//     // $(document).on({
+//     //     mouseover: function (event) {
+//     //         $(this).find('.far').addClass('star-over');
+//     //         $(this).prevAll().find('.far').addClass('star-over');
+//     //     },
+//     //     mouseleave: function (event) {
+//     //         $(this).find('.far').removeClass('star-over');
+//     //         $(this).prevAll().find('.far').removeClass('star-over');
+//     //     }
+//     // }, '.rate');
+//
+//
+//     $(document).on('click', '.rate', function () {
+//         if (!$(this).find('.star').hasClass('rate-active')) {
+//             $(this).siblings().find('.star').addClass('far').removeClass('fas rate-active');
+//             $(this).find('.star').addClass('rate-active fas').removeClass('far star-over');
+//             $(this).prevAll().find('.star').addClass('fas').removeClass('far star-over');
+//         } else {
+//
+//         }
+//         console.log($('.rate-active').length)
+//     });
+//
+// });
