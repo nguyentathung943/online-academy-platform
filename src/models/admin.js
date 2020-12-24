@@ -14,8 +14,10 @@ const AdminSchema = extendSchema(Users,{
     }
 })
 AdminSchema.pre("save",async function  (next){
-    const admin = this
-    admin.password = await bcrypt.hash(admin.password,8)
+    const user = this 
+    if(user.isModified('password')){
+        user.password= await bcrypt.hash(user.password,8) /// HASH FOR 8 ROUNDS
+    }
     next()
 })
 const Admin = mongoose.model("Admin",AdminSchema)

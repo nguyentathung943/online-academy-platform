@@ -10,12 +10,13 @@ const path = require('path')
 const bodyParser = require("body-parser")
 const hbs = require("hbs");
 const port = process.env.port || 3000;
-
+const cookieParser = require("cookie-parser")
 
 const flash = require("express-flash")
 const session  = require("express-session")
 
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(cookieParser())
 const publicPath = path.join(__dirname, 'public') // link to css/img
 const viewsPath = path.join(__dirname, 'templates/views') //link to views (HTML/HBS/ejs)
 const PartialPath = path.join(__dirname, 'templates/partials')
@@ -36,6 +37,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+require("./Authentication/authentication") // passport session on the go
 
 app.use(UserRouter)
 app.use(CourseRouter)

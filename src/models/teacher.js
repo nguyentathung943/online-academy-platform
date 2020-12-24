@@ -21,8 +21,10 @@ TeacherSchema.virtual('CoursesOwned',{
     foreignField: 'owner'
 })
 TeacherSchema.pre("save",async function  (next){
-    const teacher = this
-    teacher.password = await bcrypt.hash(teacher.password,8)
+    const user = this 
+    if(user.isModified('password')){
+        user.password= await bcrypt.hash(user.password,8) /// HASH FOR 8 ROUNDS
+    }
     next()
 })
 const Students = mongoose.model("Teachers", TeacherSchema )

@@ -25,8 +25,10 @@ const StudentSchema = extendSchema(Users,{
     }],
 })
 StudentSchema.pre("save",async function  (next){
-    const student = this
-    student.password = await bcrypt.hash(student.password,8)
+    const user = this 
+    if(user.isModified('password')){
+        user.password= await bcrypt.hash(user.password,8) /// HASH FOR 8 ROUNDS
+    }
     next()
 })
 const Students = mongoose.model("Students",StudentSchema)

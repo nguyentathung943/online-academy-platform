@@ -1,8 +1,8 @@
 const CheckAuthenticated = (req,res,next) =>{
-    if(req.isAuthenticated()){
-        return next()
+    if(!req.isAuthenticated()){
+        return res.redirect("/login")
     }
-    return res.redirect("/login")
+    next()
 }
 
 const checkAdmin = (req,res,next) =>{
@@ -19,8 +19,15 @@ const checkTeacher = (req,res,next) =>{
     return res.redirect("*")
 }
 
-modules.exports = {
+const checkStudent = (req,res,next) =>{
+    if((req.isAuthenticated()) && (req.user.role = "Student")){
+        return next()
+    }
+    return res.redirect("*")
+}
+module.exports = {
     CheckAuthenticated,
     checkAdmin,
-    checkTeacher
+    checkTeacher,
+    checkStudent
 }

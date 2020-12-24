@@ -2,11 +2,12 @@ const express = require("express");
 const Students = require("../models/student");
 const Admin = require("../models/admin");
 const Teachers = require("../models/teacher");
-const bcrypt = require("bcrypt")
+const Courses = require("../models/course")
+const Methods = require("./Methods")
 const multer = require("multer")
 const sharp = require("sharp")
 const passport = require("passport");
-const initializePassport = require("../middleware/passport");
+const check = require("../middleware/middleware")
 const upload = multer({
     limit:{
         size: 5000000,
@@ -18,57 +19,15 @@ const upload = multer({
         callback(undefined,true)
     }
 })
-initializePassport(
-    passport,
-    async (email, password) => {
-        try {
-            var user = await Teachers.findOne({email});
-            if (user) {
-                var Valid = await bcrypt.compare(password, user.password);
-                if (Valid) {
-                    return user;
-                }
-            }
-            user = await Students.findOne({email});
-            if (user) {
-                var Valid = await bcrypt.compare(password, user.password);
-                if (Valid) {
-                    return user;
-                }
-            }
-            user = await Admin.findOne({email});
-            if (user) {
-                var Valid = await bcrypt.compare(password, user.password);
-                if (Valid) {
-                    return user;
-                }
-            }
-        } catch (e) {
-            return null;
-        }
-    },
-    async (id, role) => {
-        if (role === "Teacher") {
-            return Teachers.findById(id);
-        }
-        if (role === "Student") {
-            return Students.findById(id);
-        }
-        if (role === "Administrator") {
-            return Admin.findById(id);
-        }
-    }
-);
+
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
-    console.log(req.user);
     const courses = await Courses.find();
     for (const e of courses) {
         let index = courses.indexOf(e);
-        const teacher = await Method.getCourseLecturer(e.id);
+        const teacher = await Methods.getCourseLecturer(e.id);
         courses[index].owner = teacher;
-        console.log(courses)
     }
     res.render("index", {
         courses,
@@ -115,7 +74,6 @@ router.post("/profile", async (req, res) => {
     try {
         console.log(typeof req.body.password);
         if (req.body.o_password.length == 0) {
-            console.log(1);
             const user = req.user;
             user.email = req.body.email;
             user.phoneNumber = req.body.phoneNumber;
@@ -128,7 +86,6 @@ router.post("/profile", async (req, res) => {
                 success_message: "Information saved",
             });
         } else {
-            console.log(2);
             const user = req.user;
             if (req.body.o_password !== user.password) {
                 res.render("profile", {
@@ -173,66 +130,7 @@ router.post("/profile", async (req, res) => {
     }
 });
 
-router.post("/profile", async(req,res)=>{
-    try{
-    console.log(typeof (req.body.password))
-        if(req.body.o_password.length == 0){
-            console.log(1)
-            const user = req.user
-            user.email = req.body.email
-            user.phoneNumber = req.body.phoneNumber
-            user.name = req.body.name
-            await user.save()
-            res.render("profile",{
-                name: req.user.name,
-                mobile: req.user.phoneNumber,
-                email: req.user.email,
-                success_message:"Information saved"
-            })
-        }
-        else{
-            console.log(2)
-            const user = req.user
-            if(req.body.o_password!==user.password){
-                res.render("profile",{
-                    name: req.user.name,
-                    mobile: req.user.phoneNumber,
-                    email: req.user.email,
-                    error_message:"Wrong password!"
-                })
-            }
-            else if(req.body.new_password!==req.body.confirm_password){
-                res.render("profile",{
-                    name: req.user.name,
-                    mobile: req.user.phoneNumber,
-                    email: req.user.email,
-                    error_message:"Confirm password does not match!"
-                })
-            }
-            else if(req.body.new_password==="" || req.body.confirm_password===""){
-                res.render("profile",{
-                    name: req.user.name,
-                    mobile: req.user.phoneNumber,
-                    email: req.user.email,
-                    error_message:"New password can not be blank"
-                })
-            }
-            else if((req.body.o_password===user.password) && (req.body.new_password===req.body.confirm_password)){
-                user.password = req.body.new_password;
-                await user.save()
-                res.render("profile",{
-                    name: req.user.name,
-                    mobile: req.user.phoneNumber,
-                    email: req.user.email,
-                    success_message:"Information saved"
-                })
-            }
-        }
-    }catch(e){
-        res.send(e)
-    }
 
-})
 
 router.get("/register", async (req, res) => {
     res.render("register");
@@ -280,19 +178,14 @@ router.get("/my-account", async (req, res) => {
 
 router.get("/product-detail", async (req, res) => {
     const CourseID = req.query.id;
-
+    res.cookie("CourseID",CourseID)
     const course = await Courses.findById(CourseID);
-
-    const reviewList = await Method.ShowReviewList(CourseID)
-
-    const isCommented = await Method.isReviewed("5fe317e5aaf7da24bcc32123", CourseID)
+    const reviewList = await Methods.ShowReviewList(CourseID)
     for (let e of reviewList) {
         const index = reviewList.indexOf(e)
-        const StudentComment = await Method.getStudentSpecs(e.id)
-        console.log(StudentComment)
+        const StudentComment = await Methods.getStudentSpecs(e.id)
         reviewList[index] = StudentComment
     }
-    console.log(reviewList)
     let score = course.score
     course.score = Math.round(score * 2) / 2;
     let starArr = []
@@ -300,8 +193,73 @@ router.get("/product-detail", async (req, res) => {
         starArr.push("fa-star");
     if (Math.floor(course.score) !== course.score)
         starArr.push("fa-star-half");
-    res.render("product-detail", {course, reviewList, isCommented, starArr});
+    
+    if(req.isAuthenticated()){
+        const isCommented = await Methods.isReviewed(req.user.id, CourseID)
+        const isLiked = await Methods.isLiked(req.user.id,CourseID)
+        const isRegistered = await Methods.isRegistered(req.user.id,CourseID)
+        if(isCommented){
+            await isCommented.populate("owner").execPopulate()
+            const date = isCommented.createdAt.toString().split("T")[0]
+            const userStar = []
+            for(let i = 0; i < isCommented.Star; i++){
+                userStar.push("fa-star");
+            }
+            res.render("product-detail", {course, reviewList, isCommented, starArr,userStar,date,isLiked,isRegistered});
+        }
+        else{
+            res.render("product-detail", {course, reviewList, isCommented:null, starArr,isLiked,isRegistered});
+        }
+    }
+    else{
+        res.render("product-detail", {course, reviewList, isCommented:null, starArr});
+    }
 });
+
+
+router.get("/register-course", check.CheckAuthenticated,async (req,res)=>{
+    try{
+        const student = req.user
+        const CourseID = req.cookies['CourseID']
+        console.log(CourseID)
+        console.log(student.id)
+        await Methods.registerCourse(student.id, CourseID)
+        const check = Methods.isRegistered(student.id,CourseID)
+        return res.redirect("/product-detail/?id="+ CourseID.toString())
+    }
+    catch(e){
+        res.send(e)
+    }
+})
+
+router.get("/add-watchlist", check.CheckAuthenticated, async (req,res)=>{
+    try{
+        const student = req.user
+        const CourseID = req.cookies['CourseID']
+        console.log(CourseID)
+        console.log(student.id)
+        await Methods.addtCourseToWatchList(student.id,CourseID)
+        const check = Methods.isLiked(student.id,CourseID)
+        return res.redirect("/product-detail/?id="+CourseID)
+    }
+    catch(e){
+        res.send(e)
+    }
+})
+
+router.post("/add-review", check.CheckAuthenticated, async (req,res)=>{
+    try{
+        const student = req.user
+        const CourseID = req.cookies['CourseID']
+        console.log(CourseID)
+        console.log(student.id)
+        await Methods.AddCourseReview(req.body.review_content,parseInt(req.body.num_star),student.id,CourseID)
+        return res.redirect("/product-detail/?id="+CourseID)
+    }
+    catch(e){
+        res.send(e)
+    }
+})
 
 router.get("/product-list", async (req, res) => {
     res.render("product-list");

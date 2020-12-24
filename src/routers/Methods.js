@@ -121,24 +121,28 @@ const UpdateRated = async (CourseID) => {
 }
 const isLiked = async (StudentID, CoursesID) => {
     const student = await Students.findById(StudentID)
-    await student.populate("CoursesLiked").execPopulate();
     if (student.CoursesLiked.includes(CoursesID)) {
         return true
     }
-    return false
+    else{
+        return false
+    }
+    
 }
 const isRegistered = async (StudentID,CoursesID) =>{
     const student = await Students.findById(StudentID)
-    await student.populate("CoursesRegistered").execPopulate();
     if(student.CoursesRegistered.includes(CoursesID)){
         return true
     }
-    return false
+    else{
+        return false
+    }
+    
 }
 const isReviewed = async (StudentID, CourseID) =>{
     const review = await Reviews.findOne({owner: StudentID, course: CourseID})
-    if(review) return true
-    else return false
+    if(review) return review
+    else return null
 }
 const AddCourseReview = async (text, star, StudentID, CourseID) => {
     try {

@@ -273,9 +273,12 @@
         for (let i = 0; i < 5; i++)
             if ($('.rate-active').attr('class').includes(listStar[i])) {
                 star = i + 1
+
                 break;
             }
-        console.log("Star " + star)
+        console.log(star.toString())
+        $('#start-getter').val(star.toString())
+        
     });
 
 })(jQuery);
