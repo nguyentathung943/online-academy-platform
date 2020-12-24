@@ -1,129 +1,3 @@
-{{!--
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>Login V5</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="/login/images/icons/favicon.ico" />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/login/vendor/bootstrap/css/bootstrap.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/login/vendor/animate/animate.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/login/vendor/css-hamburgers/hamburgers.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/login/vendor/animsition/css/animsition.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/login/vendor/select2/select2.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/login/vendor/daterangepicker/daterangepicker.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="login/css/util.css">
-    <link rel="stylesheet" type="text/css" href="login/css/main.css">
-    <!--===============================================================================================-->
-</head>
-
-<body>
-    {{Header}}
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
-                <form class="login100-form validate-form flex-sb flex-w" method="POST" action="/login">
-                    <span class="login100-form-title p-b-53">
-                        Sign In With
-                    </span>
-
-                    <a href="#" class="btn-face m-b-20">
-                        <i class="fa fa-facebook-official"></i>
-                        Facebook
-                    </a>
-
-                    <a href="#" class="btn-google m-b-20">
-                        <img src="/login/images/icons/icon-google.png" alt="GOOGLE">
-                        Google
-                    </a>
-
-                    <div class="p-t-31 p-b-9">
-                        <span class="txt1">
-                            Username
-                        </span>
-                    </div>
-                    <div class="wrap-input100 validate-input" data-validate="Username is required">
-                        <input class="input100" type="text" name="username">
-                        <span class="focus-input100"></span>
-                    </div>
-
-                    <div class="p-t-13 p-b-9">
-                        <span class="txt1">
-                            Password
-                        </span>
-
-                        <a href="#" class="txt2 bo1 m-l-5">
-                            Forgot?
-                        </a>
-                    </div>
-                    <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <input class="input100" type="password" name="password">
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div>
-                        {{#if messages.error}}
-                        <div>
-                            <p style="color: red;">{{messages.error}}</p>
-                        </div>
-                        {{/if}}
-                    </div>
-
-                    <div class="container-login100-form-btn m-t-17">
-                        <button class="login100-form-btn">
-                            Sign In
-                        </button>
-                    </div>
-
-                    <div class="w-full text-center p-t-55">
-                        <span class="txt2">
-                            Not a member?
-                        </span>
-
-                        <a href="#" class="txt2 bo1">
-                            Sign up now
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="dropDownSelect1"></div>
-    {{Footer}}
-    <!--===============================================================================================-->
-    <script src="/login/vendor/jquery/jquery-3.2.1.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="/login/vendor/animsition/js/animsition.min.js"></script>
-    <!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
-    <script src="/login/vendor/bootstrap/js/popper.js"></script>
-    <script src="/login/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
-    <script src="/login/vendor/select2/select2.min.js"></script>
-    <!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
-    <script src="/login/vendor//daterangepicker/moment.min.js"></script>
-    <script src="/login/vendor/daterangepicker/daterangepicker.js"></script>
-    <!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
-    <script src="/login/vendor/countdowntime/countdowntime.js"></script>
-    <!--==========/=====================================================================================-->
-    <script src="/login/js/main.js"></script>
-
-</body>
-
-</html> --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -139,7 +13,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Source+Code+Pro:700,900&display=swap"
-        rel="stylesheet">
+          rel="stylesheet">
 
     <!-- CSS Libraries -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -152,7 +26,7 @@
 
 
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="/login/images/icons/favicon.ico" />
+    <link rel="icon" type="image/png" href="/login/images/icons/favicon.ico"/>
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="/login/vendor/bootstrap/css/bootstrap.min.css">
     <!--===============================================================================================-->
@@ -181,108 +55,108 @@
 </head>
 
 <body>
-    {{>Header}}
+{{>Header}}
 
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                <form class="login100-form validate-form flex-sb flex-w" method="POST" action="/login">
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <form class="login100-form validate-form flex-sb flex-w" method="POST" action="/login">
                     <span class="login100-form-title p-b-53">
                         Sign In With
                     </span>
 
-                    <a href="#" class="btn-face m-b-20">
-                        <i class="fa fa-facebook-official"></i>
-                        Facebook
-                    </a>
+                <a href="#" class="btn-face m-b-20">
+                    <i class="fa fa-facebook-official"></i>
+                    Facebook
+                </a>
 
-                    <a href="#" class="btn-google m-b-20">
-                        <img src="/login/images/icons/icon-google.png" alt="GOOGLE">
-                        Google
-                    </a>
+                <a href="#" class="btn-google m-b-20">
+                    <img src="/login/images/icons/icon-google.png" alt="GOOGLE">
+                    Google
+                </a>
 
-                    <div class="p-t-31 p-b-9">
+                <div class="p-t-31 p-b-9">
                         <span class="txt1">
                             Username
                         </span>
-                    </div>
-                    <div class="wrap-input100 validate-input" data-validate="Username is required">
-                        <input class="input100" type="text" name="username">
-                        <span class="focus-input100"></span>
-                    </div>
+                </div>
+                <div class="wrap-input100 validate-input" data-validate="Username is required">
+                    <input class="input100" type="text" name="username">
+                    <span class="focus-input100"></span>
+                </div>
 
-                    <div class="p-t-13 p-b-9">
+                <div class="p-t-13 p-b-9">
                         <span class="txt1">
                             Password
                         </span>
 
-                        <a href="#" class="txt2 bo1 m-l-5">
-                            Forgot?
-                        </a>
-                    </div>
-                    <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <input class="input100" type="password" name="password">
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div>
-                        {{#if messages.error}}
+                    <a href="#" class="txt2 bo1 m-l-5">
+                        Forgot?
+                    </a>
+                </div>
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <input class="input100" type="password" name="password">
+                    <span class="focus-input100"></span>
+                </div>
+                <div>
+                    {{#if messages.error}}
                         <div>
                             <p style="color: red;">{{messages.error}}</p>
                         </div>
-                        {{/if}}
-                    </div>
+                    {{/if}}
+                </div>
 
-                    <div class="container-login100-form-btn m-t-17">
-                        <button class="login100-form-btn">
-                            Sign In
-                        </button>
-                    </div>
+                <div class="container-login100-form-btn m-t-17">
+                    <button class="login100-form-btn">
+                        Sign In
+                    </button>
+                </div>
 
-                    <div class="w-full text-center p-t-55">
+                <div class="w-full text-center p-t-55">
                         <span class="txt2">
                             Not a member?
                         </span>
 
-                        <a href="#" class="txt2 bo1">
-                            Sign up now
-                        </a>
-                    </div>
-                </form>
-            </div>
+                    <a href="#" class="txt2 bo1">
+                        Sign up now
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 
-    <div id="dropDownSelect1"></div>
+<div id="dropDownSelect1"></div>
 
-    {{>Footer}}
+{{>Footer}}
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="/lib/easing/easing.min.js"></script>
-    <script src="/lib/slick/slick.min.js"></script>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/lib/easing/easing.min.js"></script>
+<script src="/lib/slick/slick.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="/js/main.js"></script>
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
 
 
-    <!--===============================================================================================-->
-    <script src="/login/vendor/jquery/jquery-3.2.1.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="/login/vendor/animsition/js/animsition.min.js"></script>
-    <!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
-    <script src="/login/vendor/bootstrap/js/popper.js"></script>
-    <script src="/login/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
-    <script src="/login/vendor/select2/select2.min.js"></script>
-    <!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
-    <script src="/login/vendor//daterangepicker/moment.min.js"></script>
-    <script src="/login/vendor/daterangepicker/daterangepicker.js"></script>
-    <!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
-    <script src="/login/vendor/countdowntime/countdowntime.js"></script>
-    <!--==========/=====================================================================================-->
-    <script src="/login/js/main.js"></script>
+<!--===============================================================================================-->
+<script src="/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="/login/vendor/animsition/js/animsition.min.js"></script>
+<!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
+<script src="/login/vendor/bootstrap/js/popper.js"></script>
+<script src="/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
+<script src="/login/vendor/select2/select2.min.js"></script>
+<!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
+<script src="/login/vendor//daterangepicker/moment.min.js"></script>
+<script src="/login/vendor/daterangepicker/daterangepicker.js"></script>
+<!--&lt;!&ndash;===============================================================================================&ndash;&gt;-->
+<script src="/login/vendor/countdowntime/countdowntime.js"></script>
+<!--==========/=====================================================================================-->
+<script src="/login/js/main.js"></script>
 
 
 </body>

@@ -21,32 +21,31 @@ const upload = multer({
 initializePassport(
     passport,
     async (email, password) => {
-        try{
-            var user = await Teachers.findOne({emFail});
-            if (user){
-                var Valid = await bcrypt.compare(password,user.password)
-                if(Valid){
-                    return user
+        try {
+            var user = await Teachers.findOne({email});
+            if (user) {
+                var Valid = await bcrypt.compare(password, user.password);
+                if (Valid) {
+                    return user;
                 }
             }
             user = await Students.findOne({email});
-            if (user){
-                var Valid = await bcrypt.compare(password,user.password)
-                if(Valid){
-                    return user
+            if (user) {
+                var Valid = await bcrypt.compare(password, user.password);
+                if (Valid) {
+                    return user;
                 }
             }
             user = await Admin.findOne({email});
-            if (user){
-                var Valid = await bcrypt.compare(password,user.password)
-                if(Valid){
-                    return user
+            if (user) {
+                var Valid = await bcrypt.compare(password, user.password);
+                if (Valid) {
+                    return user;
                 }
             }
-        }catch (e){
-            return null
+        } catch (e) {
+            return null;
         }
-
     },
     async (id, role) => {
         if (role === "Teacher") {
@@ -63,8 +62,27 @@ initializePassport(
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
-    console.log(req.user)
-    res.render("index")
+    console.log(req.user);
+    const courses = await Courses.find();
+    for (const e of courses) {
+        let index = courses.indexOf(e);
+        const teacher = await Method.getCourseLecturer(e.id);
+        courses[index].owner = teacher;
+        console.log(courses)
+    }
+    res.render("index", {
+        courses,
+    });
+});
+
+router.post("/test", async (req, res) => {
+    console.log("REQ " + req.body.mytextarea);
+    return res.render("test", {data: req.body.mytextarea});
+});
+
+
+router.get("/test", async (req, res) => {
+    res.render("test");
 });
 
 router.get("/login", async (req, res) => {
@@ -83,14 +101,76 @@ router.post(
     })
 );
 router.get("/profile", async (req, res) => {
-    if(!req.isAuthenticated()){
-        return res.redirect("/login")
+    if (!req.isAuthenticated()) {
+        return res.redirect("/login");
     }
-    res.render("profile",{
+    res.render("profile", {
         name: req.user.name,
         mobile: req.user.phoneNumber,
-        email: req.user.email
+        email: req.user.email,
     });
+});
+
+router.post("/profile", async (req, res) => {
+    try {
+        console.log(typeof req.body.password);
+        if (req.body.o_password.length == 0) {
+            console.log(1);
+            const user = req.user;
+            user.email = req.body.email;
+            user.phoneNumber = req.body.phoneNumber;
+            user.name = req.body.name;
+            await user.save();
+            res.render("profile", {
+                name: req.user.name,
+                mobile: req.user.phoneNumber,
+                email: req.user.email,
+                success_message: "Information saved",
+            });
+        } else {
+            console.log(2);
+            const user = req.user;
+            if (req.body.o_password !== user.password) {
+                res.render("profile", {
+                    name: req.user.name,
+                    mobile: req.user.phoneNumber,
+                    email: req.user.email,
+                    error_message: "Wrong password!",
+                });
+            } else if (req.body.new_password !== req.body.confirm_password) {
+                res.render("profile", {
+                    name: req.user.name,
+                    mobile: req.user.phoneNumber,
+                    email: req.user.email,
+                    error_message: "Confirm password does not match!",
+                });
+            } else if (
+                req.body.new_password === "" ||
+                req.body.confirm_password === ""
+            ) {
+                res.render("profile", {
+                    name: req.user.name,
+                    mobile: req.user.phoneNumber,
+                    email: req.user.email,
+                    error_message: "New password can not be blank",
+                });
+            } else if (
+                req.body.o_password === user.password &&
+                req.body.new_password === req.body.confirm_password
+            ) {
+                user.password = req.body.new_password;
+                await user.save();
+                res.render("profile", {
+                    name: req.user.name,
+                    mobile: req.user.phoneNumber,
+                    email: req.user.email,
+                    success_message: "Information saved",
+                });
+            }
+        }
+    } catch (e) {
+        res.send(e);
+    }
 });
 
 router.post("/profile", async(req,res)=>{
@@ -159,26 +239,25 @@ router.get("/register", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-    try{
-        if(req.body.password===req.body.confirmPassword){
+    try {
+        if (req.body.password === req.body.confirmPassword) {
             const student = new Students({
                 name: req.body.name,
                 email: req.body.email,
                 phoneNumber: req.body.phone,
                 password: req.body.password,
-            })
+            });
             await student.save();
-            res.render("register",{
-                success_message: "Account created successfully"
-            })
+            res.render("register", {
+                success_message: "Account created successfully",
+            });
+        } else {
+            res.render("register", {
+                fail_message: "Confirm password does not match",
+            });
         }
-        else{
-            res.render("register",{
-                fail_message: "Confirm password does not match"
-            })
-        }
-    }catch(e){
-        res.send(e)
+    } catch (e) {
+        res.send(e);
     }
 });
 
@@ -200,7 +279,28 @@ router.get("/my-account", async (req, res) => {
 });
 
 router.get("/product-detail", async (req, res) => {
-    res.render("product-detail");
+    const CourseID = req.query.id;
+
+    const course = await Courses.findById(CourseID);
+
+    const reviewList = await Method.ShowReviewList(CourseID)
+
+    const isCommented = await Method.isReviewed("5fe317e5aaf7da24bcc32123", CourseID)
+    for (let e of reviewList) {
+        const index = reviewList.indexOf(e)
+        const StudentComment = await Method.getStudentSpecs(e.id)
+        console.log(StudentComment)
+        reviewList[index] = StudentComment
+    }
+    console.log(reviewList)
+    let score = course.score
+    course.score = Math.round(score * 2) / 2;
+    let starArr = []
+    for (let i = 0; i < Math.floor(course.score); i++)
+        starArr.push("fa-star");
+    if (Math.floor(course.score) !== course.score)
+        starArr.push("fa-star-half");
+    res.render("product-detail", {course, reviewList, isCommented, starArr});
 });
 
 router.get("/product-list", async (req, res) => {

@@ -124,15 +124,15 @@
                     <div class="product-item">
 
                         <div class="product-image">
-                            <a href="../views/product-detail.hbs">
-                                <img src="img/product-1.jpg" alt="Product Image">
+                            <a href="/product-detail?id={{this._id}}">
+                            <img src="img/product-1.jpg" alt="Product Image">
                             </a>
                         </div>
                         <div class="product-title">
-                            <a href="#" style="text-align: left !important;">
-                                <p class="text-white m-0">{{this.name}}</p>
-                                <p class="text-white m-0">{{this.category}}</p>
-                                <p class="text-white m-0">{{this.owner.name}}</p>
+                            <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
+                            <p class="text-white m-0">{{this.name}}</p>
+                            <p class="text-white m-0">{{this.category}}</p>
+                            <p class="text-white m-0">{{this.owner.name}}</p>
                             </a>
 
                             <div style="text-align: left">

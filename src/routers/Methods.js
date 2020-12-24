@@ -119,7 +119,7 @@ const UpdateRated = async (CourseID) => {
     course.score = rate.toFixed(1)
     await course.save()
 }
-const isLiked = async (StudentID,CoursesID) => {
+const isLiked = async (StudentID, CoursesID) => {
     const student = await Students.findById(StudentID)
     await student.populate("CoursesLiked").execPopulate();
     if (student.CoursesLiked.includes(CoursesID)) {
@@ -301,4 +301,5 @@ module.exports = {
     isReviewed,
     isRegistered
 }
+
 
