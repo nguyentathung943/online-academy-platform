@@ -11,7 +11,8 @@ const ChapterSchema = new mongoose.Schema({
         ref: "Courses"
     },
     completed:{
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 })
 ChapterSchema.virtual("VideoList",{

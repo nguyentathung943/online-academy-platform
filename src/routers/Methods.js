@@ -60,7 +60,6 @@ const UnregisteredCourse = async (StudentID, CourseID) => {
     const Student = await Students.findById(StudentID)
     const index1 = Student.CoursesRegistered.indexOf(CourseID)
     Student.CoursesRegistered.splice(index1, 1)
-
     await course.save()
     await Student.save()
 }
@@ -123,31 +122,29 @@ const isLiked = async (StudentID, CoursesID) => {
     const student = await Students.findById(StudentID)
     if (student.CoursesLiked.includes(CoursesID)) {
         return true
-    }
-    else{
+    } else {
         return false
     }
-    
+
 }
-const isRegistered = async (StudentID,CoursesID) =>{
+const isRegistered = async (StudentID, CoursesID) => {
     const student = await Students.findById(StudentID)
-    if(student.CoursesRegistered.includes(CoursesID)){
+    if (student.CoursesRegistered.includes(CoursesID)) {
         return true
-    }
-    else{
+    } else {
         return false
     }
-    
+
 }
-const isReviewed = async (StudentID, CourseID) =>{
+const isReviewed = async (StudentID, CourseID) => {
     const review = await Reviews.findOne({owner: StudentID, course: CourseID})
-    if(review) return review
+    if (review) return review
     else return null
 }
 const AddCourseReview = async (text, star, StudentID, CourseID) => {
     try {
         const check = await isReviewed(StudentID, CourseID)
-        if(!check){
+        if (!check) {
             const review = new Reviews({
                 comment: text,
                 Star: star,
@@ -158,7 +155,7 @@ const AddCourseReview = async (text, star, StudentID, CourseID) => {
             await course.populate('ReviewList').execPopulate()
             course.ReviewList.concat(review.id)
             UpdateRated(course.id)
-            course.number_of_reviewer= course.number_of_reviewer + 1
+            course.number_of_reviewer = course.number_of_reviewer + 1
             await review.save()
             await course.save()
         }
@@ -278,6 +275,35 @@ const DeleteCourse = async (CourseID) => {
 
     await Courses.findByIdAndDelete(CourseID)
 }
+
+function comparePrice(status,attribute) {
+    return function innerSort(a, b) {
+
+        const priceA = a[attribute]
+        const priceB = b[attribute]
+        let comparison = 0;
+        if (priceA > priceB) {
+            comparison = 1 * status;
+        } else if (priceA < priceB) {
+            comparison = -1 * status;
+        }
+        return comparison
+    }
+}
+
+const SortAs = async (arr, status,attribute) => { //1 for asc -1 for des
+    return arr.sort(comparePrice(status,attribute))
+}
+const MarkCourseAsDone = async (CourseID) => {
+    const course = await Courses.findById(CourseID)
+    await course.populate("ChapterList").execPopulate()
+    const check = course.ChapterList.every((element) => element.completed === true)
+    if (check) {
+        course.completed = true
+    }
+    await course.save()
+}
+
 module.exports = {
     getCourseLecturer,
     getCoursesOwned,
@@ -303,7 +329,11 @@ module.exports = {
     /// Check
     isLiked,
     isReviewed,
-    isRegistered
+    isRegistered,
+    // sort course
+    SortAs,
+    //
+    MarkCourseAsDone
 }
 
 
