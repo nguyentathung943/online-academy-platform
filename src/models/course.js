@@ -45,6 +45,11 @@ const CourseSchema = new mongoose.Schema({
 },{
     timestamps: true
 })
+CourseSchema.index({
+    name: 'text',
+    full_description:'text',
+    category:'text'
+})
 //courses can be registered by many students
 CourseSchema.virtual('StudentsRegistered', {
     ref: 'Students',

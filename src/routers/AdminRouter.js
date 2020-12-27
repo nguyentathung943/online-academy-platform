@@ -14,6 +14,7 @@ router.post("/student/create", async (req, res) => {
     res.send(e);
   }
 });
+
 router.post("/teacher/create", async (req, res) => {
   try {
     const Teacher = new Teachers(req.body);
@@ -43,6 +44,7 @@ router.get("/students", async (req, res) => {
     res.send(e);
   }
 });
+
 router.get("/teachers", async (req, res) => {
   try {
     const teachers = await Teachers.find({});
