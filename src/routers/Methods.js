@@ -276,23 +276,13 @@ const DeleteCourse = async (CourseID) => {
     await Courses.findByIdAndDelete(CourseID)
 }
 
-function comparePrice(status,attribute) {
-    return function innerSort(a, b) {
-
-        const priceA = a[attribute]
-        const priceB = b[attribute]
-        let comparison = 0;
-        if (priceA > priceB) {
-            comparison = 1 * status;
-        } else if (priceA < priceB) {
-            comparison = -1 * status;
-        }
-        return comparison
-    }
-}
-
-const SortAs = async (arr, status,attribute) => { //1 for asc -1 for des
-    return arr.sort(comparePrice(status,attribute))
+const FetchCourseSortAs = async (attribute,status)=>{
+    let courses
+    if(attribute==="price") courses = await Courses.find().sort({price: status})
+    if(attribute==="score") courses = await Courses.find().sort({score: status})
+    if(attribute==="date") courses = await Courses.find().sort({createdAt:status})
+    if(attribute==="student") courses = await Courses.find().sort({number_of_student: status})
+    return courses
 }
 const MarkCourseAsDone = async (CourseID) => {
     const course = await Courses.findById(CourseID)
@@ -303,7 +293,15 @@ const MarkCourseAsDone = async (CourseID) => {
     }
     await course.save()
 }
-
+const searchCourseFullText = async (content) =>{
+    const courses =  await Courses.find(  {
+        $text :{
+            $search : content,
+            $caseSensitive: false,
+            $diacriticSensitive: false
+        }})
+    return courses
+}
 module.exports = {
     getCourseLecturer,
     getCoursesOwned,
@@ -331,9 +329,13 @@ module.exports = {
     isReviewed,
     isRegistered,
     // sort course
-    SortAs,
+    FetchCourseSortAs, //1 for asc, -1 for desc.
     //
-    MarkCourseAsDone
+    MarkCourseAsDone,
+    //search
+    searchCourseFullText
+
+
 }
 
 
