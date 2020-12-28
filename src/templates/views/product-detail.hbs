@@ -95,15 +95,17 @@
                                         {{#if isRegistered}}
                                             <i class="fa fa-shopping-bag mr-2 btn">Registered</i>
                                         {{else}}
-                                            <a class="btn mr-5" href="/register-course"><i class="fa fa-shopping-bag mr-2"></i>Register</a>
-                                        {{/if}}                         
+                                            <a class="btn mr-5" href="/register-course"><i
+                                                    class="fa fa-shopping-bag mr-2"></i>Register</a>
+                                        {{/if}}
                                     </div>
                                     <div class="">
                                         {{#if isLiked}}
                                             <i class="fa fa-plus mr-2 btn">Followed</i>
                                         {{else}}
-                                            <a class="btn" href="/add-watchlist"><i class="fa fa-plus mr-2"></i>Add to watch list</a>
-                                        {{/if}}                                        
+                                            <a class="btn" href="/add-watchlist"><i class="fa fa-plus mr-2"></i>Add to
+                                                watch list</a>
+                                        {{/if}}
                                     </div>
                                 </div>
 
@@ -138,9 +140,9 @@
                                     <div class="reviews-submitted">
                                         <div class="reviewer">{{isCommented.owner.name}} - <span>{{date}}</span></div>
                                         <div class="ratting">
-                                        {{#each userStar}}
-                                            <i class="fa {{this}}"></i>
-                                        {{/each}}
+                                            {{#each userStar}}
+                                                <i class="fa {{this}}"></i>
+                                            {{/each}}
                                         </div>
                                         <p>
                                             {{isCommented.comment}}
@@ -179,13 +181,15 @@
                                         <!--                                        </div>-->
                                         <div class="row form">
                                             <form action="/add-review" method="post">
-                                            <div class="col-sm-12">
-                                                <textarea placeholder="Review" name="review_content" required></textarea>
-                                            </div>
-                                            <input type="text" id="start-getter" name="num_star" style="display: none"/>
-                                            <div class="col-sm-12">
-                                                <button type="submit">Submit</button>
-                                            </div>
+                                                <div class="col-sm-12">
+                                                    <textarea placeholder="Review" name="review_content"
+                                                              required></textarea>
+                                                </div>
+                                                <input type="text" id="start-getter" name="num_star"
+                                                       style="display: none"/>
+                                                <div class="col-sm-12">
+                                                    <button type="submit">Submit</button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -195,13 +199,13 @@
                                     <div class="reviews-submitted">
                                         <div class="reviewer">{{this.owner.name}} - <span>12 Dec 2020</span></div>
                                         <div class="ratting">
-                                        {{#each starArr}}
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        {{/each}}
+                                            {{#each starArr}}
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            {{/each}}
                                         </div>
                                         <p>
                                             {{this.comment}}
@@ -220,12 +224,6 @@
                     </div>
 
                     <div class="row align-items-center product-slider product-slider-3">
-                        {{>Product}}
-                        {{>Product}}
-                        {{>Product}}
-                        {{>Product}}
-                        {{>Product}}
-                        {{>Product}}
 
                     </div>
                 </div>
