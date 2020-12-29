@@ -63,4 +63,8 @@ router.get("/admin", async (req, res) => {
   }
 });
 
+router.get("/admin/courses-management", async (req, res) => {
+  res.render("manage-courses");
+});
+
 module.exports = router;

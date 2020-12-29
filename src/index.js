@@ -39,10 +39,11 @@ app.use(passport.initialize())
 app.use(passport.session())
 require("./Authentication/authentication") // passport session on the go
 
-app.use(UserRouter)
+app.use(AdminRouter)
 app.use(CourseRouter)
 app.use(TeacherRouter)
-app.use(AdminRouter)
+app.use(UserRouter)
+
 
 app.listen(port, () => {
     console.log("Server is running on port 3000");
