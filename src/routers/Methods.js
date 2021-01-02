@@ -305,9 +305,10 @@ const searchCourseFullText = async (content) =>{
     return courses
 }
 /////category management
-const GetCateName = async(CateID) =>{
-    const cate = await Cate.findById(CateID)
-    return cate.name
+const GetCateName = async(CourseID) =>{
+    const course = await Courses.findById(CourseID)
+    await course.populate("category").execPopulate()
+    return course
 }
 const ShowAllCategory = async() =>{
     const cates = await Cate.find()
@@ -365,4 +366,4 @@ module.exports = {
     FetchCourseByCateName,
     DeleteCate,
     ChangeCateName,
-}
+} 
