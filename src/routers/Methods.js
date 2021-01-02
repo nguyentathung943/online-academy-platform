@@ -4,6 +4,8 @@ const Admin = require("../models/admin")
 const Courses = require("../models/course")
 const Reviews = require("../models/review")
 const {Chapters, Videos} = require("../models/chapter")
+const Cate = require("../models/category")
+const { findByIdAndRemove, findOne, find } = require("../models/student")
 //GET COURSE OWNER
 const getCourseLecturer = async (CourseID) => {
     const course = await Courses.findById(CourseID)
@@ -302,6 +304,29 @@ const searchCourseFullText = async (content) =>{
         }})
     return courses
 }
+/////category management
+const GetCateName = async(CateID) =>{
+    const cate = await Cate.findById(CateID)
+    return cate.name
+}
+const ShowAllCategory = async() =>{
+    const cates = await Cate.find()
+    return cates
+}
+const FetchCourseByCateName = async(CategoryName) =>{
+    const cate = await findOne({name: CategoryName})
+    const courses = await find({category: cate._id})
+    return  courses
+}
+const DeleteCate = async(CategoryName) =>{
+    const cate = await findOne({name: CategoryName})
+    await cate.delete()
+}
+const ChangeCateName = async(OldName, NewName) =>{
+    const cate = await findOne({name: OldName})
+    cate.name = NewName
+    await cate.save()
+}
 module.exports = {
     getCourseLecturer,
     getCoursesOwned,
@@ -330,12 +355,14 @@ module.exports = {
     isRegistered,
     // sort course
     FetchCourseSortAs, //1 for asc, -1 for desc.
-    //
+    // Complete course
     MarkCourseAsDone,
     //search
-    searchCourseFullText
-
-
+    searchCourseFullText,
+    //category
+    GetCateName,
+    ShowAllCategory,
+    FetchCourseByCateName,
+    DeleteCate,
+    ChangeCateName,
 }
-
-

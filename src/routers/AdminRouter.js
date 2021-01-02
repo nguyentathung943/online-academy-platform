@@ -2,6 +2,7 @@ const express = require("express");
 const Admin = require("../models/admin");
 const Students = require("../models/student");
 const Teachers = require("../models/teacher");
+const Cate = require("../models/category")
 const router = new express.Router();
 
 ////Create
@@ -62,6 +63,15 @@ router.get("/admin", async (req, res) => {
     res.send(e);
   }
 });
+
+//ADD CATEGORY
+router.post("/admin/add-category",async (req,res)=>{
+  const cate = new Cate({
+    name: req.body.cateName
+  })
+  await cate.save()
+  res.send(cate)
+})
 
 router.get("/admin/courses-management", async (req, res) => {
   res.render("manage-courses");
