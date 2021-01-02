@@ -102,7 +102,7 @@ h2 {
     box-shadow: none;
 }
 
-.btn {
+.btn{
     color: #FF6F61;
     background: #ffffff;
     border: 1px solid #FF6F61;
@@ -110,7 +110,7 @@ h2 {
 
 .btn:hover,
 .btn:active,
-.btn:focus {
+.btn:focus{
     color: #ffffff;
     background: #FF6F61;
     box-shadow: none;

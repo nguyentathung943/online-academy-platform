@@ -45,110 +45,121 @@
     <div class="product-detail">
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body" style="height: 400px">
-                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8RYslufQHlg" frameborder="0"
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" style="height: 400px">
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8RYslufQHlg"
+                            frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="product-detail-top">
-                    <div class="row align-items-center">
-                        <div class="col-md-5">
-                            <div class="product-slider-single normal-slider">
-                                <img src="https://drive.google.com/uc?id=0BwqtkOhv7GE-YVRZRVpYNWhMVDg" alt="Product Image">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="product-detail-top">
+                        <div class="row align-items-center">
+                            <div class="col-md-5">
+                                <div class="product-slider-single normal-slider">
+                                    <img src="https://drive.google.com/uc?id=0BwqtkOhv7GE-YVRZRVpYNWhMVDg"
+                                        alt="Product Image">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="product-content">
-                                <div class="title">
-                                    <h2>Khóa học lập trình Android cơ bản</h2>
-                                </div>
-
-                                <p>Học Học Học</p>
-                                <div>
-                                    <span class="font-weight-bold" style="color: #FF6F61">{{course.score}}</span>
-                                    <div class="ratting d-inline">
-                                        {{#each starArr}}
-                                            <i class="fa {{this}}"></i>
-                                        {{/each}}
+                            <div class="col-md-7">
+                                <div class="product-content">
+                                    <div class="title">
+                                        <h2>Khóa học lập trình Android cơ bản</h2>
                                     </div>
-                                    <span style="color: gray">({{course.number_of_reviewer}})</span>
-                                </div>
-                                <div class="price">
-                                    <h4>Price:</h4>
-                                    <p> $100 <span>$149</span></p>
-                                </div>
 
-                                <div class="d-flex">
-                                    <div class="">
-                                        {{#if isRegistered}}
-                                            <i class="fa fa-shopping-bag mr-2 btn">Registered</i>
-                                        {{else}}
-                                            <a class="btn mr-5" href="/register-course"><i
-                                                    class="fa fa-shopping-bag mr-2"></i>Register</a>
-                                        {{/if}}
+                                    <p>Học Học Học</p>
+                                    <div class="price">
+                                        <h4>Price:</h4>
+                                        <p> $100 <span>$149</span></p>
                                     </div>
                                     <div class="">
-                                        {{#if isLiked}}
-                                            <i class="fa fa-plus mr-2 btn">Followed</i>
-                                        {{else}}
-                                            <a class="btn" href="/add-watchlist"><i class="fa fa-plus mr-2"></i>Add to
-                                                watch list</a>
-                                        {{/if}}
+                                        <button class="btn btn-edit">
+                                            <i class="fas fa-edit">Edit</i>
+                                        </button>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row product-detail-bottom">
-                    <div class="col-lg-12">
-                        <ul class="nav nav-pills nav-justified">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews ({{reviewList.length}}
-                                    )</a>
-                            </li>
-                        </ul>
+                    <div class="row product-detail-bottom">
+                        <div class="col-lg-12">
+                            <ul class="nav nav-pills nav-justified">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#reviews">Reviews
+                                        ({{reviewList.length}}
+                                        )</a>
+                                </li>
+                            </ul>
 
-                        <div class="tab-content">
-                            <div id="description" class="container tab-pane active">
-                                <h4>Product description</h4>
-                                <p>
-                                    {{course.full_description}}
-                                </p>
-                            </div>
+                            <div class="tab-content">
+                                <div id="description" class="container tab-pane active">
+                                    <div class="desc-container">
 
-                            <div id="reviews" class="container tab-pane fade">
-                                {{#if isCommented}}
+                                        <h4>Product description</h4>
+                                        <p>
+                                            {{course.full_description}}
+                                        </p>
+                                    </div>
+                                    <div class="editor" style="display: none;">
+                                        <form method="POST" action="">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h4>WYSIWYG Editor</h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label for="txtDesc">Course Description</label>
+                                                        <textarea id="txtDesc" name="desc" autofocus cols="30" rows="20"
+                                                            class="form-control">hihi</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <button class="btn btn-outline-success" type="submit">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="">
+                                        <button class="btn btn-edit-desc">
+                                            <i class="fas fa-edit">Edit</i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <div id="reviews" class="container tab-pane fade">
+                                    {{#if isCommented}}
                                     <div>YOUR REVIEW</div>
                                     <div class="reviews-submitted">
                                         <div class="reviewer">{{isCommented.owner.name}} - <span>{{date}}</span></div>
                                         <div class="ratting">
                                             {{#each userStar}}
-                                                <i class="fa {{this}}"></i>
+                                            <i class="fa {{this}}"></i>
                                             {{/each}}
                                         </div>
                                         <p>
                                             {{isCommented.comment}}
                                         </p>
                                     </div>
-                                {{else}}
+                                    {{else}}
                                     <div class="reviews-submit">
                                         <h4>Give your Review:</h4>
                                         <div class="stars">
@@ -183,107 +194,95 @@
                                             <form action="/add-review" method="post">
                                                 <div class="col-sm-12">
                                                     <textarea placeholder="Review" name="review_content"
-                                                              required></textarea>
+                                                        required></textarea>
                                                 </div>
                                                 <input type="text" id="start-getter" name="num_star"
-                                                       style="display: none"/>
+                                                    style="display: none" />
                                                 <div class="col-sm-12">
                                                     <button type="submit">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                {{/if}}
-                                <div>OTHER REVIEWS</div>
-                                {{#each reviewList}}
+                                    {{/if}}
+                                    <div>OTHER REVIEWS</div>
+                                    {{#each reviewList}}
                                     <div class="reviews-submitted">
                                         <div class="reviewer">{{this.owner.name}} - <span>12 Dec 2020</span></div>
                                         <div class="ratting">
                                             {{#each starArr}}
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
                                             {{/each}}
                                         </div>
                                         <p>
                                             {{this.comment}}
                                         </p>
                                     </div>
-                                {{/each}}
+                                    {{/each}}
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="product">
-                    <div class="section-header">
-                        <h1>Related Products</h1>
-                    </div>
+                <!-- Side Bar Start -->
+                <div class="col-lg-4 sidebar">
 
-                    <div class="row align-items-center product-slider product-slider-3">
+                    <div class="sidebar-widget widget-slider">
+                        <div class="w-100 text-center">
+                            <h3 class="font-weight-bold" style="color: #FF6F61">Preview this course</h3>
+                        </div>
+                        <div class="sidebar-slider normal-slider">
+                            <div class="product-item">
 
-                    </div>
-                </div>
-            </div>
-
-            <!-- Side Bar Start -->
-            <div class="col-lg-4 sidebar">
-
-                <div class="sidebar-widget widget-slider">
-                    <div class="w-100 text-center">
-                        <h3 class="font-weight-bold" style="color: #FF6F61">Preview this course</h3>
-                    </div>
-                    <div class="sidebar-slider normal-slider">
-                        <div class="product-item">
-
-                            <div class="product-image">
-                                <a href="product-detail.hbs">
-                                    <img src="/img/product-7.jpg" alt="Product Image">
-                                </a>
-                                <div class="product-action">
-                                    <a href="#" data-toggle="modal" data-target="#exampleModalCenter">
-                                        <i class="fa fa-play"></i>
+                                <div class="product-image">
+                                    <a href="product-detail.hbs">
+                                        <img src="/img/product-7.jpg" alt="Product Image">
                                     </a>
+                                    <div class="product-action">
+                                        <a href="#" data-toggle="modal" data-target="#exampleModalCenter">
+                                            <i class="fa fa-play"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-image">
-                                <a href="product-detail.hbs">
-                                    <img src="/img/product-8.jpg" alt="Product Image">
-                                </a>
-                                <div class="product-action">
-                                    <a href="#"><i class="fa fa-play"></i></a>
+                            <div class="product-item">
+                                <div class="product-image">
+                                    <a href="product-detail.hbs">
+                                        <img src="/img/product-8.jpg" alt="Product Image">
+                                    </a>
+                                    <div class="product-action">
+                                        <a href="#"><i class="fa fa-play"></i></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-image">
-                                <a href="product-detail.hbs">
-                                    <img src="/img/product-9.jpg" alt="Product Image">
-                                </a>
-                                <div class="product-action">
-                                    <a href="#"><i class="fa fa-play"></i></a>
+                            <div class="product-item">
+                                <div class="product-image">
+                                    <a href="product-detail.hbs">
+                                        <img src="/img/product-9.jpg" alt="Product Image">
+                                    </a>
+                                    <div class="product-action">
+                                        <a href="#"><i class="fa fa-play"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="sidebar-widget brands">
+                        <h2 class="title">Session 1: Khóa học lập trình Android cơ bản</h2>
+
+                    </div>
                 </div>
-
-                <div class="sidebar-widget brands">
-                    <h2 class="title">Session 1: Khóa học lập trình Android cơ bản</h2>
-                    
-
-
-                </div>
+                <!-- Side Bar End -->
             </div>
-            <!-- Side Bar End -->
         </div>
     </div>
-</div>
     <!-- Product Detail End -->
 
     <!-- Brand Start -->
@@ -309,8 +308,39 @@
     <script src="/lib/easing/easing.min.js"></script>
     <script src="/lib/slick/slick.min.js"></script>
 
+    <script src="https://cdn.tiny.cloud/1/ezd73nxbzc7bu6e86g2l82jbbffke0mwevwrnyvc5q8h89j6/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#txtDesc',
+            plugins: 'paste image link autolink lists table media',
+            menubar: false,
+            toolbar: [
+                'undo redo | bold italic underline strikethrough | numlist bullist | alignleft aligncenter alignright | forecolor backcolor | table link image media',
+            ],
+        });
+    </script>
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
+    <script>
+        var editor = $('.editor');
+        var description = $('.desc-container'); 
+        var editbtn = $('.btn-edit-desc');
+        var savebtn = $('.btn btn-outline-success');
+        $('#txtDesc').html(description.html());
+
+        editbtn.click(function () {
+            console.log("click");
+
+            description.css("display","none");
+            editbtn.css("display","none");
+            editor.css("display","flex");
+        })
+
+        savebtn.click(function() {
+            
+        })
+    </script>
 </body>
 
 </html>
