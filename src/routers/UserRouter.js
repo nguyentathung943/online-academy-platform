@@ -279,7 +279,7 @@ router.get("/courses/add", async (req, res) => {
     try {
         res.render("add_course")
 
-    } catch (e) {
+    } catch (e) {   
         res.send(e)
     }
 })
