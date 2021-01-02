@@ -28,10 +28,11 @@
                 <div class="navbar-nav mr-auto">
                     <a href="/" class="nav-item nav-link active">Home</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
+                        <a href="/course-list" class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
                         <div class="dropdown-menu">
-                            <a href="/wishlist" class="dropdown-item">IT-Web</a>
-                            <a href="/login" class="dropdown-item">IT-Mobile</a>
+                            {{#each categories}}
+                            <a href="/course-list?categoryName={{this.name}}" class="dropdown-item">{{this.name}}</a>
+                            {{/each}}
                         </div>
                     </div>
                     <a href="/courses-owned" class="nav-item nav-link">Purchase history</a>
@@ -65,8 +66,10 @@
             </div>
             <div class="col-md-6">
                 <div class="search">
-                    <input type="text" placeholder="Search">
-                    <button><i class="fa fa-search"></i></button>
+                    <form action="/course-list">
+                        <input type="text" placeholder="Search by course name" name="searchValue">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
                 </div>
             </div>
 

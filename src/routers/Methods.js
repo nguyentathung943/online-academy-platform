@@ -308,23 +308,23 @@ const searchCourseFullText = async (content) =>{
 const GetCateName = async(CourseID) =>{
     const course = await Courses.findById(CourseID)
     await course.populate("category").execPopulate()
-    return course
+    return course.category
 }
 const ShowAllCategory = async() =>{
     const cates = await Cate.find()
     return cates
 }
 const FetchCourseByCateName = async(CategoryName) =>{
-    const cate = await findOne({name: CategoryName})
-    const courses = await find({category: cate._id})
+    const cate = await Cate.findOne({name: CategoryName})
+    const courses = await Courses.find({category: cate._id})
     return  courses
 }
 const DeleteCate = async(CategoryName) =>{
-    const cate = await findOne({name: CategoryName})
+    const cate = await Cate.findOne({name: CategoryName})
     await cate.delete()
 }
 const ChangeCateName = async(OldName, NewName) =>{
-    const cate = await findOne({name: OldName})
+    const cate = await Cate.findOne({name: OldName})
     cate.name = NewName
     await cate.save()
 }
