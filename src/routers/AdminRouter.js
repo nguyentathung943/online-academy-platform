@@ -4,6 +4,10 @@ const Students = require("../models/student");
 const Teachers = require("../models/teacher");
 const Cate = require("../models/category")
 const router = new express.Router();
+const multer = require("multer")
+const sharp = require("sharp");
+const Courses = require("../models/course");
+const Authen = require("../middleware/middleware")
 
 ////Create
 router.post("/student/create", async (req, res) => {
@@ -81,8 +85,5 @@ router.get("/admin/view-course", async (req, res) => {
   res.render("viewCourse");
 });
 
-router.get("/admin/add-course", async (req, res) => {
-  res.render("addCourse");
-});
 
 module.exports = router;

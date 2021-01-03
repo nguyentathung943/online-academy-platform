@@ -9,6 +9,11 @@ const app = express();
 const path = require('path')
 const bodyParser = require("body-parser")
 const hbs = require("hbs");
+
+hbs.registerHelper('ifEquals', function(arg1, arg2, options) {
+    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
+
 const port = process.env.port || 3000;
 const cookieParser = require("cookie-parser")
 

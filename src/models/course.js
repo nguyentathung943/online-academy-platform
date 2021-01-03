@@ -2,6 +2,10 @@ const mongoose = require("mongoose")
 const {virtual} = require("./user")
 
 const CourseSchema = new mongoose.Schema({
+    avatar:{
+        type: Buffer,
+        required: true,
+    },
     name: {
         type: String,
         required: true

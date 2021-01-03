@@ -4,39 +4,46 @@ const Admin = require("../models/admin");
 const Teachers = require("../models/teacher");
 const Courses = require("../models/course")
 const Methods = require("./Methods")
-const multer = require("multer")
-const sharp = require("sharp")
+
 const passport = require("passport");
 const check = require("../middleware/middleware");
 const Category = require("../models/category");
-const upload = multer({
-    limit:{
-        size: 5000000,
-    },
-    fileFilter(req,file,callback){
-        if (!file.originalname.match(/\.(jpg|png|jpeg)$/)){
-            return callback( new Error('Please upload an photo'))
-        }
-        callback(undefined,true)
-    }
-})
 
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
-    const courses = await Courses.find();
-    for (const e of courses) {
-        let index = courses.indexOf(e);
-        const teacher = await Methods.getCourseLecturer(e.id);
-        courses[index].owner = teacher;
-        const cate = await Methods.GetCateName(e.id)
-        courses[index].category = cate
+    if (req.isAuthenticated()){
+        const courses = await Courses.find();
+        for (const e of courses) {
+            let index = courses.indexOf(e);
+            const teacher = await Methods.getCourseLecturer(e.id);
+            courses[index].owner = teacher;
+            const cate = await Methods.GetCateName(e.id)
+            courses[index].category = cate  
+        }
+        const categories = await Category.find({})
+        res.render("index", {
+            courses,
+            categories,
+            role: req.user.role
+        });
     }
-    const categories = await Category.find({})
-    res.render("index", {
-        courses,
-        categories
-    });
+    else{
+        const courses = await Courses.find();
+        for (const e of courses) {
+            let index = courses.indexOf(e);
+            const teacher = await Methods.getCourseLecturer(e.id);
+            courses[index].owner = teacher;
+            const cate = await Methods.GetCateName(e.id)
+            courses[index].category = cate
+        }
+        const categories = await Category.find({})
+        res.render("index", {
+            courses,
+            categories,
+            role: ""
+        });
+    }
 });
 
 router.post("/test", async (req, res) => {

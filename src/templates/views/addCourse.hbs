@@ -64,6 +64,18 @@
     box-shadow: none;
 }
 </style>
+    <script src="https://cdn.tiny.cloud/1/kaozrk7baxqmz687gdl50m3ymekd4behuweni1bz7m1clu2s/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+            toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+            toolbar_mode: 'floating',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+        });
+    </script>
 
 </head>
 
@@ -76,13 +88,10 @@
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
-                <form class="login100-form validate-form flex-sb flex-w" method="POST" action="/">
+                <form class="login100-form validate-form flex-sb flex-w" enctype="multipart/form-data"  method="POST" action="/teacher/add-course">
                     <span class="login100-form-title p-b-53">
                         Add new course
                     </span>
-
-
-
 
                     <div class="p-t-31 p-b-9">
                         <span class="txt1">
@@ -102,7 +111,7 @@
                     </div>
 
                     <div class="wrap-input100" style="border: none;">
-                        <input id="fuMain" name="fuMain" type="file" class="file input100" required>
+                        <input id="fuMain" name="avatar" type="file" class="file input100" required>
                     </div>
                     <div class="p-t-31 p-b-9">
                         <span class="txt1">
@@ -111,10 +120,21 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Username is required">
-                        <input class="input100" type="text" name="description" required>
+                        <input class="input100" type="text" name="brief_des" required>
                         <span class="focus-input100"></span>
                     </div>
 
+                    <div class="p-t-31 p-b-9">
+                        <span class="txt1">
+                            Full Description
+                        </span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Username is required">
+                        <textarea id="mytextarea" name="full_des"></textarea>
+                        <span class="focus-input100"></span>
+                    </div>
+                        
 
                     <div class="p-t-31 p-b-9">
                         <span class="txt1">
@@ -124,8 +144,9 @@
 
                     <div class="wrap-input100" style="background-color: inherit; border:0px;">
                         <select id="category" name="category" class="custom-select custom-select-lg mb-3">
-                            <option value="web">IT-Web</option>
-                            <option value="mobile">IT-Mobile</option>
+                            {{#each cate}}
+                            <option value={{this._id}}>{{this.name}}</option>
+                            {{/each}}
                         </select>
                     </div>
                     <div class="p-t-31 p-b-9">
@@ -152,7 +173,7 @@
                     </div>
 
                     <div class="container-login100-form-btn m-t-17">
-                        <button class="login100-form-btn">
+                        <button class="login100-form-btn" type="submit"> 
                             Add course
                         </button>
                     </div>
