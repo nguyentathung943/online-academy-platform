@@ -8,6 +8,7 @@ const multer = require("multer")
 const sharp = require("sharp");
 const Courses = require("../models/course");
 const Authen = require("../middleware/middleware")
+const Methods = require("./Methods")
 
 ////Create
 router.post("/student/create", async (req, res) => {
@@ -77,8 +78,23 @@ router.post("/admin/add-category",async (req,res)=>{
   res.send(cate)
 })
 
+
 router.get("/admin/courses-management", async (req, res) => {
-  res.render("manage-courses");
+  const courses = await Courses.find();
+  for (const e of courses) {
+      let index = courses.indexOf(e);
+      const teacher = await Methods.getCourseLecturer(e.id);
+      courses[index].owner = teacher;
+      const cate = await Methods.GetCateName(e.id)
+      courses[index].category = cate  
+  }
+  const categories = await Cate.find({})
+  res.render("manage-courses", {
+      courses,
+      categories,
+      role: ""
+  });
+  
 });
 
 router.get("/admin/view-course", async (req, res) => {

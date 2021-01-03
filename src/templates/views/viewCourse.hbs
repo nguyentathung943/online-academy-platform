@@ -109,7 +109,6 @@
                             <div class="tab-content">
                                 <div id="description" class="container tab-pane active">
                                     <div class="desc-container">
-
                                         <h4>Product description</h4>
                                         <p>
                                             {{course.full_description}}
@@ -129,7 +128,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-footer">
-                                                    <button class="btn btn-outline-success" type="submit">
+                                                    <button class="btn btn-outline-success" type="button">
                                                         <i class="fa fa-check" aria-hidden="true"></i>
                                                         Save
                                                     </button>
@@ -314,7 +313,7 @@
         tinymce.init({
             selector: '#txtDesc',
             plugins: 'paste image link autolink lists table media',
-            menubar: false,
+            menubar: true,
             toolbar: [
                 'undo redo | bold italic underline strikethrough | numlist bullist | alignleft aligncenter alignright | forecolor backcolor | table link image media',
             ],
@@ -324,21 +323,25 @@
     <script src="/js/main.js"></script>
     <script>
         var editor = $('.editor');
-        var description = $('.desc-container'); 
         var editbtn = $('.btn-edit-desc');
-        var savebtn = $('.btn btn-outline-success');
-        $('#txtDesc').html(description.html());
-
+        var savebtn = $('.btn-outline-success');
+        var description = $('.desc-container');
+        $('#txtDesc').html(description.html());     
         editbtn.click(function () {
-            console.log("click");
-
+            $('#txtDesc').html(description.html());
             description.css("display","none");
             editbtn.css("display","none");
             editor.css("display","flex");
         })
 
         savebtn.click(function() {
-            
+            description.html("");
+            var str = $('#txtDesc').html();
+
+            description.html(str);
+            description.css("display","flex");
+            editbtn.css("display","flex");
+            editor.css("display","none");
         })
     </script>
 </body>
