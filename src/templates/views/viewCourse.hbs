@@ -23,7 +23,18 @@
 
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
-
+    <style>
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-outline-success {
+            color: #fff;
+            border-color: #28a745;
+            background-color:#28a745;
+        }
+    </style>
 </head>
 
 <body>
@@ -33,8 +44,8 @@
     <div class="breadcrumb-wrap">
         <div class="container-fluid">
             <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Course Management</a></li>
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/admin/courses-management">Course Management</a></li>
                 <li class="breadcrumb-item active">Course Detail</li>
             </ul>
         </div>
@@ -67,20 +78,20 @@
                         <div class="row align-items-center">
                             <div class="col-md-5">
                                 <div class="product-slider-single normal-slider">
-                                    <img src="https://drive.google.com/uc?id=0BwqtkOhv7GE-YVRZRVpYNWhMVDg"
-                                        alt="Product Image">
+                                    <img src="data:image/jpg;base64,{{course.avatar}}"
+                                        alt="Image">
                                 </div>
                             </div>
                             <div class="col-md-7">
                                 <div class="product-content">
                                     <div class="title">
-                                        <h2>Khóa học lập trình Android cơ bản</h2>
+                                        <h2>{{course.name}}</h2>
                                     </div>
 
-                                    <p>Học Học Học</p>
+                                    <p>{{course.brief_description}}</p>
                                     <div class="price">
                                         <h4>Price:</h4>
-                                        <p> $100 <span>$149</span></p>
+                                        <p> ${{course.price}} <span>$149</span></p>
                                     </div>
                                     <div class="">
                                         <button class="btn btn-edit">
@@ -109,10 +120,7 @@
                             <div class="tab-content">
                                 <div id="description" class="container tab-pane active">
                                     <div class="desc-container">
-                                        <h4>Product description</h4>
-                                        <p>
-                                            {{course.full_description}}
-                                        </p>
+                                        {{course.full_description}}
                                     </div>
                                     <div class="editor" style="display: none;">
                                         <form method="POST" action="">
@@ -124,13 +132,17 @@
                                                     <div class="form-group">
                                                         <label for="txtDesc">Course Description</label>
                                                         <textarea id="txtDesc" name="desc" autofocus cols="30" rows="20"
-                                                            class="form-control">hihi</textarea>
+                                                            class="form-control">{{course.full_description}}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="card-footer">
-                                                    <button class="btn btn-outline-success" type="button">
+                                                    <button class="btn btn-outline-success" type="Submit">
                                                         <i class="fa fa-check" aria-hidden="true"></i>
                                                         Save
+                                                    </button>
+                                                    <button class="btn btn-danger" type="button">
+                                                        <i class="fa fa-danger" aria-hidden="true"></i>
+                                                        Cancel
                                                     </button>
                                                 </div>
                                             </div>
@@ -327,6 +339,7 @@
         var savebtn = $('.btn-outline-success');
         var description = $('.desc-container');
         $('#txtDesc').html(description.html());     
+        description.html($.parseHTML(description.text()));
         editbtn.click(function () {
             $('#txtDesc').html(description.html());
             description.css("display","none");
@@ -334,15 +347,6 @@
             editor.css("display","flex");
         })
 
-        savebtn.click(function() {
-            description.html("");
-            var str = $('#txtDesc').html();
-
-            description.html(str);
-            description.css("display","flex");
-            editbtn.css("display","flex");
-            editor.css("display","none");
-        })
     </script>
 </body>
 

@@ -97,9 +97,22 @@ router.get("/admin/courses-management", async (req, res) => {
   
 });
 
-router.get("/admin/view-course", async (req, res) => {
-  res.render("viewCourse");
-});
+router.post("/admin/view-course",async (req,res)=>{
+  const NewDesc = req.body.desc;
+  const CourseID = req.cookies['CourseID'];
+  await Methods.UpdateDescription(CourseID.toString(), NewDesc);
+  return res.redirect("/admin/view-course?id="+ CourseID.toString());
+})
 
+router.get("/admin/view-course", async (req, res) => {
+  const categories = await Cate.find({})
+  const CourseID = req.query.id;
+  res.cookie("CourseID",CourseID)
+  const course = await Courses.findById(CourseID);
+
+  // Check
+  res.render("viewCourse", {course, categories});
+  
+});
 
 module.exports = router;

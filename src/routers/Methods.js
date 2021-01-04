@@ -328,6 +328,11 @@ const ChangeCateName = async(OldName, NewName) =>{
     cate.name = NewName
     await cate.save()
 }
+const UpdateDescription = async(CourseId, NewDesc) => {
+    const course = await Courses.findById(CourseId)
+    course.full_description = NewDesc;
+    await course.save()
+}
 module.exports = {
     getCourseLecturer,
     getCoursesOwned,
@@ -366,4 +371,6 @@ module.exports = {
     FetchCourseByCateName,
     DeleteCate,
     ChangeCateName,
+    //Update description
+    UpdateDescription,
 } 
