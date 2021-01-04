@@ -333,6 +333,13 @@ const UpdateDescription = async(CourseId, NewDesc) => {
     course.full_description = NewDesc;
     await course.save()
 }
+const UpdateCourseDetail = async(CourseId, Name, BriefDesc, Price) => {
+    const course = await Courses.findById(CourseId);
+    course.name = Name;
+    course.brief_description = BriefDesc;
+    course.price = Price;
+    await course.save()
+}
 module.exports = {
     getCourseLecturer,
     getCoursesOwned,
@@ -373,4 +380,5 @@ module.exports = {
     ChangeCateName,
     //Update description
     UpdateDescription,
+    UpdateCourseDetail,
 } 

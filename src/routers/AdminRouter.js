@@ -100,7 +100,14 @@ router.get("/admin/courses-management", async (req, res) => {
 router.post("/admin/view-course",async (req,res)=>{
   const NewDesc = req.body.desc;
   const CourseID = req.cookies['CourseID'];
-  await Methods.UpdateDescription(CourseID.toString(), NewDesc);
+  console.log(req.body);  
+  console.log(req.body.action);
+  if (req.body.action == "course_detail") {
+    await Methods.UpdateCourseDetail(CourseID.toString(),req.body.courseNameInput,req.body.briefDescriptionInput,req.body.priceInput);
+    console.log("Pass");
+  }
+  if (req.body.action == "course_description")
+    await Methods.UpdateDescription(CourseID.toString(), NewDesc);
   return res.redirect("/admin/view-course?id="+ CourseID.toString());
 })
 
