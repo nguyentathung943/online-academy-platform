@@ -65,42 +65,62 @@
                         </div>
                     </div>
                     {{#if courses}}
-                        {{#each courses}}
-                            <div class="col-md-3">
-                                <div class="product-item">
+                        <div class="tab-content">
+                            {{#each listPageCourses}}
 
-                                    <div class="product-image">
-                                        <a href="/product-detail?id={{this._id}}">
-                                        <img src="data:image/jpg;base64,{{this.avatar}}" alt="Product Image">
-                                        {{!-- <img src="img/product-1.jpg" alt="Product Image"> --}}
-                                        </a>
-                                    </div>
-                                    <div class="product-title">
-                                        <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
-                                        <p class="text-white m-0">{{this.name}}</p>
-                                        <p class="text-white m-0">{{this.category.name}}</p>
-                                        <p class="text-white m-0">{{this.owner.name}}</p>
-                                        </a>
+                                <div class="tab-pane fade" id="page{{id}}">
+                                    <div class="row">
+                                        {{#each this.data}}
 
-                                        <div style="text-align: left">
-                                            <span class="font-weight-bold" style="color: #FF6F61">{{this.score}}</span>
-                                            <div class="ratting d-inline">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                            <div class="col-md-3">
+                                                <div class="product-item">
+
+                                                    <div class="product-image">
+                                                        <a href="/product-detail?id={{this._id}}">
+                                                        <img src="data:image/jpg;base64,{{this.avatar}}"
+                                                             alt="Product Image">
+                                                        {{!-- <img src="img/product-1.jpg" alt="Product Image"> --}}
+                                                        </a>
+                                                    </div>
+                                                    <div class="product-title">
+                                                        <a href="/product-detail?id={{this._id}}" style="text-align:
+                                                        left
+                                                        !important;">
+                                                        <p class="text-white m-0">{{this.name}}</p>
+                                                        <p class="text-white m-0">{{this.category.name}}</p>
+                                                        <p class="text-white m-0">{{this.owner.name}}</p>
+                                                        </a>
+
+                                                        <div style="text-align: left">
+                                                        <span class="font-weight-bold"
+                                                              style="color: #FF6F61">{{this.score}}</span>
+                                                            <div class="ratting d-inline">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                            </div>
+                                                            <span class="text-white">({{this.number_of_reviewer}}
+                                                                )</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-price">
+                                                        <h3><span>$</span>{{this.price}}</h3>
+                                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy
+                                                            Now</a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <span class="text-white">({{this.number_of_reviewer}})</span>
-                                        </div>
+
+                                        {{/each}}
                                     </div>
-                                    <div class="product-price">
-                                        <h3><span>$</span>{{this.price}}</h3>
-                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                                    </div>
+
                                 </div>
-                            </div>
-                        {{/each}}
+
+                            {{/each}}
+                        </div>
+
                     {{else}}
                         <div> COURSE YOU ARE SEARCHING NOT FOUND</div>
                     {{/if}}
@@ -111,55 +131,76 @@
                 <div class="col-md-12">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
+                            {{#each listPage}}
+                                <li class="page-item"><a class="page-link" data-toggle="pill"
+                                                         href="#page{{this}}">{{this}}</a></li>
+                            {{/each}}
                         </ul>
                     </nav>
                 </div>
-                <!-- Pagination Start -->
+
+
+                <!-- Side Bar Start -->
+
             </div>
-
-            <!-- Side Bar Start -->
-
         </div>
     </div>
-</div>
-<!-- Product List End -->
+    <!-- Product List End -->
 
-<!-- Brand Start -->
-<div class="brand">
-    <div class="container-fluid">
-        <div class="brand-slider">
-            <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+    <!-- Brand Start -->
+    <div class="brand">
+        <div class="container-fluid">
+            <div class="brand-slider">
+                <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+            </div>
         </div>
     </div>
-</div>
+    <!--<div class="tab-content">-->
+    <!--    <div class="tab-pane fade show active" id="n1" role="tabpanel"-->
+    <!--         aria-labelledby="dashboard-nav">-->
+    <!--        1-->
+    <!--    </div>-->
+    <!--    <div class="tab-pane fade" id="n2" role="tabpanel" aria-labelledby="orders-nav">-->
+    <!--        2-->
+    <!--    </div>-->
+    <!--    <div class="tab-pane fade" id="n3" role="tabpanel" aria-labelledby="payment-nav">-->
+    <!--        3-->
+    <!--    </div>-->
+    <!--    <div class="tab-pane fade" id="n4" role="tabpanel" aria-labelledby="address-nav">-->
+    <!--        4-->
+    <!--    </div>-->
+    <!--    <div class="tab-pane fade" id="n5" role="tabpanel" aria-labelledby="account-nav">-->
+    <!--        5-->
+    <!--    </div>-->
+    <!--</div>-->
+    <!--<div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">-->
+    <!--    <a class="nav-link active" id="dashboard-nav" data-toggle="pill" href="#n1" role="tab"><i-->
+    <!--            class="fa fa-tachometer-alt"></i>Dashboard</a>-->
+    <!--    <a class="nav-link" id="orders-nav" data-toggle="pill" href="#n2" role="tab"><i-->
+    <!--            class="fa fa-shopping-bag"></i>Orders</a>-->
+    <!--    <a class="nav-link" id="payment-nav" data-toggle="pill" href="#n3" role="tab"><i-->
+    <!--            class="fa fa-credit-card"></i>Payment Method</a>-->
+    <!--    <a class="nav-link" id="address-nav" data-toggle="pill" href="#n4" role="tab"><i-->
+    <!--            class="fa fa-map-marker-alt"></i>address</a>-->
+    <!--    <a class="nav-link" id="account-nav" data-toggle="pill" href="#n5" role="tab"><i-->
+    <!--            class="fa fa-user"></i>Account Details</a>-->
+    <!--</div>-->
+    {{>Footer}}
 
-{{>Footer}}
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/slick/slick.min.js"></script>
 
-<!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<script src="lib/easing/easing.min.js"></script>
-<script src="lib/slick/slick.min.js"></script>
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
 
-<!-- Template Javascript -->
-<script src="js/main.js"></script>
-<script>
-    console.log({{json courses}})
-</script>
 </body>
 
 </html>

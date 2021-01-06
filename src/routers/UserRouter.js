@@ -197,13 +197,18 @@ router.get("/product-detail", async (req, res) => {
         const StudentComment = await Methods.getStudentSpecs(e.id)
         reviewList[index] = StudentComment
     }
-    let score = course.score
-    course.score = Math.round(score * 2) / 2;
+    course.number_of_student = course.number_of_student.toLocaleString()
+    let score = course.score;
+    if (score - Math.floor(score) >= 0.25)
+        score = Math.floor(score) + 0.5
+    else score = Math.floor(score)
     let starArr = []
-    for (let i = 0; i < Math.floor(course.score); i++)
+    for (let i = 0; i < Math.floor(score); i++)
         starArr.push("fa-star");
-    if (Math.floor(course.score) !== course.score)
-        starArr.push("fa-star-half");
+    if (Math.floor(score) !== score)
+        starArr.push("fa-star-half-full");
+    for (let i = 0; i < 5 - Math.ceil(score); i++)
+        starArr.push("fa-star-o");
 
     if (req.isAuthenticated()) {
         const isCommented = await Methods.isReviewed(req.user.id, CourseID)
@@ -325,6 +330,8 @@ router.get("/course-list", async (req, res) => {
         });
     } else if (req.query.searchValue) {
         var courses = await Methods.searchCourseFullText(req.query.searchValue)
+        let listPage = [];
+        let listPageCourses = [];
         if (courses.length === 0) {
             courses = null;
         } else {
@@ -335,10 +342,24 @@ router.get("/course-list", async (req, res) => {
                 const cate = await Methods.GetCateName(e.id)
                 courses[index].category = cate
             }
+            let len = courses.length;
+            let count = len / 4;
+            for (let i = 0; i < count; i++)
+                listPageCourses.push({id: i + 1, data: courses.slice(i * 4, i * 4 + 4)})
+            if (len % 4 !== 0) {
+                listPageCourses.push({id: count + 1, data: courses.slice(count * 4)})
+                count++
+            }
+            for (let i = 1; i <= count; i++)
+                listPage.push(i)
+            console.log("listPage", listPage)
+            console.log("listPageCourse", listPageCourses)
         }
         res.render("product-list", {
             categories,
-            courses
+            courses,
+            listPage,
+            listPageCourses
         });
     } else if (req.query.categoryName) {
         const courses = await Methods.FetchCourseByCateName(req.query.categoryName)
