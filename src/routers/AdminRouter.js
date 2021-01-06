@@ -9,7 +9,8 @@ const sharp = require("sharp");
 const Courses = require("../models/course");
 const Authen = require("../middleware/middleware")
 const Methods = require("./Methods")
-
+const Chapter = require("../models/chapter")
+const SessionVideos = require("../models/sessionvideos")
 ////Create
 router.post("/student/create", async (req, res) => {
   try {
@@ -98,16 +99,38 @@ router.get("/admin/courses-management", async (req, res) => {
 });
 
 router.post("/admin/view-course",async (req,res)=>{
-  const NewDesc = req.body.desc;
+  
   const CourseID = req.cookies['CourseID'];
   console.log(req.body);  
   console.log(req.body.action);
   if (req.body.action == "course_detail") {
+    // Update course's detail
     await Methods.UpdateCourseDetail(CourseID.toString(),req.body.courseNameInput,req.body.briefDescriptionInput,req.body.priceInput);
-    console.log("Pass");
+    console.log("Pass course detail");
   }
-  if (req.body.action == "course_description")
+  else if (req.body.action == "course_description"){
+    // Update main description
+    const NewDesc = req.body.desc;
     await Methods.UpdateDescription(CourseID.toString(), NewDesc);
+    console.log("Pass course desc");
+  }
+  else if (req.body.action == "add_session"){
+    // Add session
+    await Methods.AddChapter(CourseID, req.body.sessionNameInput);
+    console.log("Pass add session");
+  }
+  else if (req.body.action == "remove_session"){
+    await Methods.DeleteChapter(req.body.sessionIdInput);
+    console.log("Pass remove session");
+  }
+  else if (req.body.action == "change_session_name"){
+    var chapter = await Methods.getChapterSpecs(req.body.ChapterIdInput2);
+    chapter.name = req.body.changeSessionNameInput;
+    await chapter.save();
+  }
+  else if (req.body.action == "add_video"){
+    await Methods.AddVideo(req.body.ChapterIdInput,req.body.VideoNameInput,req.body.url);
+  }
   return res.redirect("/admin/view-course?id="+ CourseID.toString());
 })
 
@@ -116,9 +139,11 @@ router.get("/admin/view-course", async (req, res) => {
   const CourseID = req.query.id;
   res.cookie("CourseID",CourseID)
   const course = await Courses.findById(CourseID);
-
+  const chapters = await Methods.viewChapterList(CourseID);
+  
   // Check
-  res.render("viewCourse", {course, categories});
+  const videolist = await SessionVideos.getbyCourseID(CourseID);
+  res.render("viewCourse", {course, categories, chapters, videolist});
   
 });
 
