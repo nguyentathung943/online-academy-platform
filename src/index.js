@@ -25,7 +25,14 @@ app.use(cookieParser())
 const publicPath = path.join(__dirname, 'public') // link to css/img
 const viewsPath = path.join(__dirname, 'templates/views') //link to views (HTML/HBS/ejs)
 const PartialPath = path.join(__dirname, 'templates/partials')
-
+hbs.registerHelper("inc", function(value, options)
+{
+    return parseInt(value) + 1;
+});
+hbs.registerHelper("arrayof", function(array, value, options)
+{
+    return array[parseInt(value)];
+});
 app.set('views', viewsPath)
 app.set('view engine', 'hbs')
 app.use(express.json())

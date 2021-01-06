@@ -362,6 +362,7 @@ module.exports = {
     DeleteVideo,
     DeleteChapter,
     DeleteCourse,
+    getChapterSpecs,
     /// Check
     isLiked,
     isReviewed,
