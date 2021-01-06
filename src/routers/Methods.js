@@ -92,15 +92,14 @@ const ShowWatchList = async (StudentID) => {
 }
 const RemoveCourseFromWatchList = async (StudentID, CourseID) => {
     const student = await Students.findById(StudentID);
-    await student.populate("CoursesLiked").execPopulate();
-    student.CoursesLiked = student.CoursesLiked.toObject().filter(course => {
-        return course.id != CourseID
-    });
+    const index1 = student.CoursesLiked.indexOf(CourseID)
+    student.CoursesLiked.splice(index1,1)
     await student.save()
     const course = await Courses.findById(CourseID)
     await course.populate('StudentsLiked').execPopulate()
-    const index = course.StudentsLiked.indexOf(StudentID)
-    // course.StudentsRegistered.splice(index, 1)
+    course.StudentsLiked = course.StudentsLiked.filter(e =>{
+        return e._id != StudentID
+    })
     await course.save()
 }
 

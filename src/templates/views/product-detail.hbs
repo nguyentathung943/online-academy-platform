@@ -149,7 +149,8 @@
                                             {{isCommented.comment}}
                                         </p>
                                     </div>
-                                {{else}}
+                                {{/if}}
+                                {{#if isRegistered}}
                                     <div class="reviews-submit">
                                         <h4>Give your Review:</h4>
                                         <div class="stars">
@@ -194,6 +195,9 @@
                                             </form>
                                         </div>
                                     </div>
+                                
+                                {{else}}
+                                        <div>BUY THIS COURSE TO REVIEW</div>
                                 {{/if}}
                                 <div>OTHER REVIEWS</div>
                                 {{#each reviewList}}
