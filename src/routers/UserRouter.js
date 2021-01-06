@@ -12,14 +12,14 @@ const Category = require("../models/category");
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
-    if (req.isAuthenticated()){
+    if (req.isAuthenticated()) {
         const courses = await Courses.find();
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
             courses[index].owner = teacher;
             const cate = await Methods.GetCateName(e.id)
-            courses[index].category = cate  
+            courses[index].category = cate
         }
         const categories = await Category.find({})
         res.render("index", {
@@ -27,8 +27,7 @@ router.get("/", async (req, res) => {
             categories,
             role: req.user.role
         });
-    }
-    else{
+    } else {
         const courses = await Courses.find();
         for (const e of courses) {
             let index = courses.indexOf(e);
@@ -143,7 +142,6 @@ router.post("/profile", async (req, res) => {
 });
 
 
-
 router.get("/register", async (req, res) => {
     res.render("register");
 });
@@ -191,7 +189,7 @@ router.get("/my-account", async (req, res) => {
 router.get("/product-detail", async (req, res) => {
     const categories = await Category.find({})
     const CourseID = req.query.id;
-    res.cookie("CourseID",CourseID)
+    res.cookie("CourseID", CourseID)
     const course = await Courses.findById(CourseID);
     const reviewList = await Methods.ShowReviewList(CourseID)
     for (let e of reviewList) {
@@ -206,74 +204,99 @@ router.get("/product-detail", async (req, res) => {
         starArr.push("fa-star");
     if (Math.floor(course.score) !== course.score)
         starArr.push("fa-star-half");
-    
-    if(req.isAuthenticated()){
+
+    if (req.isAuthenticated()) {
         const isCommented = await Methods.isReviewed(req.user.id, CourseID)
-        const isLiked = await Methods.isLiked(req.user.id,CourseID)
-        const isRegistered = await Methods.isRegistered(req.user.id,CourseID)
-        if(isCommented){
+        const isLiked = await Methods.isLiked(req.user.id, CourseID)
+        const isRegistered = await Methods.isRegistered(req.user.id, CourseID)
+        if (isCommented) {
             await isCommented.populate("owner").execPopulate()
             const date = isCommented.createdAt.toString().split("T")[0]
             const userStar = []
-            for(let i = 0; i < isCommented.Star; i++){
+            for (let i = 0; i < isCommented.Star; i++) {
                 userStar.push("fa-star");
             }
-            res.render("product-detail", {course, reviewList, isCommented, starArr,userStar,date,isLiked,isRegistered,categories});
+            res.render("product-detail", {
+                course,
+                reviewList,
+                isCommented,
+                starArr,
+                userStar,
+                date,
+                isLiked,
+                isRegistered,
+                categories
+            });
+        } else {
+            res.render("product-detail", {
+                course,
+                reviewList,
+                isCommented: null,
+                starArr,
+                isLiked,
+                isRegistered,
+                categories
+            });
         }
-        else{
-            res.render("product-detail", {course, reviewList, isCommented:null, starArr,isLiked,isRegistered,categories});
-        }
-    }
-    else{
-        res.render("product-detail", {course, reviewList, isCommented:null, starArr,categories});
+    } else {
+        res.render("product-detail", {course, reviewList, isCommented: null, starArr, categories});
     }
 });
 
 
-router.get("/register-course", check.CheckAuthenticated,async (req,res)=>{
-    try{
+router.get("/register-course", check.CheckAuthenticated, async (req, res) => {
+    try {
         const student = req.user
         const CourseID = req.cookies['CourseID']
         await Methods.registerCourse(student.id, CourseID)
-        const check = Methods.isRegistered(student.id,CourseID)
-        return res.redirect("/product-detail/?id="+ CourseID.toString())
-    }
-    catch(e){
+        const check = Methods.isRegistered(student.id, CourseID)
+        return res.redirect("/product-detail/?id=" + CourseID.toString())
+    } catch (e) {
         res.send(e)
     }
 })
 
-router.get("/add-watchlist", check.CheckAuthenticated, async (req,res)=>{
-    try{
+router.get("/add-watchlist", check.CheckAuthenticated, async (req, res) => {
+    try {
         const student = req.user
         const CourseID = req.cookies['CourseID']
-        await Methods.addtCourseToWatchList(student.id,CourseID)
-        const check = Methods.isLiked(student.id,CourseID)
-        return res.redirect("/product-detail/?id="+CourseID)
-    }
-    catch(e){
+        await Methods.addtCourseToWatchList(student.id, CourseID)
+        const check = Methods.isLiked(student.id, CourseID)
+        return res.redirect("/product-detail/?id=" + CourseID)
+    } catch (e) {
         res.send(e)
     }
 })
 
-router.post("/add-review", check.CheckAuthenticated, async (req,res)=>{
-    try{
+router.get("/remove-watchlist", check.CheckAuthenticated, async (req, res) => {
+    try {
         const student = req.user
         const CourseID = req.cookies['CourseID']
-        await Methods.AddCourseReview(req.body.review_content,parseInt(req.body.num_star),student.id,CourseID)
-        return res.redirect("/product-detail/?id="+CourseID)
+        await Methods.RemoveCourseFromWatchList(student.id, CourseID)
+        const check = Methods.isLiked(student.id, CourseID)
+        return res.redirect("/product-detail/?id=" + CourseID)
+    } catch (e) {
+        res.send(e)
     }
-    catch(e){
+})
+
+router.post("/add-review", check.CheckAuthenticated, async (req, res) => {
+    try {
+        const student = req.user
+        const CourseID = req.cookies['CourseID']
+        await Methods.AddCourseReview(req.body.review_content, parseInt(req.body.num_star), student.id, CourseID)
+        return res.redirect("/product-detail/?id=" + CourseID)
+    } catch (e) {
         res.send(e)
     }
 })
 router.get("/course-list", async (req, res) => {
     const categories = await Category.find({})
-    
-    if(req.query.sortPrice){
-        let status= null;
+
+    if (req.query.sortPrice) {
+        let status = null;
         req.query.sortPrice == "1" ? status = 1 : status = -1
-        const courses = await Methods.FetchCourseSortAs("price",status)
+        const courses = await Methods.FetchCourseSortAs("price", status)
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -281,15 +304,14 @@ router.get("/course-list", async (req, res) => {
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
         }
-        res.render("product-list",{
+        res.render("product-list", {
             categories,
             courses
         });
-    }
-    else if(req.query.sortRate){
-        let status= null;
+    } else if (req.query.sortRate) {
+        let status = null;
         req.query.sortRate == "1" ? status = 1 : status = -1
-        const courses = await Methods.FetchCourseSortAs("score",status)
+        const courses = await Methods.FetchCourseSortAs("score", status)
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -297,17 +319,15 @@ router.get("/course-list", async (req, res) => {
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
         }
-        res.render("product-list",{
+        res.render("product-list", {
             categories,
             courses,
         });
-    }
-    else if(req.query.searchValue){
-        var courses =  await Methods.searchCourseFullText(req.query.searchValue)
-        if(courses.length===0){
-            courses= null;
-        }
-        else{
+    } else if (req.query.searchValue) {
+        var courses = await Methods.searchCourseFullText(req.query.searchValue)
+        if (courses.length === 0) {
+            courses = null;
+        } else {
             for (const e of courses) {
                 let index = courses.indexOf(e);
                 const teacher = await Methods.getCourseLecturer(e.id);
@@ -316,12 +336,11 @@ router.get("/course-list", async (req, res) => {
                 courses[index].category = cate
             }
         }
-        res.render("product-list",{
+        res.render("product-list", {
             categories,
             courses
         });
-    }
-    else if(req.query.categoryName) {
+    } else if (req.query.categoryName) {
         const courses = await Methods.FetchCourseByCateName(req.query.categoryName)
         for (const e of courses) {
             let index = courses.indexOf(e);
@@ -330,12 +349,11 @@ router.get("/course-list", async (req, res) => {
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
         }
-        res.render("product-list",{
+        res.render("product-list", {
             categories,
             courses
         });
-    }
-    else{
+    } else {
         const courses = await Courses.find();
         for (const e of courses) {
             let index = courses.indexOf(e);
@@ -344,16 +362,16 @@ router.get("/course-list", async (req, res) => {
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
         }
-        res.render("product-list",{
+        res.render("product-list", {
             categories,
             courses
         });
     }
 });
 
-router.post("course-list", async(req,res)=>{
-    if(req.body.searchValue){
-        return res.redirect("/course-list?searchValue="+ req.body.searchValue)
+router.post("course-list", async (req, res) => {
+    if (req.body.searchValue) {
+        return res.redirect("/course-list?searchValue=" + req.body.searchValue)
     }
 })
 
@@ -371,7 +389,7 @@ router.get("/courses/add", async (req, res) => {
     try {
         res.render("add_course")
 
-    } catch (e) {   
+    } catch (e) {
         res.send(e)
     }
 })

@@ -5,7 +5,7 @@ const Courses = require("../models/course")
 const Reviews = require("../models/review")
 const {Chapters, Videos} = require("../models/chapter")
 const Cate = require("../models/category")
-const { findByIdAndRemove, findOne, find } = require("../models/student")
+const {findByIdAndRemove, findOne, find} = require("../models/student")
 //GET COURSE OWNER
 const getCourseLecturer = async (CourseID) => {
     const course = await Courses.findById(CourseID)
@@ -100,7 +100,7 @@ const RemoveCourseFromWatchList = async (StudentID, CourseID) => {
     const course = await Courses.findById(CourseID)
     await course.populate('StudentsLiked').execPopulate()
     const index = course.StudentsLiked.indexOf(StudentID)
-    course.StudentsRegistered.splice(index, 1)
+    // course.StudentsRegistered.splice(index, 1)
     await course.save()
 }
 
@@ -278,12 +278,12 @@ const DeleteCourse = async (CourseID) => {
     await Courses.findByIdAndDelete(CourseID)
 }
 
-const FetchCourseSortAs = async (attribute,status)=>{
+const FetchCourseSortAs = async (attribute, status) => {
     let courses
-    if(attribute==="price") courses = await Courses.find().sort({price: status})
-    if(attribute==="score") courses = await Courses.find().sort({score: status})
-    if(attribute==="date") courses = await Courses.find().sort({createdAt:status})
-    if(attribute==="student") courses = await Courses.find().sort({number_of_student: status})
+    if (attribute === "price") courses = await Courses.find().sort({price: status})
+    if (attribute === "score") courses = await Courses.find().sort({score: status})
+    if (attribute === "date") courses = await Courses.find().sort({createdAt: status})
+    if (attribute === "student") courses = await Courses.find().sort({number_of_student: status})
     return courses
 }
 const MarkCourseAsDone = async (CourseID) => {
@@ -295,45 +295,46 @@ const MarkCourseAsDone = async (CourseID) => {
     }
     await course.save()
 }
-const searchCourseFullText = async (content) =>{
-    const courses =  await Courses.find(  {
-        $text :{
-            $search : content,
+const searchCourseFullText = async (content) => {
+    const courses = await Courses.find({
+        $text: {
+            $search: content,
             $caseSensitive: false,
             $diacriticSensitive: false
-        }})
+        }
+    })
     return courses
 }
 /////category management
-const GetCateName = async(CourseID) =>{
+const GetCateName = async (CourseID) => {
     const course = await Courses.findById(CourseID)
     await course.populate("category").execPopulate()
     return course.category
 }
-const ShowAllCategory = async() =>{
+const ShowAllCategory = async () => {
     const cates = await Cate.find()
     return cates
 }
-const FetchCourseByCateName = async(CategoryName) =>{
+const FetchCourseByCateName = async (CategoryName) => {
     const cate = await Cate.findOne({name: CategoryName})
     const courses = await Courses.find({category: cate._id})
-    return  courses
+    return courses
 }
-const DeleteCate = async(CategoryName) =>{
+const DeleteCate = async (CategoryName) => {
     const cate = await Cate.findOne({name: CategoryName})
     await cate.delete()
 }
-const ChangeCateName = async(OldName, NewName) =>{
+const ChangeCateName = async (OldName, NewName) => {
     const cate = await Cate.findOne({name: OldName})
     cate.name = NewName
     await cate.save()
 }
-const UpdateDescription = async(CourseId, NewDesc) => {
+const UpdateDescription = async (CourseId, NewDesc) => {
     const course = await Courses.findById(CourseId)
     course.full_description = NewDesc;
     await course.save()
 }
-const UpdateCourseDetail = async(CourseId, Name, BriefDesc, Price) => {
+const UpdateCourseDetail = async (CourseId, Name, BriefDesc, Price) => {
     const course = await Courses.findById(CourseId);
     course.name = Name;
     course.brief_description = BriefDesc;
