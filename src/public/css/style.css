@@ -234,74 +234,74 @@ h2 {
 /**********************************/
 /*********** Nav Bar CSS **********/
 /**********************************/
-.nav {
-    position: relative;
-}
+/*.nav {*/
+/*    position: relative;*/
+/*}*/
 
-@media (min-width: 992px) {
-    .nav .container-fluid {
-        padding-left: 52px;
-        padding-right: 52px;
-    }
-}
+/*@media (min-width: 992px) {*/
+/*    .nav .container-fluid {*/
+/*        padding-left: 52px;*/
+/*        padding-right: 52px;*/
+/*    }*/
+/*}*/
 
-.nav .navbar {
-    height: 100%;
-    padding: 0;
-}
+/*.nav .navbar {*/
+/*    height: 100%;*/
+/*    padding: 0;*/
+/*}*/
 
-.nav .dropdown-menu {
-    margin-top: 0;
-    border: 0;
-    border-radius: 0;
-    background: #FF6F61;
-}
+/*.nav .dropdown-menu {*/
+/*    margin-top: 0;*/
+/*    border: 0;*/
+/*    border-radius: 0;*/
+/*    background: #FF6F61;*/
+/*}*/
 
-.nav .dropdown-menu a.active {
-    color: #353535;
-    background: #f8f9fa;
-}
+/*.nav .dropdown-menu a.active {*/
+/*    color: #353535;*/
+/*    background: #f8f9fa;*/
+/*}*/
 
-@media (min-width: 768px) {
-    .nav,
-    .nav .navbar {
-        background: #FF6F61 !important;
-    }
+/*@media (min-width: 768px) {*/
+/*    .nav,*/
+/*    .nav .navbar {*/
+/*        background: #FF6F61 !important;*/
+/*    }*/
 
-    .nav .navbar-brand {
-        display: none;
-    }
+/*    .nav .navbar-brand {*/
+/*        display: none;*/
+/*    }*/
 
-    .nav .navbar-dark a.nav-link {
-        color: #ffffff;
-        font-size: 14px;
-        text-transform: uppercase;
-    }
+/*    .nav .navbar-dark a.nav-link {*/
+/*        color: #ffffff;*/
+/*        font-size: 14px;*/
+/*        text-transform: uppercase;*/
+/*    }*/
 
-    .nav .navbar-dark a.nav-link:hover,
-    .nav .navbar-dark a.nav-link.active {
-        color: #000000;
-    }
-}
+/*    .nav .navbar-dark a.nav-link:hover,*/
+/*    .nav .navbar-dark a.nav-link.active {*/
+/*        color: #000000;*/
+/*    }*/
+/*}*/
 
-@media (max-width: 768px) {
-    .nav {
-        padding: 5px 0;
-    }
+/*@media (max-width: 768px) {*/
+/*    .nav {*/
+/*        padding: 5px 0;*/
+/*    }*/
 
-    .nav,
-    .nav .navbar {
-        background: #000000 !important;
-    }
+/*    .nav,*/
+/*    .nav .navbar {*/
+/*        background: #000000 !important;*/
+/*    }*/
 
-    .nav a.nav-link {
-        padding: 5px 0;
-    }
+/*    .nav a.nav-link {*/
+/*        padding: 5px 0;*/
+/*    }*/
 
-    .nav .dropdown-menu {
-        box-shadow: none;
-    }
-}
+/*    .nav .dropdown-menu {*/
+/*        box-shadow: none;*/
+/*    }*/
+/*}*/
 
 
 /**********************************/

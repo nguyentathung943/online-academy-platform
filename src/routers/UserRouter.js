@@ -20,6 +20,7 @@ router.get("/", async (req, res) => {
             courses[index].owner = teacher;
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
+            courses[index].starArr = GetStarArr(courses[index].score)
         }
         const categories = await Category.find({})
         res.render("index", {
@@ -35,6 +36,7 @@ router.get("/", async (req, res) => {
             courses[index].owner = teacher;
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
+            courses[index].starArr = GetStarArr(courses[index].score)
         }
         const categories = await Category.find({})
         res.render("index", {
@@ -198,17 +200,7 @@ router.get("/product-detail", async (req, res) => {
         reviewList[index] = StudentComment
     }
     course.number_of_student = course.number_of_student.toLocaleString()
-    let score = course.score;
-    if (score - Math.floor(score) >= 0.25)
-        score = Math.floor(score) + 0.5
-    else score = Math.floor(score)
-    let starArr = []
-    for (let i = 0; i < Math.floor(score); i++)
-        starArr.push("fa-star");
-    if (Math.floor(score) !== score)
-        starArr.push("fa-star-half-full");
-    for (let i = 0; i < 5 - Math.ceil(score); i++)
-        starArr.push("fa-star-o");
+    course.starArr = GetStarArr(course.score)
 
     if (req.isAuthenticated()) {
         const isCommented = await Methods.isReviewed(req.user.id, CourseID)
@@ -225,7 +217,6 @@ router.get("/product-detail", async (req, res) => {
                 course,
                 reviewList,
                 isCommented,
-                starArr,
                 userStar,
                 date,
                 isLiked,
@@ -237,14 +228,13 @@ router.get("/product-detail", async (req, res) => {
                 course,
                 reviewList,
                 isCommented: null,
-                starArr,
                 isLiked,
                 isRegistered,
                 categories
             });
         }
     } else {
-        res.render("product-detail", {course, reviewList, isCommented: null, starArr, categories});
+        res.render("product-detail", {course, reviewList, isCommented: null, categories});
     }
 });
 
@@ -308,6 +298,7 @@ router.get("/course-list", async (req, res) => {
             courses[index].owner = teacher;
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
+            courses[index].starArr = GetStarArr(courses[index].score)
         }
         res.render("product-list", {
             categories,
@@ -323,6 +314,7 @@ router.get("/course-list", async (req, res) => {
             courses[index].owner = teacher;
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
+            courses[index].starArr = GetStarArr(courses[index].score)
         }
         res.render("product-list", {
             categories,
@@ -341,6 +333,7 @@ router.get("/course-list", async (req, res) => {
                 courses[index].owner = teacher;
                 const cate = await Methods.GetCateName(e.id)
                 courses[index].category = cate
+                courses[index].starArr = GetStarArr(courses[index].score)
             }
             let len = courses.length;
             let count = len / 4;
@@ -369,6 +362,7 @@ router.get("/course-list", async (req, res) => {
             courses[index].owner = teacher;
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
+            courses[index].starArr = GetStarArr(courses[index].score)
         }
         res.render("product-list", {
             categories,
@@ -382,6 +376,7 @@ router.get("/course-list", async (req, res) => {
             courses[index].owner = teacher
             const cate = await Methods.GetCateName(e.id)
             courses[index].category = cate
+            courses[index].starArr = GetStarArr(courses[index].score)
         }
         res.render("product-list", {
             categories,
@@ -421,4 +416,18 @@ router.get('*', (req, res) => {
     })
 })
 
+
+const GetStarArr = (score) => {
+    if (score - Math.floor(score) >= 0.25)
+        score = Math.floor(score) + 0.5
+    else score = Math.floor(score)
+    let starList = []
+    for (let i = 0; i < Math.floor(score); i++)
+        starList.push("fa-star");
+    if (Math.floor(score) !== score)
+        starList.push("fa-star-half-full");
+    for (let i = 0; i < 5 - Math.ceil(score); i++)
+        starList.push("fa-star-o");
+    return starList;
+}
 module.exports = router

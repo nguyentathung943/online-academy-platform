@@ -80,7 +80,7 @@
                                 <div>
                                     <span class="font-weight-bold" style="color: #FF6F61">{{course.score}}</span>
                                     <div class="ratting d-inline">
-                                        {{#each starArr}}
+                                        {{#each course.starArr}}
                                             <i class="fa {{this}} "></i>
                                         {{/each}}
 
@@ -208,12 +208,12 @@
                                 {{else}}
                                     <div style="font-weight: bold">BUY THIS COURSE TO REVIEW</div>
                                 {{/if}}
-                                    <div style="font-weight: bold">OTHER REVIEWS</div>
+                                <div style="font-weight: bold">OTHER REVIEWS</div>
                                 {{#each reviewList}}
                                     <div class="reviews-submitted">
                                         <div class="reviewer">{{this.owner.name}} - <span>12 Dec 2020</span></div>
                                         <div class="ratting">
-                                            {{#each starArr}}
+                                            {{#each course.starArr}}
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
