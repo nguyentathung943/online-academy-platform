@@ -1,9 +1,14 @@
 const mongoose = require("mongoose")
 const {virtual} = require("./user")
-
+const validator = require("validator")
 const CourseSchema = new mongoose.Schema({
     avatar:{
-        type: Buffer,
+        type: String,
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error("Please provide a valid URL")
+            }
+        },
         required: true,
     },
     name: {

@@ -282,7 +282,7 @@
                             <div class="tab-content">
                                 <div id="description" class="container tab-pane active">
                                     <div class="desc-container">
-                                        {{course.full_description}}
+                                        {{{course.full_description}}}
                                     </div>
                                     <div class="editor" style="display: none;">
                                         <form method="POST" action="" name="desc">
@@ -464,13 +464,8 @@
         var editor = $('.editor');
         var editbtn = $('.btn-edit-desc');
         var savebtn = $('.btn-outline-success');
-        var description = $('.desc-container');
         var cancelDescBtn = $('#cancelDescBtn');
         $('#txtDesc').html(description.html());
-        $('document').ready(function () {
-            description.html($.parseHTML(description.text()));
-        });
-
         editbtn.click(function () {
             $('#txtDesc').html(description.html());
             description.css("display", "none");
