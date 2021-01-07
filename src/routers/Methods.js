@@ -333,9 +333,14 @@ const UpdateDescription = async (CourseId, NewDesc) => {
     course.full_description = NewDesc;
     await course.save()
 }
-const UpdateCourseDetail = async (CourseId, Name, BriefDesc, Price) => {
+const UpdateCourseDetail = async (CourseId,avatar, Name, BriefDesc, Price) => {
     const course = await Courses.findById(CourseId);
     course.name = Name;
+    if(avatar!=null){
+        const imageID = avatar.split('/')[5]
+        const baseURl = "https://drive.google.com/thumbnail?id=" + imageID
+        course.avatar = baseURl
+    }
     course.brief_description = BriefDesc;
     course.price = Price;
     await course.save()

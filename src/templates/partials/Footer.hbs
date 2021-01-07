@@ -27,7 +27,8 @@
                     </div>
                 </div>
             </div>
-
+            {{#if role}}
+            {{#ifEquals role "Student"}}
             <div class="col-lg-3 col-md-6">
                 <div class="footer-widget">
                     <h2>Courses Info</h2>
@@ -36,15 +37,73 @@
                     </ul>
                 </div>
             </div>
-
             <div class="col-lg-3 col-md-6">
                 <div class="footer-widget">
                     <h2>Purchase Info</h2>
                     <ul>
-                        <li><a href="#">Purchase History</a></li>
+                        <li><a href="#">Courses Owned</a></li>
                     </ul>
                 </div>
             </div>
+            {{/ifEquals}}
+            {{#ifEquals role "Teacher"}}
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-widget">
+                    <h2>Courses Info</h2>
+                    <ul>
+                        <li><a href="#">Courses Management</a></li>
+                        <li><a href="#">Add Course</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-widget">
+                    <h2>Info</h2>
+                    <ul>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            {{/ifEquals}}
+                        {{#ifEquals role "Administrator"}}
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-widget">
+                    <h2>Basic Management</h2>
+                    <ul>
+                        <li><a href="#">Courses Management</a></li>
+                        <li><a href="#">User Management</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-widget">
+                    <h2>Info</h2>
+                    <ul>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            {{/ifEquals}}
+            {{else}}
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-widget">
+                    <h2>Courses Info</h2>
+                    <ul>
+                        <li><a href="#">Register course</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-widget">
+                    <h2>Purchase Info</h2>
+                    <ul>
+                        <li><a href="#">Courses Owned</a></li>
+                    </ul>
+                </div>
+            </div>
+            {{/if}}
         </div>
 
 
