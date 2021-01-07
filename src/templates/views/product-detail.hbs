@@ -16,8 +16,9 @@
           rel="stylesheet">
 
     <!-- CSS Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">-->
     <link href="/lib/slick/slick.css" rel="stylesheet">
     <link href="/lib/slick/slick-theme.css" rel="stylesheet">
 
@@ -80,10 +81,12 @@
                                     <span class="font-weight-bold" style="color: #FF6F61">{{course.score}}</span>
                                     <div class="ratting d-inline">
                                         {{#each starArr}}
-                                            <i class="fa {{this}}"></i>
+                                            <i class="fa {{this}} "></i>
                                         {{/each}}
+
                                     </div>
-                                    <span style="color: gray">({{course.number_of_reviewer}})</span>
+                                    <span style="color: gray">({{course.number_of_reviewer}} ratings)</span>
+                                    <span class="font-weight-bold">{{course.number_of_student}} students</span>
                                 </div>
                                 <div class="price">
                                     <h4>Price:</h4>
@@ -93,10 +96,13 @@
                                 <div class="d-flex">
                                     <div class="">
                                         {{#if isRegistered}}
-                                            <i class="fa fa-shopping-bag mr-2 btn">Registered</i>
+                                            <div class="btn mr-5 registered">
+                                                <i class="fa fa-shopping-bag mr-2"></i>Registered
+                                            </div>
                                         {{else}}
                                             <a class="btn mr-5" href="/register-course"><i
                                                     class="fa fa-shopping-bag mr-2"></i>Register</a>
+
                                         {{/if}}
                                     </div>
                                     <div class="">
@@ -122,7 +128,7 @@
                                 <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews ({{reviewList.length}}
+                                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews ( {{reviewList.length}}
                                     )</a>
                             </li>
                         </ul>
@@ -202,7 +208,7 @@
                                 {{else}}
                                     <div style="font-weight: bold">BUY THIS COURSE TO REVIEW</div>
                                 {{/if}}
-                                <div style="font-weight: bold">OTHER REVIEWS</div>
+                                    <div style="font-weight: bold">OTHER REVIEWS</div>
                                 {{#each reviewList}}
                                     <div class="reviews-submitted">
                                         <div class="reviewer">{{this.owner.name}} - <span>12 Dec 2020</span></div>

@@ -102,7 +102,7 @@ h2 {
     box-shadow: none;
 }
 
-.btn{
+.btn {
     color: #FF6F61;
     background: #ffffff;
     border: 1px solid #FF6F61;
@@ -110,7 +110,7 @@ h2 {
 
 .btn:hover,
 .btn:active,
-.btn:focus{
+.btn:focus {
     color: #ffffff;
     background: #FF6F61;
     box-shadow: none;
@@ -1183,6 +1183,14 @@ h2 {
     margin-right: 5px;
 }
 
+.product-detail .product-content .action .registered i {
+    margin-right: 5px;
+}
+
+.product-detail .product-content .action .registered i {
+    margin-right: 5px;
+}
+
 .product-detail .nav.nav-pills .nav-link {
     color: #FF6F61;
     background: #000000;
@@ -1365,7 +1373,7 @@ h2 {
 }
 
 .sidebar-widget.brands ul li a::before {
-    content: '\f105';
+    content: '*';
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     padding-right: 5px;
@@ -1376,7 +1384,7 @@ h2 {
 }
 
 .sidebar-widget.brands ul li a:hover::before {
-    content: '\f101';
+    content: '**';
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
 }
