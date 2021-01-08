@@ -15,181 +15,186 @@
 </div>
 <!-- Top bar End -->
 {{#if role}}
-{{#ifEquals role "Student"}}
-<!-- Nav Bar Start -->
-<div class="nav">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    {{#ifEquals role "Student"}}
+        <!-- Nav Bar Start -->
+        <div class="nav">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                <div class="navbar-nav mr-auto">
-                    <a href="/" class="nav-item nav-link active">Home</a>
-                    <div class="nav-item dropdown">
-                        <a href="/course-list" class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
-                        <div class="dropdown-menu">
-                            {{#each categories}}
-                            <a href="/course-list?categoryName={{this.name}}" class="dropdown-item">{{this.name}}</a>
-                            {{/each}}
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <div class="nav-item dropdown">
+                                <a href="/course-list" class="nav-link dropdown-toggle"
+                                   data-toggle="dropdown">Category</a>
+                                <div class="dropdown-menu">
+                                    {{#each categories}}
+                                        <a href="/course-list?categoryName={{this.name}}&score=-1"
+                                        class="dropdown-item">{{this.name}}</a>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            <a href="/courses-owned" class="nav-item nav-link">Purchase history</a>
+                            <a href="/cart" class="nav-item nav-link">Watchlist</a>
+                        </div>
+                        <div class="navbar-nav ml-auto">
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{user.name}}</a>
+                                <div class="dropdown-menu">
+                                    <a href="/profile" class="dropdown-item">Profile</a>
+                                    <a href="/logout" class="dropdown-item">Logout</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <a href="/courses-owned" class="nav-item nav-link">Purchase history</a>
-                    <a href="/cart" class="nav-item nav-link">Watchlist</a>
-                </div>
-                <div class="navbar-nav ml-auto">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{user.name}}</a>
-                        <div class="dropdown-menu">
-                            <a href="/profile" class="dropdown-item">Profile</a>
-                            <a href="/logout" class="dropdown-item">Logout</a>
-                        </div>
-                    </div>
-                </div>
+                </nav>
             </div>
-        </nav>
-    </div>
-</div>
-<div class="bottom-bar">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-md-3">
-                <div class="logo">
-                    <a href="/">
-                        <img src="/img/logo.png" alt="Logo">
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="search">
-                    <form action="/course-list">
-                        <input type="text" placeholder="Search by course name" name="searchValue">
-                        <button type="submit"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
-            </div>
-
         </div>
-    </div>
-</div>
-{{/ifEquals}}
-<!-- Nav Bar End -->
-{{#ifEquals role "Teacher"}}
-<div class="nav">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                <div class="navbar-nav mr-auto">
-                    <a href="/" class="nav-item nav-link active">Home</a>
-                    <a href="/course-list" class="nav-item nav-link" data-toggle="dropdown">Courses Management</a>
-                    <a href="/teacher/add-course" class="nav-item nav-link">Add course</a>
-                </div>
-                <div class="navbar-nav ml-auto">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{user.name}}</a>
-                        <div class="dropdown-menu">
-                            <a href="/profile" class="dropdown-item">Profile</a>
-                            <a href="/logout" class="dropdown-item">Logout</a>
+        <div class="bottom-bar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <div class="logo">
+                            <a href="/">
+                                <img src="/img/logo.png" alt="Logo">
+                            </a>
                         </div>
                     </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-</div>
-{{/ifEquals}}
-{{#ifEquals role "Administrator"}}
-<div class="nav">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                <div class="navbar-nav mr-auto">
-                    <a href="/" class="nav-item nav-link active">Home</a>
-                    <a href="/teacher/course-add" class="nav-item nav-link">Category Management</a>
-                    <a href="/teacher/course-add" class="nav-item nav-link">Course Management</a>
-                    <a href="/teacher/course-add" class="nav-item nav-link">User Management</a>
-                </div>
-                <div class="navbar-nav ml-auto">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{user.name}}</a>
-                        <div class="dropdown-menu">
-                            <a href="/profile" class="dropdown-item">Profile</a>
-                            <a href="/logout" class="dropdown-item">Logout</a>
+                    <div class="col-md-6">
+                        <div class="search">
+                            <form action="/course-list">
+                                <input type="text" placeholder="Search by course name" name="searchValue">
+                                <button type="submit"><i class="fa fa-search"></i></button>
+                            </form>
                         </div>
                     </div>
+
                 </div>
             </div>
-        </nav>
-    </div>
-</div>
-{{/ifEquals}}
+        </div>
+    {{/ifEquals}}
+    <!-- Nav Bar End -->
+    {{#ifEquals role "Teacher"}}
+        <div class="nav">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/course-list" class="nav-item nav-link" data-toggle="dropdown">Courses
+                                Management</a>
+                            <a href="/teacher/add-course" class="nav-item nav-link">Add course</a>
+                        </div>
+                        <div class="navbar-nav ml-auto">
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{user.name}}</a>
+                                <div class="dropdown-menu">
+                                    <a href="/profile" class="dropdown-item">Profile</a>
+                                    <a href="/logout" class="dropdown-item">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    {{/ifEquals}}
+    {{#ifEquals role "Administrator"}}
+        <div class="nav">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/teacher/course-add" class="nav-item nav-link">Category Management</a>
+                            <a href="/teacher/course-add" class="nav-item nav-link">Course Management</a>
+                            <a href="/teacher/course-add" class="nav-item nav-link">User Management</a>
+                        </div>
+                        <div class="navbar-nav ml-auto">
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{user.name}}</a>
+                                <div class="dropdown-menu">
+                                    <a href="/profile" class="dropdown-item">Profile</a>
+                                    <a href="/logout" class="dropdown-item">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    {{/ifEquals}}
 {{else}}
-<!-- Nav Bar Start -->
-<div class="nav">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <!-- Nav Bar Start -->
+    <div class="nav">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                <div class="navbar-nav mr-auto">
-                    <a href="/" class="nav-item nav-link active">Home</a>
-                    <div class="nav-item dropdown">
-                        <a href="/course-list" class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
-                        <div class="dropdown-menu">
-                            {{#each categories}}
-                            <a href="/course-list?categoryName={{this.name}}" class="dropdown-item">{{this.name}}</a>
-                            {{/each}}
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav mr-auto">
+                        <a href="/" class="nav-item nav-link active">Home</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
+                            <div class="dropdown-menu">
+                                {{#each categories}}
+                                    <a href="/course-list?categoryName={{this.name}}&score=-1"
+                                    class="dropdown-item">{{this.name}}</a>
+                                {{/each}}
+                            </div>
+                        </div>
+                        <a href="/course-list?score=-1" class="nav-item nav-link">All Courses</a>
+                        <a href="/courses-owned" class="nav-item nav-link">Purchase history</a>
+                        <a href="/cart" class="nav-item nav-link">Watchlist</a>
+                    </div>
+                    <div class="navbar-nav ml-auto">
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
+                            <div class="dropdown-menu">
+                                <a href="/login" class="dropdown-item">Login</a>
+                                <a href="/register" class="dropdown-item">Register</a>
+                            </div>
                         </div>
                     </div>
-                    <a href="/courses-owned" class="nav-item nav-link">Purchase history</a>
-                    <a href="/cart" class="nav-item nav-link">Watchlist</a>
                 </div>
-                <div class="navbar-nav ml-auto">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
-                        <div class="dropdown-menu">
-                            <a href="/login" class="dropdown-item">Login</a>
-                            <a href="/register" class="dropdown-item">Register</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-</div>
-<div class="bottom-bar">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-md-3">
-                <div class="logo">
-                    <a href="/">
-                        <img src="/img/logo.png" alt="Logo">
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="search">
-                    <form action="/course-list">
-                        <input type="text" placeholder="Search by course name" name="searchValue">
-                        <button type="submit"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
-            </div>
-
+            </nav>
         </div>
     </div>
-</div>
+    <div class="bottom-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <div class="logo">
+                        <a href="/">
+                            <img src="/img/logo.png" alt="Logo">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="search">
+                        <form action="/course-list">
+                            <input type="text" placeholder="Search by course name" name="searchValue">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 {{/if}}
 <!-- Bottom Bar Start -->
 

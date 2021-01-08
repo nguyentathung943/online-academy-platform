@@ -75,8 +75,7 @@ router.post(
 router.get("/profile", async (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect("/login");
-    }
-    else{
+    } else {
         res.render("profile", {
             name: req.user.name,
             mobile: req.user.phoneNumber,
@@ -303,11 +302,14 @@ router.post("/add-review", check.CheckAuthenticated, async (req, res) => {
 })
 router.get("/course-list", async (req, res) => {
     const categories = await Category.find({})
-
+    let option = ""
+    let host = req.originalUrl;
     if (req.query.sortPrice) {
+        host = host.split("?")[0] + "?";
+        console.log("Host", host)
         let status = null;
-        req.query.sortPrice == "1" ? status = 1 : status = -1
-        const courses = await Methods.FetchCourseSortAs("price", status)
+        req.query.sortPrice == "1" ? (status = 1, option = "Ascending Price") : (status = -1, option = "Descending Price");
+        let courses = await Methods.FetchCourseSortAs("price", status)
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -316,30 +318,52 @@ router.get("/course-list", async (req, res) => {
             courses[index].category = cate
             courses[index].starArr = GetStarArr(courses[index].score)
         }
-        res.render("product-list", {
-            categories,
-            courses
-        });
-    } else if (req.query.sortRate) {
-        let status = null;
-        req.query.sortRate == "1" ? status = 1 : status = -1
-        const courses = await Methods.FetchCourseSortAs("score", status)
-        for (const e of courses) {
-            let index = courses.indexOf(e);
-            const teacher = await Methods.getCourseLecturer(e.id);
-            courses[index].owner = teacher;
-            const cate = await Methods.GetCateName(e.id)
-            courses[index].category = cate
-            courses[index].starArr = GetStarArr(courses[index].score)
-        }
+        courses = GetPagination(courses)
         res.render("product-list", {
             categories,
             courses,
+            option,
+            host
+        });
+    } else if (req.query.sortRate) {
+        host = host.split("?")[0] + "?";
+        console.log("Host", host)
+        let status = null;
+        req.query.sortRate == "1" ? (status = 1, option = "Ascending Rate Score") : (status = -1, option = "Descending Rate Score");
+        let courses = await Methods.FetchCourseSortAs("score", status)
+        for (const e of courses) {
+            let index = courses.indexOf(e);
+            const teacher = await Methods.getCourseLecturer(e.id);
+            courses[index].owner = teacher;
+            const cate = await Methods.GetCateName(e.id)
+            courses[index].category = cate
+            courses[index].starArr = GetStarArr(courses[index].score)
+        }
+        courses = GetPagination(courses)
+        res.render("product-list", {
+            categories,
+            courses,
+            option,
+            host
         });
     } else if (req.query.searchValue) {
+        host = host.split("&")[0] + "&";
+        console.log("Host", host)
         var courses = await Methods.searchCourseFullText(req.query.searchValue)
-        let listPage = [];
-        let listPageCourses = [];
+        var attri = null
+        req.query.price ? (attri = "price") : (attri = "score")
+        if (attri === "price") {
+            if (req.query[attri] == "-1")
+                option = "Descending Price";
+            else
+                option = "Ascending Price";
+        } else {
+            if (req.query[attri] == "-1")
+                option = "Descending Rate Score";
+            else
+                option = "Ascending Rate Score";
+        }
+        courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
         if (courses.length === 0) {
             courses = null;
         } else {
@@ -351,27 +375,33 @@ router.get("/course-list", async (req, res) => {
                 courses[index].category = cate
                 courses[index].starArr = GetStarArr(courses[index].score)
             }
-            let len = courses.length;
-            let count = len / 4;
-            for (let i = 0; i < count; i++)
-                listPageCourses.push({id: i + 1, data: courses.slice(i * 4, i * 4 + 4)})
-            if (len % 4 !== 0) {
-                listPageCourses.push({id: count + 1, data: courses.slice(count * 4)})
-                count++
-            }
-            for (let i = 1; i <= count; i++)
-                listPage.push(i)
-            console.log("listPage", listPage)
-            console.log("listPageCourse", listPageCourses)
+
+            courses = GetPagination(courses)
         }
         res.render("product-list", {
             categories,
             courses,
-            listPage,
-            listPageCourses
+            option,
+            host
         });
     } else if (req.query.categoryName) {
-        const courses = await Methods.FetchCourseByCateName(req.query.categoryName)
+        let courses = await Methods.FetchCourseByCateName(req.query.categoryName)
+        host = host.split("&")[0] + "&";
+        console.log("Host", host)
+        var attri = null
+        req.query.price ? (attri = "price") : (attri = "score")
+        if (attri === "price") {
+            if (req.query[attri] == "-1")
+                option = "Descending Price";
+            else
+                option = "Ascending Price";
+        } else {
+            if (req.query[attri] == "-1")
+                option = "Descending Rate Score";
+            else
+                option = "Ascending Rate Score";
+        }
+        courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -380,12 +410,31 @@ router.get("/course-list", async (req, res) => {
             courses[index].category = cate
             courses[index].starArr = GetStarArr(courses[index].score)
         }
+        courses = GetPagination(courses)
         res.render("product-list", {
             categories,
-            courses
+            courses,
+            option,
+            host
         });
     } else {
-        const courses = await Courses.find();
+        host = host.split("?")[0] + "?";
+        console.log("Host", host)
+        let courses = await Courses.find();
+        var attri = null
+        req.query.price ? (attri = "price") : (attri = "score")
+        if (attri === "price") {
+            if (req.query[attri] == "-1")
+                option = "Descending Price";
+            else
+                option = "Ascending Price";
+        } else {
+            if (req.query[attri] == "-1")
+                option = "Descending Rate Score";
+            else
+                option = "Ascending Rate Score";
+        }
+        courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -394,16 +443,19 @@ router.get("/course-list", async (req, res) => {
             courses[index].category = cate
             courses[index].starArr = GetStarArr(courses[index].score)
         }
+        courses = GetPagination(courses)
         res.render("product-list", {
             categories,
-            courses
+            courses,
+            option,
+            host
         });
     }
 });
 
 router.post("course-list", async (req, res) => {
     if (req.body.searchValue) {
-        return res.redirect("/course-list?searchValue=" + req.body.searchValue)
+        return res.redirect("/course-list?searchValue=" + req.body.searchValue + "&score=-1")
     }
 })
 
@@ -445,5 +497,18 @@ const GetStarArr = (score) => {
     for (let i = 0; i < 5 - Math.ceil(score); i++)
         starList.push("fa-star-o");
     return starList;
+}
+
+const GetPagination = (courses) => {
+    let listPageCourses = [];
+    let len = courses.length;
+    let count = Math.floor(len / 4);
+    for (let i = 0; i < count; i++)
+        listPageCourses.push({id: i + 1, data: courses.slice(i * 4, i * 4 + 4)})
+    if (len % 4 !== 0) {
+        listPageCourses.push({id: count + 1, data: courses.slice(count * 4)})
+        count++
+    }
+    return listPageCourses
 }
 module.exports = router

@@ -93,11 +93,11 @@ const ShowWatchList = async (StudentID) => {
 const RemoveCourseFromWatchList = async (StudentID, CourseID) => {
     const student = await Students.findById(StudentID);
     const index1 = student.CoursesLiked.indexOf(CourseID)
-    student.CoursesLiked.splice(index1,1)
+    student.CoursesLiked.splice(index1, 1)
     await student.save()
     const course = await Courses.findById(CourseID)
     await course.populate('StudentsLiked').execPopulate()
-    course.StudentsLiked = course.StudentsLiked.filter(e =>{
+    course.StudentsLiked = course.StudentsLiked.filter(e => {
         return e._id != StudentID
     })
     await course.save()
@@ -285,6 +285,10 @@ const FetchCourseSortAs = async (attribute, status) => {
     if (attribute === "student") courses = await Courses.find().sort({number_of_student: status})
     return courses
 }
+const CourseSortAs = async (arr, attribute, status) => {
+    status === 1 ? arr.sort((a, b) => a[attribute] - b[attribute]) : arr.sort((a, b) => b[attribute] - a[attribute])
+    return arr
+}
 const MarkCourseAsDone = async (CourseID) => {
     const course = await Courses.findById(CourseID)
     await course.populate("ChapterList").execPopulate()
@@ -333,10 +337,10 @@ const UpdateDescription = async (CourseId, NewDesc) => {
     course.full_description = NewDesc;
     await course.save()
 }
-const UpdateCourseDetail = async (CourseId,avatar, Name, BriefDesc, Price) => {
+const UpdateCourseDetail = async (CourseId, avatar, Name, BriefDesc, Price) => {
     const course = await Courses.findById(CourseId);
     course.name = Name;
-    if(avatar!=null){
+    if (avatar != null) {
         const imageID = avatar.split('/')[5]
         const baseURl = "https://drive.google.com/thumbnail?id=" + imageID
         course.avatar = baseURl
@@ -387,4 +391,5 @@ module.exports = {
     //Update description
     UpdateDescription,
     UpdateCourseDetail,
+    CourseSortAs,
 } 

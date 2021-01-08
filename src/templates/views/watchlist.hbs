@@ -74,9 +74,8 @@
                     </div>
                     {{#if courses}}
                         <div class="tab-content w-100">
-                            {{#each listPageCourses}}
-
-                                <div class="tab-pane fade" id="page{{id}}">
+                            {{#each courses}}
+                                <div class="tab-pane fade" id="page{{this.id}}">
                                     <div class="row">
                                         {{#each this.data}}
 
@@ -132,15 +131,14 @@
                     {{/if}}
 
                 </div>
-
                 <!-- Pagination Start -->
                 <div class="col-md-12">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center nav">
-                            {{#each listPage}}
+                            {{#each courses}}
                                 <li class="page-item">
-                                    <a class="page-link nav-link" id="btn{{this}}" data-toggle="pill"
-                                       href="#page{{this}}" aria-selected="false" role="tab">{{this}}</a></li>
+                                    <a class="page-link nav-link" id="btn{{this.id}}" data-toggle="pill"
+                                       href="#page{{this.id}}" aria-selected="false" role="tab">{{this.id}}</a></li>
                             {{/each}}
                         </ul>
                     </nav>
@@ -176,7 +174,6 @@
 <script>
     // jQuery(".tab-pane:first-child").addClass("show active")
     jQuery("#btn1").click()
-
 </script>
 </body>
 

@@ -58,15 +58,15 @@
                         <div class="col-md-4">
                             <div class="product-short">
                                 <div class="dropdown bg-white">
-                                    <div class="dropdown-toggle" data-toggle="dropdown">Product sort by</div>
+                                    <div class="dropdown-toggle" data-toggle="dropdown">{{option}}</div>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="/course-list?sortRate=1" class="dropdown-item">Ascending Rate Score</a>
-                                        <a href="/course-list?sortRate=-1" class="dropdown-item">Descending Rate
+                                        <a href="{{host}}score=1" class="dropdown-item">Ascending Rate
+                                            Score</a>
+                                        <a href="{{host}}score=-1" class="dropdown-item">Descending Rate
                                             Score</a>
 
-                                        <a href="/course-list?sortPrice=1" class="dropdown-item">Ascending Price</a>
-                                        <a href="/course-list?sortPrice=-1" class="dropdown-item">Descending Price</a>
-
+                                        <a href="{{host}}price=1" class="dropdown-item">Ascending Price</a>
+                                        <a href="{{host}}price=-1" class="dropdown-item">Descending Price</a>
                                     </div>
                                 </div>
                             </div>
@@ -74,8 +74,8 @@
                     </div>
                     {{#if courses}}
                         <div class="tab-content w-100">
-                            {{#each listPageCourses}}
-                                <div class="tab-pane fade" id="page{{id}}">
+                            {{#each courses}}
+                                <div class="tab-pane fade" id="page{{this.id}}">
                                     <div class="row">
                                         {{#each this.data}}
 
@@ -135,10 +135,10 @@
                 <div class="col-md-12">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center nav">
-                            {{#each listPage}}
+                            {{#each courses}}
                                 <li class="page-item">
-                                    <a class="page-link nav-link" id="btn{{this}}" data-toggle="pill"
-                                       href="#page{{this}}" aria-selected="false" role="tab">{{this}}</a></li>
+                                    <a class="page-link nav-link" id="btn{{this.id}}" data-toggle="pill"
+                                       href="#page{{this.id}}" aria-selected="false" role="tab">{{this.id}}</a></li>
                             {{/each}}
                         </ul>
                     </nav>
@@ -172,8 +172,9 @@
 <!-- Template Javascript -->
 <script src="js/main.js"></script>
 <script>
-    // jQuery(".tab-pane:first-child").addClass("show active")
-    jQuery("#btn1").click()
+    jQuery("#btn1").click();
+    var Hoa = $('#page1').html();
+    console.log(Hoa)
 </script>
 </body>
 
