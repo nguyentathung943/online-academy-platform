@@ -251,6 +251,18 @@ router.get("/register-course", check.CheckAuthenticated, async (req, res) => {
     }
 })
 
+router.get("/watchlist", check.CheckAuthenticated, async (req, res) => {
+    try {
+        const student = req.user
+        const courses = Methods.ShowWatchList(student)
+        // await Methods.addtCourseToWatchList(student.id, CourseID)
+        // const check = Methods.isLiked(student.id, CourseID)
+        res.render("/watchlist", {courses})
+    } catch (e) {
+        res.send(e)
+    }
+})
+
 router.get("/add-watchlist", check.CheckAuthenticated, async (req, res) => {
     try {
         const student = req.user
