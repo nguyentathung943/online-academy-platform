@@ -26,7 +26,8 @@ router.get("/", async (req, res) => {
         res.render("index", {
             courses,
             categories,
-            role: req.user.role
+            role: req.user.role,
+            user: req.user
         });
     } else {
         const courses = await Courses.find();
@@ -42,7 +43,6 @@ router.get("/", async (req, res) => {
         res.render("index", {
             courses,
             categories,
-            role: ""
         });
     }
 });
@@ -76,11 +76,15 @@ router.get("/profile", async (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect("/login");
     }
-    res.render("profile", {
-        name: req.user.name,
-        mobile: req.user.phoneNumber,
-        email: req.user.email,
-    });
+    else{
+        res.render("profile", {
+            name: req.user.name,
+            mobile: req.user.phoneNumber,
+            email: req.user.email,
+            role: req.user.role,
+            user: req.user
+        });
+    }
 });
 
 router.post("/profile", async (req, res) => {

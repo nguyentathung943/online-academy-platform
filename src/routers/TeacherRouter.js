@@ -28,9 +28,9 @@ router.post("/teacher/add-course", async (req, res) => {
             price: req.body.price,
         })
         await course.save()
-        res.render("addCourse", {cate, categories, success_message: "Course added successfully", role: req.user.role});
+        res.render("addCourse", {cate, categories, success_message: "Course added successfully",  role: req.user.role,user: req.user});
     } catch (e) {
-        res.render("addCourse", {cate, categories, error_message: e, role: req.user.role});
+        res.render("addCourse", {cate, categories, error_message: e,   role: req.user.role, user: req.user});
     }
 })
 

@@ -103,7 +103,12 @@ router.post("/admin/view-course",async (req,res)=>{
   console.log(req.body.action);
   if (req.body.action == "course_detail") {
     // Update course's detail
-    await Methods.UpdateCourseDetail(CourseID.toString(),req.body.courseNameInput,req.body.briefDescriptionInput,req.body.priceInput);
+    let ava = null
+    if(req.body.avatarInput!==''){
+      ava = req.body.avatarInput
+    }
+    console.log(ava)
+    await Methods.UpdateCourseDetail(CourseID.toString(),ava,req.body.courseNameInput,req.body.briefDescriptionInput,req.body.priceInput);
     console.log("Pass course detail");
   }
   else if (req.body.action == "course_description"){
