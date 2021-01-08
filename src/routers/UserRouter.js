@@ -204,8 +204,19 @@ router.get("/product-detail", async (req, res) => {
     }
     course.number_of_student = course.number_of_student.toLocaleString()
     course.starArr = GetStarArr(course.score)
+    await course.populate("owner").execPopulate()
+    course.relatedCourses = await Methods.GetRelatedCourses(course.category)
+    let index = course.relatedCourses.findIndex((e) => e._id.toString() === course._id.toString())
+    course.relatedCourses.splice(index, 1);
+    if (course.relatedCourses.length > 5) {
+        course.relatedCourses = course.relatedCourses.slice(0, 5)
+    }
+    course.relatedCourses.forEach((e, index) => {
+        course.relatedCourses[index].starArr = GetStarArr(course.relatedCourses[index].score)
+    })
 
     if (req.isAuthenticated()) {
+
         const isCommented = await Methods.isReviewed(req.user.id, CourseID)
         const isLiked = await Methods.isLiked(req.user.id, CourseID)
         const isRegistered = await Methods.isRegistered(req.user.id, CourseID)

@@ -128,6 +128,9 @@
                                 <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#teacherInfo">Lecturer information</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" data-toggle="pill" href="#reviews">Reviews ( {{reviewList.length}}
                                     )</a>
                             </li>
@@ -140,7 +143,15 @@
                                     {{{course.full_description}}}
                                 </p>
                             </div>
-
+                            <div id="teacherInfo" class="container tab-pane active">
+                                <h4>Lecturer Infomation</h4>
+                                <div>
+                                    <p><span class="font-weight-bold">Name:</span> {{course.owner.name}}</p>
+                                    <p><span class="font-weight-bold">Phone number:</span> {{course.owner.phoneNumber}}
+                                    </p>
+                                    <p><span class="font-weight-bold">Email:</span> {{course.owner.email}}</p>
+                                </div>
+                            </div>
                             <div id="reviews" class="container tab-pane fade">
                                 {{#if isRegistered}}
                                     {{#if isCommented}}
@@ -238,7 +249,39 @@
                     </div>
 
                     <div class="row align-items-center product-slider product-slider-3">
+                        {{#each course.relatedCourses}}
+                            <div class="col-lg-4">
+                                <div class="product-item">
 
+                                    <div class="product-image">
+                                        <a href="/product-detail?id={{this._id}}">
+                                        <img src="{{this.avatar}}" alt="Product Image"/>
+                                        </a>
+                                    </div>
+                                    <div class="product-title">
+                                        <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
+                                        <p class="text-white m-0">{{this.name}}</p>
+                                        <p class="text-white m-0">{{this.category.name}}</p>
+                                        <p class="text-white m-0">{{this.owner.name}}</p>
+                                        </a>
+
+                                        <div style="text-align: left">
+                                            <span class="font-weight-bold" style="color: #FF6F61">{{this.score}}</span>
+                                            <div class="ratting d-inline">
+                                                {{#each this.starArr}}
+                                                    <i class="fa {{this}}"></i>
+                                                {{/each}}
+                                            </div>
+                                            <span class="text-white">({{this.number_of_reviewer}})</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>{{this.price}}</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/each}}
                     </div>
                 </div>
             </div>

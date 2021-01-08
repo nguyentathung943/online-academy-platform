@@ -285,6 +285,11 @@ const FetchCourseSortAs = async (attribute, status) => {
     if (attribute === "student") courses = await Courses.find().sort({number_of_student: status})
     return courses
 }
+
+const GetRelatedCourses = async (id) => {
+    const course = await Courses.find({category: id}).sort({number_of_student: -1})
+    return course
+}
 const CourseSortAs = async (arr, attribute, status) => {
     status === 1 ? arr.sort((a, b) => a[attribute] - b[attribute]) : arr.sort((a, b) => b[attribute] - a[attribute])
     return arr
@@ -392,4 +397,5 @@ module.exports = {
     UpdateDescription,
     UpdateCourseDetail,
     CourseSortAs,
+    GetRelatedCourses
 } 
