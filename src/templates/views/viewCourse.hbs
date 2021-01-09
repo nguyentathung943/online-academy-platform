@@ -73,6 +73,41 @@
         .collapse {
             display:
         }
+
+        #status {
+
+            display: inline-block;
+            color: #FF6F61;
+            font-size: 25px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .status {
+            margin-bottom: 15px;
+            position: relative;
+            width: 100%;
+        }
+        .status h4 {
+                display: inline-block;
+    width: 80px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-right: 5px;
+        }
+        #status{
+                display: inline-block;
+    width: 80px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-right: 5px;
+        }
+        @media screen and (min-width: 676px) {
+            .modal-dialog {
+                max-width: 800px;
+                /* New width for default modal */
+            }
+        }
     </style>
 </head>
 
@@ -100,7 +135,7 @@
             aria-labelledby="renderVideoModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-body" style="height: 400px">
+                    <div class="modal-body" style="height: 600px">
                         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8RYslufQHlg"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -215,7 +250,7 @@
                         <div class="row align-items-center">
                             <div class="col-md-5">
                                 <div class="product-slider-single normal-slider">
-                                    <img src="{{course.avatar}}" alt="Image"/>
+                                    <img src="{{course.avatar}}" alt="Image" />
                                 </div>
                             </div>
                             <div class="col-md-7">
@@ -227,9 +262,17 @@
 
                                         <p id="briefDescription">{{course.brief_description}}</p>
                                         <div class="price">
-                                            <h4>Price:</h4>
+                                            <h4>Price :</h4>
                                             <p>$</p>
                                             <p id="price"> {{course.price}} </p><span>$149</span>
+                                        </div>
+                                        <div class="status">
+                                            <h4>Status :</h4>
+                                            {{#if course.completed}}
+                                            <p id="status"> Completed </p>
+                                            {{else}}
+                                            <p id="status"> Incompleted </p>
+                                            {{/if}}
                                         </div>
                                         <div class="">
                                             <button class="btn btn-edit-detail">
@@ -240,9 +283,8 @@
                                     <form id="coursedetail" style="display: none;" method="POST" action="">
                                         <div class="form-group">
                                             <label for="coursename">Image (URL)</label>
-                                            <input type="url" class="form-control" id="avatarInput"
-                                                name="avatarInput" aria-describedby="emailHelp"
-                                                placeholder="Enter image URL">
+                                            <input type="url" class="form-control" id="avatarInput" name="avatarInput"
+                                                aria-describedby="emailHelp" placeholder="Enter image URL">
                                         </div>
                                         <div class="form-group">
                                             <label for="coursename">Course name</label>
@@ -260,6 +302,13 @@
                                             <label for="price">Price</label>
                                             <input type="number" min="0" class="form-control" id="priceInput"
                                                 name="priceInput" placeholder="Enter course price" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="status">Status</label>
+                                            <select class="form-control" id="statusInput" name="statusInput">
+                                                <option value="Completed">Completed</option>
+                                                <option value="Incompleted">Incompleted</option>
+                                            </select>
                                         </div>
                                         <button class="btn btn-outline-success" id="saveDetailBtn" name="action"
                                             value="course_detail" type="submit">
@@ -279,6 +328,7 @@
 
                     <div class="row product-detail-bottom">
                         <div class="col-lg-12">
+                            
                             <ul class="nav nav-pills nav-justified">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
@@ -288,7 +338,7 @@
                             <div class="tab-content">
                                 <div id="description" class="container tab-pane active">
                                     <div class="desc-container">
-                                        {{course.full_description}}
+                                        {{{course.full_description}}}
                                     </div>
                                     <div class="editor" style="display: none;">
                                         <form method="POST" action="" name="desc">
@@ -362,24 +412,24 @@
 
                                                             <div class="collapse" id="chapter_{{inc @index}}">
                                                                 <!-- Add videos -->
-                                                                
-                                                                {{#with (arrayof ../videolist @index)}}
-                                                                    {{#each this.videos}}
-                                                                    <div class="mb-2">
-                                                                        <button type="button" class="btn btn-primary"
-                                                                            data-toggle="modal"
-                                                                            data-target="#renderVideoModal"
-                                                                            data-whatever="{{this.url}}">{{this.name}}</button>
 
-                                                                    </div>
-                                                                    {{/each}}
+                                                                {{#with (arrayof ../videolist @index)}}
+                                                                {{#each this.videos}}
+                                                                <div class="mb-2">
+                                                                    <button type="button" class="btn btn-primary"
+                                                                        data-toggle="modal"
+                                                                        data-target="#renderVideoModal"
+                                                                        data-whatever="{{this.url}}">{{this.name}}</button>
+
+                                                                </div>
+                                                                {{/each}}
                                                                 {{/with}}
-                                                                    <button class="rbtn" type="button"
-                                                                        data-toggle="modal" data-target="#addVideoModal"
-                                                                        data-whatever="{{this._id}}"
-                                                                        data-name="{{this.name}}"><i
-                                                                            class="fas fa-plus"></i></button>
-                                                               
+                                                                <button class="rbtn" type="button" data-toggle="modal"
+                                                                    data-target="#addVideoModal"
+                                                                    data-whatever="{{this._id}}"
+                                                                    data-name="{{this.name}}"><i
+                                                                        class="fas fa-plus"></i></button>
+
 
                                                             </div>
                                                         </div>
@@ -473,9 +523,7 @@
         var description = $('.desc-container');
         var cancelDescBtn = $('#cancelDescBtn');
         $('#txtDesc').html(description.html());
-        $('document').ready(function () {
-            description.html($.parseHTML(description.text()));
-        });
+
 
         editbtn.click(function () {
             $('#txtDesc').html(description.html());
@@ -495,10 +543,12 @@
             $('#courseNameInput').val($('#courseName').text());
             $('#briefDescriptionInput').val($('#briefDescription').text());
             $('#priceInput').val(parseInt($('#price').text()));
-            console.log($('#price').text());
 
             $('#content').css("display", "none");
             $('#coursedetail').css("display", "block");
+            if ($('#status').text().trim() === "Incompleted")
+                $('#statusInput').val("Incompleted");
+            else  $('#statusInput').val("Completed");
         })
         detailCancelBtn.click(function () {
             $('#content').css("display", "block");

@@ -1080,7 +1080,7 @@ h2 {
 .product-detail .product-content .price,
 .product-detail .product-content .details,
 .product-detail .product-content .quantity,
-.product-detail .product-content .action {
+.product-detail .product-content .action{
     position: relative;
     width: 100%;
 }
