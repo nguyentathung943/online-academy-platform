@@ -34,8 +34,7 @@
 <div class="breadcrumb-wrap">
     <div class="container-fluid">
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active">Product Detail</li>
         </ul>
     </div>
@@ -76,6 +75,7 @@
                                     <h2>{{course.name}}</h2>
                                 </div>
                                 <p class="font-weight-bold">{{course.category.name}}</p>
+                                <p>Last updated {{course.date}}</p>
                                 <p>{{course.brief_description}}</p>
 
                                 <div>
@@ -223,7 +223,7 @@
                                 <div style="font-weight: bold">OTHER REVIEWS</div>
                                 {{#each reviewList}}
                                     <div class="reviews-submitted">
-                                        <div class="reviewer">{{this.owner.name}} - <span>12 Dec 2020</span></div>
+                                        <div class="reviewer">{{this.owner.name}} - <span>{{this.date}}</span></div>
                                         <div class="ratting">
                                             {{#each this.Star}}
                                                 <i class="fa {{this}}"></i>

@@ -88,7 +88,6 @@ const addtCourseToWatchList = async (StudentID, CourseID) => {
 const ShowWatchList = async (StudentID) => {
     const student = await Students.findById(StudentID)
     await student.populate("CoursesLiked").execPopulate()
-    console.log("student", student)
     return student.CoursesLiked.toObject()
 }
 const RemoveCourseFromWatchList = async (StudentID, CourseID) => {

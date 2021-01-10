@@ -53,27 +53,20 @@
             </div>
             <div class="col-md-9">
                 <div class="header-slider normal-slider">
-                    <div class="header-slider-item">
-                        <img style="width: 600px; height: 400px" src="img/slider-1.jpg" alt="Slider Image"/>
-                        <div class="header-slider-caption">
-                            <p>Some text goes here that describes the image</p>
-                            <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Shop Now</a>
+                    {{#each featuredCourses}}
+                        <div class="header-slider-item">
+                            <div class="row">
+                                <img class="col-6" src="{{this.avatar}}"
+                                     alt="Slider Image"/>
+                                <div class="col-6">
+                                    <p>{{this.name}}</p>
+                                    <p>{{this.category.name}}</p>
+                                    <p>{{this.owner.name}}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="header-slider-item">
-                        <img style="width: 600px; height: 400px" src="img/slider-2.jpg" alt="Slider Image"/>
-                        <div class="header-slider-caption">
-                            <p>Some text goes here that describes the image</p>
-                            <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Shop Now</a>
-                        </div>
-                    </div>
-                    <div class="header-slider-item">
-                        <img style="width: 600px; height: 400px" src="img/slider-3.jpg" alt="Slider Image"/>
-                        <div class="header-slider-caption">
-                            <p>Some text goes here that describes the image</p>
-                            <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Shop Now</a>
-                        </div>
-                    </div>
+                    {{/each}}
+
                 </div>
             </div>
             <!--            <div class="col-md-3">-->
@@ -117,10 +110,10 @@
 <div id="most-view-course" class="featured-product product">
     <div class="container-fluid">
         <div class="section-header">
-            <h1>Most View Course</h1>
+            <h1>Most View Courses</h1>
         </div>
         <div class="row align-items-center product-slider product-slider-4">
-            {{#each courses}}
+            {{#each mostViewCourses}}
                 <div class="col-lg-3">
                     <div class="product-item">
 
@@ -163,9 +156,42 @@
 <div class="recent-product product" id="newest-course">
     <div class="container-fluid">
         <div class="section-header">
-            <h1>Newest Course</h1>
+            <h1>Newest Courses</h1>
         </div>
         <div class="row align-items-center product-slider product-slider-4">
+            {{#each newestCourses}}
+                <div class="col-lg-3">
+                    <div class="product-item">
+
+                        <div class="product-image">
+                            <a href="/product-detail?id={{this._id}}">
+                            <img src="{{this.avatar}}" alt="Product Image"/>
+                            </a>
+                        </div>
+                        <div class="product-title">
+                            <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
+                            <p class="text-white m-0">{{this.name}}</p>
+                            <p class="text-white m-0">{{this.category.name}}</p>
+                            <p class="text-white m-0">{{this.owner.name}}</p>
+                            </a>
+
+                            <div style="text-align: left">
+                                <span class="font-weight-bold" style="color: #FF6F61">{{this.score}}</span>
+                                <div class="ratting d-inline">
+                                    {{#each this.starArr}}
+                                        <i class="fa {{this}}"></i>
+                                    {{/each}}
+                                </div>
+                                <span class="text-white">({{this.number_of_reviewer}})</span>
+                            </div>
+                        </div>
+                        <div class="product-price">
+                            <h3><span>$</span>{{this.price}}</h3>
+                            <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
         </div>
     </div>
 </div>

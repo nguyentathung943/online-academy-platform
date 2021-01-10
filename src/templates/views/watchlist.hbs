@@ -32,9 +32,8 @@
 <div class="breadcrumb-wrap">
     <div class="container-fluid">
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Products</a></li>
-            <li class="breadcrumb-item active">Cart</li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Watchlist</li>
         </ul>
     </div>
 </div>
@@ -61,20 +60,19 @@
                                 <tr>
                                     <td>
                                         <div class="img">
-                                            <a href="#"><img src="img/product-1.jpg" alt="Image"></a>
-                                            <p>Product Name</p>
+                                            <a href="#"><img src="{{this.avatar}}" alt="Image"></a>
+                                            <p>{{this.name}}</p>
                                         </div>
                                     </td>
-                                    <td>$99</td>
+                                    <td>{{this.price}}$</td>
                                     <td>
-                                        <div class="qty">
-                                            <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                                            <input type="text" value="1">
-                                            <button class="btn-plus"><i class="fa fa-plus"></i></button>
-                                        </div>
+                                        {{this.owner.name}}
                                     </td>
                                     <td>
-                                        <button><i class="fa fa-trash"></i></button>
+                                        <a href="/remove-watchlist/{{this.id}}">
+                                            <button><i class="fa fa-trash"></i>
+                                            </button>
+                                        </a>
                                     </td>
                                 </tr>
                             {{/each}}
