@@ -342,11 +342,7 @@ const UpdateDescription = async (CourseId, NewDesc) => {
     course.full_description = NewDesc;
     await course.save()
 }
-<<<<<<< Updated upstream
-const UpdateCourseDetail = async (CourseId, avatar, Name, BriefDesc, Price) => {
-=======
 const UpdateCourseDetail = async (CourseId,avatar, Name, BriefDesc, Price, Status) => {
->>>>>>> Stashed changes
     const course = await Courses.findById(CourseId);
     course.name = Name;
     if (avatar != null) {
