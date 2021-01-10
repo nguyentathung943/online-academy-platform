@@ -354,16 +354,9 @@ const ChangeCateName = async (OldName, NewName) => {
 const UpdateDescription = async (CourseId, NewDesc) => {
     const course = await Courses.findById(CourseId);
     course.full_description = NewDesc;
-    await course.save();
-};
-const UpdateCourseDetail = async (
-    CourseId,
-    avatar,
-    Name,
-    BriefDesc,
-    Price,
-    Status
-) => {
+    await course.save()
+}
+const UpdateCourseDetail = async (CourseId,avatar, Name, BriefDesc, Price, Status) => {
     const course = await Courses.findById(CourseId);
     course.name = Name;
     if (avatar != null) {
