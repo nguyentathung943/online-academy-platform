@@ -4,11 +4,11 @@ const Admin = require("../models/admin");
 const Teachers = require("../models/teacher");
 const Courses = require("../models/course")
 const Methods = require("./Methods")
-
+const Send_Mail = require("../otp_confirm/otp")
 const passport = require("passport");
 const check = require("../middleware/middleware");
 const Category = require("../models/category");
-
+const OS = require("os")
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
@@ -58,14 +58,22 @@ router.get("/", async (req, res) => {
     }
     const categories = await Category.find({})
     if (req.isAuthenticated()) {
-        res.render("index", {
-            categories,
-            featuredCourses,
-            mostViewCourses,
-            newestCourses,
-            role: req.user.role,
-            user: req.user
-        });
+        if(!req.user.confirmed){
+            res.render('error', {
+                title:"EMAIL NOT CONFIRMED!",
+                error: 'Please confirm your email before using our services!',
+            })
+        }
+        else{
+            res.render("index", {
+                categories,
+                featuredCourses,
+                mostViewCourses,
+                newestCourses,
+                role: req.user.role,
+                user: req.user
+            });
+        }
     } else {
         res.render("index", {
             categories,
@@ -81,10 +89,6 @@ router.post("/test", async (req, res) => {
     return res.render("test", {data: req.body.mytextarea});
 });
 
-
-router.get("/test", async (req, res) => {
-    res.render("test");
-});
 
 router.get("/login", async (req, res) => {
     if (req.isAuthenticated()) {
@@ -104,7 +108,14 @@ router.post(
 router.get("/profile", async (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect("/login");
-    } else {
+    } 
+    else if(req.user.role==="Student"&&(!req.user.confirmed)){
+        res.render('error', {
+            title:"EMAIL NOT CONFIRMED!",
+            error: 'Please confirm your email before using our services!',
+        })
+    }
+    else {
         res.render("profile", {
             name: req.user.name,
             mobile: req.user.phoneNumber,
@@ -179,20 +190,45 @@ router.post("/profile", async (req, res) => {
 router.get("/register", async (req, res) => {
     res.render("register");
 });
-
+router.get("/confirm-email",async(req,res)=>{
+    const student = await Students.findById(req.query.id)
+    if(student.confirmed===false){
+        student.confirmed = true
+        await student.save()
+        res.render("confirm",{
+            message: "EMAIL CONFIRMED SUCCESSFULLY"
+        })
+    }
+    else{
+        res.render("confirm",{
+            message: "YOUR EMAIL HAS ALREADY BEEN CONFIRMED"
+        })
+    }
+})
 router.post("/register", async (req, res) => {
     try {
         if (req.body.password === req.body.confirmPassword) {
-            const student = new Students({
-                name: req.body.name,
-                email: req.body.email,
-                phoneNumber: req.body.phone,
-                password: req.body.password,
-            });
-            await student.save();
-            res.render("register", {
-                success_message: "Account created successfully",
-            });
+            const stu = await Students.findOne({email: req.body.email})
+            if(stu){
+                res.render("register", {
+                    fail_message: "Email already existed, please choose another one!",
+                });
+            }
+            else{
+                const student = new Students({
+                    name: req.body.name,
+                    email: req.body.email,
+                    phoneNumber: req.body.phone,
+                    password: req.body.password,
+                });
+                await student.save();
+                const host = req.headers.host
+                const url = "http://"+host+"/confirm-email?id="+student._id.toString()
+                await Send_Mail(url,student.email)
+                res.render("register", {
+                    success_message: "Account created successfully, check your mailbox to confirm your email",
+                });
+            }
         } else {
             res.render("register", {
                 fail_message: "Confirm password does not match",
@@ -201,23 +237,6 @@ router.post("/register", async (req, res) => {
     } catch (e) {
         res.send(e);
     }
-});
-
-router.get("/cart", async (req, res) => {
-    console.log(req.user);
-    res.render("cart");
-});
-
-router.get("/checkout", async (req, res) => {
-    res.render("checkout");
-});
-
-router.get("/contact", async (req, res) => {
-    res.render("contact");
-});
-
-router.get("/my-account", async (req, res) => {
-    res.render("my-account");
 });
 
 router.get("/product-detail", async (req, res) => {
@@ -256,39 +275,47 @@ router.get("/product-detail", async (req, res) => {
         await course.relatedCourses[index].populate("category").execPopulate()
     }
     if (req.isAuthenticated()) {
-
-        const isCommented = await Methods.isReviewed(req.user.id, CourseID)
-        const isLiked = await Methods.isLiked(req.user.id, CourseID)
-        const isRegistered = await Methods.isRegistered(req.user.id, CourseID)
-        if (isCommented) {
-            await isCommented.populate("owner").execPopulate()
-            const date = isCommented.createdAt.toString().split("T")[0]
-            const userStar = []
-            for (let i = 0; i < isCommented.Star; i++) {
-                userStar.push("fa-star");
-            }
-            res.render("product-detail", {
-                course,
-                reviewList,
-                isCommented,
-                userStar,
-                date,
-                isLiked,
-                isRegistered,
-                categories,
-                role: req.user.role,
-                user: req.user
-            });
-        } else {
-            res.render("product-detail", {
-                course,
-                reviewList,
-                isCommented: null,
-                isLiked,
-                isRegistered,
-                categories
-            });
+        if(!req.user.confirmed){
+            res.render('error', {
+                title:"EMAIL NOT CONFIRMED!",
+                error: 'Please confirm your email before using our services!',
+            })
         }
+        else{
+            const isCommented = await Methods.isReviewed(req.user.id, CourseID)
+            const isLiked = await Methods.isLiked(req.user.id, CourseID)
+            const isRegistered = await Methods.isRegistered(req.user.id, CourseID)
+            if (isCommented) {
+                await isCommented.populate("owner").execPopulate()
+                const date = isCommented.createdAt.toString().split("T")[0]
+                const userStar = []
+                for (let i = 0; i < isCommented.Star; i++) {
+                    userStar.push("fa-star");
+                }
+                res.render("product-detail", {
+                    course,
+                    reviewList,
+                    isCommented,
+                    userStar,
+                    date,
+                    isLiked,
+                    isRegistered,
+                    categories,
+                    role: req.user.role,
+                    user: req.user
+                });
+            } else {
+                res.render("product-detail", {
+                    course,
+                    reviewList,
+                    isCommented: null,
+                    isLiked,
+                    isRegistered,
+                    categories
+                });
+            }
+        }
+
     } else {
         res.render("product-detail", {course, reviewList, isCommented: null, categories});
     }
@@ -540,27 +567,14 @@ router.post("course-list", async (req, res) => {
     }
 })
 
-router.get("/wishlist", async (req, res) => {
-    res.render("wishlist");
-});
-
 router.get("/logout", async (req, res) => {
     req.logOut();
     return res.redirect("/login");
 });
 
-router.get("/courses/add", async (req, res) => {
-    console.log("hello")
-    try {
-        res.render("add_course")
-
-    } catch (e) {
-        res.send(e)
-    }
-})
-
 router.get('*', (req, res) => {
     res.render('error', {
+        title:"404 NOT FOUND!",
         error: 'The page you are trying to connect does not exist or you are not authorized to access!',
     })
 })

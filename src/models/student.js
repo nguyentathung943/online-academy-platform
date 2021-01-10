@@ -13,6 +13,10 @@ const StudentSchema = extendSchema(Users,{
         required: true,
         strim: true,
     },
+    confirmed:{
+        type: Boolean,
+        default: false
+    },
     //Student can have many many students registered
     CoursesRegistered:[{
         type: mongoose.Schema.Types.ObjectId,
