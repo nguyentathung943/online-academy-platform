@@ -96,6 +96,18 @@ router.get("/admin/courses-management", async (req, res) => {
   
 });
 
+router.get("/admin/users-management", async (req, res) => {
+  const teachers = await Teachers.find();
+  const students = await Students.find();
+  
+  res.render("manage-users", {
+      teachers,
+      students,
+      role: ""
+  });
+  
+});
+
 router.post("/admin/view-course",async (req,res)=>{
   
   const CourseID = req.cookies['CourseID'];
@@ -107,8 +119,7 @@ router.post("/admin/view-course",async (req,res)=>{
     if(req.body.avatarInput!==''){
       ava = req.body.avatarInput
     }
-    console.log(ava)
-    await Methods.UpdateCourseDetail(CourseID.toString(),ava,req.body.courseNameInput,req.body.briefDescriptionInput,req.body.priceInput);
+    await Methods.UpdateCourseDetail(CourseID.toString(),ava,req.body.courseNameInput,req.body.briefDescriptionInput,req.body.priceInput,req.body.statusInput);
     console.log("Pass course detail");
   }
   else if (req.body.action == "course_description"){
