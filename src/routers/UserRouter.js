@@ -196,25 +196,33 @@ router.get("/product-detail", async (req, res) => {
     const CourseID = req.query.id;
     res.cookie("CourseID", CourseID)
     const course = await Courses.findById(CourseID);
-    const reviewList = await Methods.ShowReviewList(CourseID)
+    let reviewList = await Methods.ShowReviewList(CourseID)
     for (let e of reviewList) {
         const index = reviewList.indexOf(e)
         const StudentComment = await Methods.getStudentSpecs(e.id)
         reviewList[index] = StudentComment
     }
+    for (let i = 0; i < reviewList.length; i++) {
+        let temp = JSON.parse(JSON.stringify(reviewList[i]))
+        temp.Star = GetStarArr(temp.Star)
+        reviewList[i] = temp
+    }
+    console.log("reviewlist", reviewList)
     course.number_of_student = course.number_of_student.toLocaleString()
     course.starArr = GetStarArr(course.score)
     await course.populate("owner").execPopulate()
+    await course.populate("category").execPopulate()
     course.relatedCourses = await Methods.GetRelatedCourses(course.category)
     let index = course.relatedCourses.findIndex((e) => e._id.toString() === course._id.toString())
     course.relatedCourses.splice(index, 1);
     if (course.relatedCourses.length > 5) {
         course.relatedCourses = course.relatedCourses.slice(0, 5)
     }
-    course.relatedCourses.forEach((e, index) => {
+    for (let index = 0; index < course.relatedCourses.length; index++) {
         course.relatedCourses[index].starArr = GetStarArr(course.relatedCourses[index].score)
-    })
-
+        await course.relatedCourses[index].populate("owner").execPopulate()
+        await course.relatedCourses[index].populate("category").execPopulate()
+    }
     if (req.isAuthenticated()) {
 
         const isCommented = await Methods.isReviewed(req.user.id, CourseID)
@@ -268,10 +276,12 @@ router.get("/register-course", check.CheckAuthenticated, async (req, res) => {
 router.get("/watchlist", check.CheckAuthenticated, async (req, res) => {
     try {
         const student = req.user
-        const courses = Methods.ShowWatchList(student)
+        const courses = await Methods.ShowWatchList(student)
         // await Methods.addtCourseToWatchList(student.id, CourseID)
         // const check = Methods.isLiked(student.id, CourseID)
-        res.render("/watchlist", {courses})
+        // res.render("/watchlist", {courses})
+        console.log("couses watchlist", courses)
+        res.render("watchlist", {courses})
     } catch (e) {
         res.send(e)
     }

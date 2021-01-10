@@ -2,10 +2,10 @@ const mongoose = require("mongoose")
 const {virtual} = require("./user")
 const validator = require("validator")
 const CourseSchema = new mongoose.Schema({
-    avatar:{
+    avatar: {
         type: String,
-        validate(value){
-            if(!validator.isURL(value)){
+        validate(value) {
+            if (!validator.isURL(value)) {
                 throw new Error("Please provide a valid URL")
             }
         },
@@ -17,7 +17,7 @@ const CourseSchema = new mongoose.Schema({
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:"Categories"
+        ref: "Categories"
     },
     brief_description: {
         type: String,
@@ -51,13 +51,13 @@ const CourseSchema = new mongoose.Schema({
         type: Number,
         required: true
     }
-},{
+}, {
     timestamps: true
 })
 CourseSchema.index({
     name: 'text',
-    full_description:'text',
-    category:'text'
+    full_description: 'text',
+    category: 'text'
 })
 //courses can be registered by many students
 CourseSchema.virtual('StudentsRegistered', {

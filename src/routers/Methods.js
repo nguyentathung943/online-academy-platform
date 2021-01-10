@@ -88,6 +88,7 @@ const addtCourseToWatchList = async (StudentID, CourseID) => {
 const ShowWatchList = async (StudentID) => {
     const student = await Students.findById(StudentID)
     await student.populate("CoursesLiked").execPopulate()
+    console.log("student", student)
     return student.CoursesLiked.toObject()
 }
 const RemoveCourseFromWatchList = async (StudentID, CourseID) => {
@@ -114,8 +115,9 @@ const UpdateRated = async (CourseID) => {
     var rate = 0
     await course.populate('ReviewList').execPopulate()
     course.ReviewList.forEach(element => {
-        rate = (rate + element.Star) / course.ReviewList.length
+        rate += element.Star
     });
+    rate /= course.ReviewList.length
     course.score = rate.toFixed(1)
     await course.save()
 }

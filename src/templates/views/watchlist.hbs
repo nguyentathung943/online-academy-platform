@@ -17,20 +17,12 @@
 
     <!-- CSS Libraries -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="lib/slick/slick.css" rel="stylesheet">
     <link href="lib/slick/slick-theme.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-    <style>
-        a.active {
-            background-color: black !important;
-            color: #FF6F61 !important;
-        }
-    </style>
-
 </head>
 
 <body>
@@ -42,139 +34,71 @@
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item"><a href="#">Products</a></li>
-            <li class="breadcrumb-item active">Product List</li>
+            <li class="breadcrumb-item active">Cart</li>
         </ul>
     </div>
 </div>
 <!-- Breadcrumb End -->
 
-<!--Product List Start-->
-<div class="product-view">
+<!-- Cart Start -->
+<div class="cart-page">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-md-12 mb-4">
-                        <div class="col-md-4">
-                            <div class="product-short">
-                                <div class="dropdown bg-white">
-                                    <div class="dropdown-toggle" data-toggle="dropdown">Product sort by</div>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="/course-list?sortRate=1" class="dropdown-item">Ascending Rate Score</a>
-                                        <a href="/course-list?sortRate=-1" class="dropdown-item">Descending Rate
-                                            Score</a>
-
-                                        <a href="/course-list?sortPrice=1" class="dropdown-item">Ascending Price</a>
-                                        <a href="/course-list?sortPrice=-1" class="dropdown-item">Descending Price</a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="cart-page-inner">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Course Name</th>
+                                <th>Price</th>
+                                <th>Lecturer</th>
+                                <th>Remove</th>
+                            </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                            {{#each courses}}
+                                <tr>
+                                    <td>
+                                        <div class="img">
+                                            <a href="#"><img src="img/product-1.jpg" alt="Image"></a>
+                                            <p>Product Name</p>
+                                        </div>
+                                    </td>
+                                    <td>$99</td>
+                                    <td>
+                                        <div class="qty">
+                                            <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                            <input type="text" value="1">
+                                            <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
                     </div>
-                    {{#if courses}}
-                        <div class="tab-content w-100">
-                            {{#each courses}}
-                                <div class="tab-pane fade" id="page{{this.id}}">
-                                    <div class="row">
-                                        {{#each this.data}}
-
-                                            <div class="col-md-3">
-                                                <div class="product-item">
-
-                                                    <div class="product-image">
-                                                        <a href="/product-detail?id={{this._id}}">
-                                                        <img src="{{this.avatar}}"
-                                                             alt="Product Image">
-                                                        {{!-- <img src="img/product-1.jpg" alt="Product Image"> --}}
-                                                        </a>
-                                                    </div>
-                                                    <div class="product-title">
-                                                        <a href="/product-detail?id={{this._id}}" style="text-align:
-                                                        left
-                                                        !important;">
-                                                        <p class="text-white m-0">{{this.name}}</p>
-                                                        <p class="text-white m-0">{{this.category.name}}</p>
-                                                        <p class="text-white m-0">{{this.owner.name}}</p>
-                                                        </a>
-
-                                                        <div style="text-align: left">
-                                                        <span class="font-weight-bold"
-                                                              style="color: #FF6F61">{{this.score}}</span>
-                                                            <div class="ratting d-inline">
-                                                                {{#each this.starArr}}
-                                                                    <i class="fa {{this}}"></i>
-                                                                {{/each}}
-                                                            </div>
-                                                            <span class="text-white">({{this.number_of_reviewer}}
-                                                                )</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-price">
-                                                        <h3><span>$</span>{{this.price}}</h3>
-                                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy
-                                                            Now</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        {{/each}}
-                                    </div>
-
-                                </div>
-
-                            {{/each}}
-                        </div>
-
-                    {{else}}
-                        <div> COURSE YOU ARE SEARCHING NOT FOUND</div>
-                    {{/if}}
-
                 </div>
-                <!-- Pagination Start -->
-                <div class="col-md-12">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center nav">
-                            {{#each courses}}
-                                <li class="page-item">
-                                    <a class="page-link nav-link" id="btn{{this.id}}" data-toggle="pill"
-                                       href="#page{{this.id}}" aria-selected="false" role="tab">{{this.id}}</a></li>
-                            {{/each}}
-                        </ul>
-                    </nav>
-                </div>
-                <!-- Side Bar Start -->
-
             </div>
-        </div>
-    </div>
-    <!-- Product List End -->
-</div>
-<!-- Brand Start -->
-<div class="brand">
-    <div class="container-fluid">
-        <div class="brand-slider">
-            <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+
         </div>
     </div>
 </div>
+<!-- Cart End -->
+
 {{>Footer}}
+
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <script src="lib/easing/easing.min.js"></script>
 <script src="lib/slick/slick.min.js"></script>
+
 <!-- Template Javascript -->
 <script src="js/main.js"></script>
-<script>
-    // jQuery(".tab-pane:first-child").addClass("show active")
-    jQuery("#btn1").click()
-</script>
 </body>
 
 </html>
