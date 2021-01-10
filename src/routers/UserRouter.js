@@ -12,62 +12,62 @@ const Category = require("../models/category");
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
+    const courses = await Courses.find();
+    for (const e of courses) {
+        let index = courses.indexOf(e);
+        const teacher = await Methods.getCourseLecturer(e.id);
+        courses[index].owner = teacher;
+        const cate = await Methods.GetCateName(e.id)
+        courses[index].category = cate
+        courses[index].starArr = GetStarArr(courses[index].score)
+    }
+
+    let featuredCourses = JSON.parse(JSON.stringify(courses));
+    featuredCourses = featuredCourses.filter((e) => new Date(e.createdAt).getTime() + 604800000 >= Date.now())
+    featuredCourses.sort(function (a, b) {
+        return b.number_of_student - a.number_of_student;
+    });
+    let mostViewCourses = JSON.parse(JSON.stringify(courses));
+    mostViewCourses.sort(function (a, b) {
+        return b.number_of_student - a.number_of_student;
+    });
+    let newestCourses = JSON.parse(JSON.stringify(courses));
+    newestCourses.sort(function (a, b) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+    if (featuredCourses.length > 4) {
+        featuredCourses = featuredCourses.slice(0, 4)
+    }
+    if (mostViewCourses.length > 10) {
+        mostViewCourses = mostViewCourses.slice(0, 10)
+    }
+    if (newestCourses.length > 10) {
+        newestCourses = newestCourses.slice(0, 10)
+    }
+    for (const e of featuredCourses) {
+        let index = featuredCourses.indexOf(e);
+        featuredCourses[index].starArr = GetStarArr(featuredCourses[index].score)
+    }
+    for (const e of mostViewCourses) {
+        let index = mostViewCourses.indexOf(e);
+        mostViewCourses[index].starArr = GetStarArr(mostViewCourses[index].score)
+    }
+    for (const e of newestCourses) {
+        let index = newestCourses.indexOf(e);
+        newestCourses[index].starArr = GetStarArr(newestCourses[index].score)
+    }
+    const categories = await Category.find({})
     if (req.isAuthenticated()) {
-        const courses = await Courses.find();
-        for (const e of courses) {
-            let index = courses.indexOf(e);
-            const teacher = await Methods.getCourseLecturer(e.id);
-            courses[index].owner = teacher;
-            const cate = await Methods.GetCateName(e.id)
-            courses[index].category = cate
-            courses[index].starArr = GetStarArr(courses[index].score)
-        }
-        const categories = await Category.find({})
         res.render("index", {
-            courses,
             categories,
+            featuredCourses,
+            mostViewCourses,
+            newestCourses,
             role: req.user.role,
             user: req.user
         });
     } else {
-        const courses = await Courses.find();
-
-
-        for (const e of courses) {
-            let index = courses.indexOf(e);
-            const teacher = await Methods.getCourseLecturer(e.id);
-            courses[index].owner = teacher;
-            const cate = await Methods.GetCateName(e.id)
-            courses[index].category = cate
-            courses[index].starArr = GetStarArr(courses[index].score)
-        }
-        let featuredCourses = JSON.parse(JSON.stringify(courses));
-        featuredCourses = featuredCourses.filter((e) => new Date(e.createdAt).getTime() + 604800000 >= Date.now())
-        featuredCourses.sort(function (a, b) {
-            return b.number_of_student - a.number_of_student;
-        });
-        let mostViewCourses = JSON.parse(JSON.stringify(courses));
-        mostViewCourses.sort(function (a, b) {
-            return b.number_of_student - a.number_of_student;
-        });
-        let newestCourses = JSON.parse(JSON.stringify(courses));
-        newestCourses.sort(function (a, b) {
-            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        });
-        if (featuredCourses.length > 4) {
-            featuredCourses = featuredCourses.slice(0, 4)
-        }
-        if (mostViewCourses.length > 10) {
-            mostViewCourses = mostViewCourses.slice(0, 10)
-        }
-        if (newestCourses.length > 10) {
-            newestCourses = newestCourses.slice(0, 10)
-        }
-
-
-        const categories = await Category.find({})
         res.render("index", {
-            courses,
             categories,
             featuredCourses,
             mostViewCourses,
@@ -275,7 +275,9 @@ router.get("/product-detail", async (req, res) => {
                 date,
                 isLiked,
                 isRegistered,
-                categories
+                categories,
+                role: req.user.role,
+                user: req.user
             });
         } else {
             res.render("product-detail", {
@@ -311,7 +313,10 @@ router.get("/watchlist", check.CheckAuthenticated, async (req, res) => {
         const courses = await Methods.ShowWatchList(student)
         for (let index = 0; index < courses.length; index++)
             await courses[index].populate("owner").execPopulate()
-        res.render("watchlist", {courses})
+        res.render("watchlist", {
+            courses, role: req.user.role,
+            user: req.user
+        })
     } catch (e) {
         res.send(e)
     }
@@ -324,6 +329,21 @@ router.get("/add-watchlist", check.CheckAuthenticated, async (req, res) => {
         await Methods.addtCourseToWatchList(student.id, CourseID)
         const check = Methods.isLiked(student.id, CourseID)
         return res.redirect("/product-detail/?id=" + CourseID)
+    } catch (e) {
+        res.send(e)
+    }
+})
+
+router.get("/courses-registered", check.CheckAuthenticated, async (req, res) => {
+    try {
+        const student = req.user
+        const courses = await Methods.getCoursesRegistered(student)
+        for (let index = 0; index < courses.length; index++)
+            await courses[index].populate("owner").execPopulate()
+        res.render("registeredCourses", {
+            courses, role: req.user.role,
+            user: req.user
+        })
     } catch (e) {
         res.send(e)
     }
@@ -369,7 +389,6 @@ router.get("/course-list", async (req, res) => {
     let host = req.originalUrl;
     if (req.query.sortPrice) {
         host = host.split("?")[0] + "?";
-        console.log("Host", host)
         let status = null;
         req.query.sortPrice == "1" ? (status = 1, option = "Ascending Price") : (status = -1, option = "Descending Price");
         let courses = await Methods.FetchCourseSortAs("price", status)
@@ -390,7 +409,6 @@ router.get("/course-list", async (req, res) => {
         });
     } else if (req.query.sortRate) {
         host = host.split("?")[0] + "?";
-        console.log("Host", host)
         let status = null;
         req.query.sortRate == "1" ? (status = 1, option = "Ascending Rate Score") : (status = -1, option = "Descending Rate Score");
         let courses = await Methods.FetchCourseSortAs("score", status)

@@ -88,20 +88,23 @@
             position: relative;
             width: 100%;
         }
+
         .status h4 {
-                display: inline-block;
-    width: 80px;
-    font-size: 18px;
-    font-weight: 700;
-    margin-right: 5px;
+            display: inline-block;
+            width: 80px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-right: 5px;
         }
-        #status{
-                display: inline-block;
-    width: 80px;
-    font-size: 18px;
-    font-weight: 700;
-    margin-right: 5px;
+
+        #status {
+            display: inline-block;
+            width: 80px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-right: 5px;
         }
+
         @media screen and (min-width: 676px) {
             .modal-dialog {
                 max-width: 800px;
@@ -328,7 +331,7 @@
 
                     <div class="row product-detail-bottom">
                         <div class="col-lg-12">
-                            
+
                             <ul class="nav nav-pills nav-justified">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
@@ -548,7 +551,7 @@
             $('#coursedetail').css("display", "block");
             if ($('#status').text().trim() === "Incompleted")
                 $('#statusInput').val("Incompleted");
-            else  $('#statusInput').val("Completed");
+            else $('#statusInput').val("Completed");
         })
         detailCancelBtn.click(function () {
             $('#content').css("display", "block");
