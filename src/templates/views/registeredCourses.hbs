@@ -52,7 +52,6 @@
                                 <th>Course Name</th>
                                 <th>Price</th>
                                 <th>Lecturer</th>
-                                <th>Remove</th>
                             </tr>
                             </thead>
                             <tbody class="align-middle">
@@ -67,12 +66,6 @@
                                     <td>{{this.price}}$</td>
                                     <td>
                                         {{this.owner.name}}
-                                    </td>
-                                    <td>
-                                        <a href="/remove-watchlist/{{this.id}}">
-                                            <button><i class="fa fa-trash"></i>
-                                            </button>
-                                        </a>
                                     </td>
                                 </tr>
                             {{/each}}

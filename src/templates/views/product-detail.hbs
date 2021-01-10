@@ -34,8 +34,7 @@
 <div class="breadcrumb-wrap">
     <div class="container-fluid">
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active">Product Detail</li>
         </ul>
     </div>
@@ -75,8 +74,10 @@
                                 <div class="title">
                                     <h2>{{course.name}}</h2>
                                 </div>
-
+                                <p class="font-weight-bold">{{course.category.name}}</p>
+                                <p>Last updated {{course.date}}</p>
                                 <p>{{course.brief_description}}</p>
+
                                 <div>
                                     <span class="font-weight-bold" style="color: #FF6F61">{{course.score}}</span>
                                     <div class="ratting d-inline">
@@ -143,7 +144,7 @@
                                     {{{course.full_description}}}
                                 </p>
                             </div>
-                            <div id="teacherInfo" class="container tab-pane active">
+                            <div id="teacherInfo" class="container tab-pane fade">
                                 <h4>Lecturer Infomation</h4>
                                 <div>
                                     <p><span class="font-weight-bold">Name:</span> {{course.owner.name}}</p>
@@ -222,14 +223,10 @@
                                 <div style="font-weight: bold">OTHER REVIEWS</div>
                                 {{#each reviewList}}
                                     <div class="reviews-submitted">
-                                        <div class="reviewer">{{this.owner.name}} - <span>12 Dec 2020</span></div>
+                                        <div class="reviewer">{{this.owner.name}} - <span>{{this.date}}</span></div>
                                         <div class="ratting">
-                                            {{#each course.starArr}}
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                            {{#each this.Star}}
+                                                <i class="fa {{this}}"></i>
                                             {{/each}}
                                         </div>
                                         <p>
@@ -260,7 +257,8 @@
                                     </div>
                                     <div class="product-title">
                                         <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
-                                        <p class="text-white m-0">{{this.name}}</p>
+                                        <p class="text-white m-0"
+                                           style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.name}}</p>
                                         <p class="text-white m-0">{{this.category.name}}</p>
                                         <p class="text-white m-0">{{this.owner.name}}</p>
                                         </a>

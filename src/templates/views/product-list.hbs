@@ -41,7 +41,6 @@
     <div class="container-fluid">
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Products</a></li>
             <li class="breadcrumb-item active">Product List</li>
         </ul>
     </div>
@@ -92,7 +91,8 @@
                                                         <a href="/product-detail?id={{this._id}}" style="text-align:
                                                         left
                                                         !important;">
-                                                        <p class="text-white m-0">{{this.name}}</p>
+                                                        <p class="text-white m-0"
+                                                           style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.name}}</p>
                                                         <p class="text-white m-0">{{this.category.name}}</p>
                                                         <p class="text-white m-0">{{this.owner.name}}</p>
                                                         </a>
