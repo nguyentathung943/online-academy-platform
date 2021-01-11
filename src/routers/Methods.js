@@ -5,7 +5,15 @@ const Courses = require("../models/course");
 const Reviews = require("../models/review");
 const {Chapters, Videos} = require("../models/chapter");
 const Cate = require("../models/category");
-const {findByIdAndRemove, findOne, find} = require("../models/student");
+const Register = require("../models/register")
+//REGISTER 
+const PlaceAnOrder = async(StudentID, CourseID) =>{
+    const Regis = new Register({
+        owner: StudentID,
+        course: CourseID
+    })
+    await Regis.save()
+}
 //GET COURSE OWNER
 const getCourseLecturer = async (CourseID) => {
     const course = await Courses.findById(CourseID);
@@ -35,6 +43,7 @@ const registerCourse = async (StudentID, CourseID) => {
             student.CoursesRegistered = student.CoursesRegistered.concat(course.id);
             course.StudentsRegistered = course.StudentsRegistered.concat(student.id);
             course.number_of_student = course.number_of_student + 1;
+            await PlaceAnOrder(StudentID,CourseID)
             await student.save();
             await course.save();
         }

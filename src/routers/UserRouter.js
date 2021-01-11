@@ -118,9 +118,6 @@ router.get("/profile", async (req, res) => {
     }
     else {
         res.render("profile", {
-            name: req.user.name,
-            mobile: req.user.phoneNumber,
-            email: req.user.email,
             role: req.user.role,
             user: req.user
         });
@@ -254,7 +251,7 @@ router.get("/product-detail", async (req, res) => {
     for (let i = 0; i < reviewList.length; i++) {
         let temp = JSON.parse(JSON.stringify(reviewList[i]))
         temp.Star = GetStarArr(temp.Star)
-        temp.date = new Date(temp.updatedAt).toLocaleDateString()
+        temp.date = temp.createdAt.toString().split("T")[0]
         reviewList[i] = temp
     }
     console.log("reviewlist", reviewList)
