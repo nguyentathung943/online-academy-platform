@@ -9,6 +9,7 @@ const passport = require("passport");
 const check = require("../middleware/middleware");
 const Category = require("../models/category");
 const OS = require("os")
+const SessionVideos= require("../models/sessionvideos");
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
@@ -274,6 +275,10 @@ router.get("/product-detail", async (req, res) => {
         await course.relatedCourses[index].populate("owner").execPopulate()
         await course.relatedCourses[index].populate("category").execPopulate()
     }
+    // Query chapters of course
+    const chapters = await Methods.viewChapterList(CourseID);
+    const videolist = await SessionVideos.getbyCourseID(CourseID);
+    console.log(chapters);
     if (req.isAuthenticated()) {
         if(!req.user.confirmed){
             res.render('error', {
@@ -314,10 +319,24 @@ router.get("/product-detail", async (req, res) => {
                     categories
                 });
             }
-        }
+            res.render("product-detail", {
+                course,
+                reviewList,
+                isCommented,
+                userStar,
+                date,
+                isLiked,
+                isRegistered,
+                categories,
+                chapters,
+                videolist,
+                role: req.user.role,
+                user: req.user
+            });
+        } 
 
     } else {
-        res.render("product-detail", {course, reviewList, isCommented: null, categories});
+        res.render("product-detail", {course, reviewList, isCommented: null, categories,chapters,videolist});
     }
 });
 

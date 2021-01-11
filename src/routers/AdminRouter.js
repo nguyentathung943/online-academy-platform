@@ -33,19 +33,55 @@ router.get("/admin/courses-management", async (req, res) => {
   const categories = await Cate.find({})
   res.render("manage-courses", {
     courses,
-    categories,
-    role: ""
+    categories
   });
+
+});
+
+router.post("/admin/courses-management", async (req, res) => {
+  console.log(req.body);
+  if (req.body.action == "remove_course"){
+    console.log("Pass");
+    await Methods.DeleteCourse(req.body.courseIdInput);
+  }
+  return res.redirect("/admin/courses-management");
 
 });
 
 router.get("/admin/categories-management", async (req, res) => {
   const categories = await Category.find();
-
+  const hasCourses = [];
+  for (const cate of categories) {
+    const course = await Methods.FetchCourseByCateName(cate.name);
+    if (course.length != 0)
+      hasCourses.push(true);
+    else hasCourses.push(false);
+  }
   res.render("manage-categories", {
-    categories
+    categories, hasCourses
   });
 
+});
+router.post("/admin/categories-management", async (req, res) => {
+  console.log(req.body);
+  if (req.body.action == "add_category") {
+    if (!Methods.existCateName(req.body.CategoryNameInput)) {
+      const cate = new Category({
+        name: req.body.CategoryNameInput
+      });
+      await cate.save();
+    }
+  }
+  else if (req.body.action == "remove_cate") {
+    const cate = await Category.findById(req.body.CateIdInput);
+    await cate.delete();
+  }
+  else if (req.body.action == "edit_category_name"){
+    const cate = await Category.findById(req.body.CateIdInput);
+    cate.name = req.body.newCategoryNameInput;
+    await cate.save();
+  }
+  return res.redirect("/admin/categories-management");
 });
 router.get("/admin/users-management", async (req, res) => {
   const teachers = await Teachers.find();
@@ -60,12 +96,12 @@ router.get("/admin/users-management", async (req, res) => {
 router.post("/admin/users-management", async (req, res) => {
   console.log(req.body);
   if (req.body.action == "edit_user_detail") {
-    if (req.body.UserRoleInput == "Teacher"){
+    if (req.body.UserRoleInput == "Teacher") {
       const teacher = await Teachers.findById(req.body.UserIdInput);
       teacher.name = req.body.UserNameInput;
       teacher.phoneNumber = req.body.PhoneInput;
       teacher.email = req.body.EmailInput;
-      if (req.body.ResetPasswordInput.length != 0){
+      if (req.body.ResetPasswordInput.length != 0) {
         teacher.password = req.body.ResetPasswordInput;
       }
       await teacher.save();
@@ -75,7 +111,7 @@ router.post("/admin/users-management", async (req, res) => {
       student.name = req.body.UserNameInput;
       student.phoneNumber = req.body.PhoneInput;
       student.email = req.body.EmailInput;
-      if (req.body.ResetPasswordInput.length != 0){
+      if (req.body.ResetPasswordInput.length != 0) {
         student.password = req.body.ResetPasswordInput;
       }
       await student.save();
@@ -92,8 +128,8 @@ router.post("/admin/users-management", async (req, res) => {
     await teacher.save();
     console.log("Pass add action");
   }
-  else if (req.body.action == "remove_user"){
-    if (req.body.UserRoleInput == "Teacher"){
+  else if (req.body.action == "remove_user") {
+    if (req.body.UserRoleInput == "Teacher") {
       const teacher = await Teachers.findById(req.body.UserIdInput);
       await teacher.delete();
     }
@@ -157,5 +193,189 @@ router.get("/admin/view-course", async (req, res) => {
   res.render("viewCourse", { course, categories, chapters, videolist });
 
 });
+
+router.get("/admin/course-list", async (req, res) => {
+  const categories = await Category.find({})
+  let option = ""
+  let host = req.originalUrl;
+  if (req.query.sortPrice) {
+      host = host.split("?")[0] + "?";
+      let status = null;
+      req.query.sortPrice == "1" ? (status = 1, option = "Ascending Price") : (status = -1, option = "Descending Price");
+      let courses = await Methods.FetchCourseSortAs("price", status)
+      for (const e of courses) {
+          let index = courses.indexOf(e);
+          const teacher = await Methods.getCourseLecturer(e.id);
+          courses[index].owner = teacher;
+          const cate = await Methods.GetCateName(e.id)
+          courses[index].category = cate
+          courses[index].starArr = GetStarArr(courses[index].score)
+      }
+      courses = GetPagination(courses)
+      res.render("course-list", {
+          categories,
+          courses,
+          option,
+          host
+      });
+  } else if (req.query.sortRate) {
+      host = host.split("?")[0] + "?";
+      let status = null;
+      req.query.sortRate == "1" ? (status = 1, option = "Ascending Rate Score") : (status = -1, option = "Descending Rate Score");
+      let courses = await Methods.FetchCourseSortAs("score", status)
+      for (const e of courses) {
+          let index = courses.indexOf(e);
+          const teacher = await Methods.getCourseLecturer(e.id);
+          courses[index].owner = teacher;
+          const cate = await Methods.GetCateName(e.id)
+          courses[index].category = cate
+          courses[index].starArr = GetStarArr(courses[index].score)
+      }
+      courses = GetPagination(courses)
+      res.render("course-list", {
+          categories,
+          courses,
+          option,
+          host
+      });
+  } else if (req.query.searchValue) {
+      host = host.split("&")[0] + "&";
+      console.log("Host", host)
+      var courses = await Methods.searchCourseFullText(req.query.searchValue)
+      var attri = null
+      req.query.price ? (attri = "price") : (attri = "score")
+      if (attri === "price") {
+          if (req.query[attri] == "-1")
+              option = "Descending Price";
+          else
+              option = "Ascending Price";
+      } else {
+          if (req.query[attri] == "-1")
+              option = "Descending Rate Score";
+          else
+              option = "Ascending Rate Score";
+      }
+      courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
+      if (courses.length === 0) {
+          courses = null;
+      } else {
+          for (const e of courses) {
+              let index = courses.indexOf(e);
+              const teacher = await Methods.getCourseLecturer(e.id);
+              courses[index].owner = teacher;
+              const cate = await Methods.GetCateName(e.id)
+              courses[index].category = cate
+              courses[index].starArr = GetStarArr(courses[index].score)
+          }
+
+          courses = GetPagination(courses)
+      }
+      res.render("course-list", {
+          categories,
+          courses,
+          option,
+          host
+      });
+  } else if (req.query.categoryName) {
+      let courses = await Methods.FetchCourseByCateName(req.query.categoryName)
+      host = host.split("&")[0] + "&";
+      console.log("Host", host)
+      var attri = null
+      req.query.price ? (attri = "price") : (attri = "score")
+      if (attri === "price") {
+          if (req.query[attri] == "-1")
+              option = "Descending Price";
+          else
+              option = "Ascending Price";
+      } else {
+          if (req.query[attri] == "-1")
+              option = "Descending Rate Score";
+          else
+              option = "Ascending Rate Score";
+      }
+      courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
+      for (const e of courses) {
+          let index = courses.indexOf(e);
+          const teacher = await Methods.getCourseLecturer(e.id);
+          courses[index].owner = teacher;
+          const cate = await Methods.GetCateName(e.id)
+          courses[index].category = cate
+          courses[index].starArr = GetStarArr(courses[index].score)
+      }
+      courses = GetPagination(courses)
+      res.render("course-list", {
+          categories,
+          courses,
+          option,
+          host
+      });
+  } else {
+      host = host.split("?")[0] + "?";
+      console.log("Host", host)
+      let courses = await Courses.find();
+      var attri = null
+      req.query.price ? (attri = "price") : (attri = "score")
+      if (attri === "price") {
+          if (req.query[attri] == "-1")
+              option = "Descending Price";
+          else
+              option = "Ascending Price";
+      } else {
+          if (req.query[attri] == "-1")
+              option = "Descending Rate Score";
+          else
+              option = "Ascending Rate Score";
+      }
+      courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
+      for (const e of courses) {
+          let index = courses.indexOf(e);
+          const teacher = await Methods.getCourseLecturer(e.id);
+          courses[index].owner = teacher
+          const cate = await Methods.GetCateName(e.id)
+          courses[index].category = cate
+          courses[index].starArr = GetStarArr(courses[index].score)
+      }
+      courses = GetPagination(courses)
+      res.render("course-list", {
+          categories,
+          courses,
+          option,
+          host
+      });
+  }
+});
+
+router.post("/admin/course-list", async (req, res) => {
+  if (req.body.searchValue) {
+      return res.redirect("/admin/course-list?searchValue=" + req.body.searchValue + "&score=-1")
+  }
+})
+
+const GetStarArr = (score) => {
+  if (score - Math.floor(score) >= 0.25)
+      score = Math.floor(score) + 0.5
+  else score = Math.floor(score)
+  let starList = []
+  for (let i = 0; i < Math.floor(score); i++)
+      starList.push("fa-star");
+  if (Math.floor(score) !== score)
+      starList.push("fa-star-half-full");
+  for (let i = 0; i < 5 - Math.ceil(score); i++)
+      starList.push("fa-star-o");
+  return starList;
+}
+
+const GetPagination = (courses) => {
+  let listPageCourses = [];
+  let len = courses.length;
+  let count = Math.floor(len / 4);
+  for (let i = 0; i < count; i++)
+      listPageCourses.push({id: i + 1, data: courses.slice(i * 4, i * 4 + 4)})
+  if (len % 4 !== 0) {
+      listPageCourses.push({id: count + 1, data: courses.slice(count * 4)})
+      count++
+  }
+  return listPageCourses
+}
 
 module.exports = router;

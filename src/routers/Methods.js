@@ -333,6 +333,10 @@ const GetCateName = async (CourseID) => {
     await course.populate("category").execPopulate();
     return course.category;
 };
+const existCateName = async (CateName) => {
+    const cate = await Cate.findOne({name: CateName});
+    return (cate.length != 0)? true: false;
+};
 const ShowAllCategory = async () => {
     const cates = await Cate.find();
     return cates;
@@ -409,6 +413,7 @@ module.exports = {
     FetchCourseByCateName,
     DeleteCate,
     ChangeCateName,
+    existCateName,
     //Update description
     UpdateDescription,
     UpdateCourseDetail,
