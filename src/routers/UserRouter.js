@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
     }
 
     let featuredCourses = JSON.parse(JSON.stringify(courses));
-    featuredCourses = featuredCourses.filter((e) => new Date(e.createdAt).getTime() + 604800000 >= Date.now())
+    // featuredCourses = featuredCourses.filter((e) => new Date(e.createdAt).getTime() + 604800000 >= Date.now())
     featuredCourses.sort(function (a, b) {
         return b.number_of_student - a.number_of_student;
     });
@@ -58,13 +58,12 @@ router.get("/", async (req, res) => {
     }
     const categories = await Category.find({})
     if (req.isAuthenticated()) {
-        if(!req.user.confirmed){
+        if (!req.user.confirmed) {
             res.render('error', {
-                title:"EMAIL NOT CONFIRMED!",
+                title: "EMAIL NOT CONFIRMED!",
                 error: 'Please confirm your email before using our services!',
             })
-        }
-        else{
+        } else {
             res.render("index", {
                 categories,
                 featuredCourses,
@@ -108,14 +107,12 @@ router.post(
 router.get("/profile", async (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect("/login");
-    } 
-    else if(req.user.role==="Student"&&(!req.user.confirmed)){
+    } else if (req.user.role === "Student" && (!req.user.confirmed)) {
         res.render('error', {
-            title:"EMAIL NOT CONFIRMED!",
+            title: "EMAIL NOT CONFIRMED!",
             error: 'Please confirm your email before using our services!',
         })
-    }
-    else {
+    } else {
         res.render("profile", {
             name: req.user.name,
             mobile: req.user.phoneNumber,
@@ -190,17 +187,16 @@ router.post("/profile", async (req, res) => {
 router.get("/register", async (req, res) => {
     res.render("register");
 });
-router.get("/confirm-email",async(req,res)=>{
+router.get("/confirm-email", async (req, res) => {
     const student = await Students.findById(req.query.id)
-    if(student.confirmed===false){
+    if (student.confirmed === false) {
         student.confirmed = true
         await student.save()
-        res.render("confirm",{
+        res.render("confirm", {
             message: "EMAIL CONFIRMED SUCCESSFULLY"
         })
-    }
-    else{
-        res.render("confirm",{
+    } else {
+        res.render("confirm", {
             message: "YOUR EMAIL HAS ALREADY BEEN CONFIRMED"
         })
     }
@@ -209,12 +205,11 @@ router.post("/register", async (req, res) => {
     try {
         if (req.body.password === req.body.confirmPassword) {
             const stu = await Students.findOne({email: req.body.email})
-            if(stu){
+            if (stu) {
                 res.render("register", {
                     fail_message: "Email already existed, please choose another one!",
                 });
-            }
-            else{
+            } else {
                 const student = new Students({
                     name: req.body.name,
                     email: req.body.email,
@@ -223,8 +218,8 @@ router.post("/register", async (req, res) => {
                 });
                 await student.save();
                 const host = req.headers.host
-                const url = "http://"+host+"/confirm-email?id="+student._id.toString()
-                await Send_Mail(url,student.email)
+                const url = "http://" + host + "/confirm-email?id=" + student._id.toString()
+                await Send_Mail(url, student.email)
                 res.render("register", {
                     success_message: "Account created successfully, check your mailbox to confirm your email",
                 });
@@ -275,28 +270,27 @@ router.get("/product-detail", async (req, res) => {
         await course.relatedCourses[index].populate("category").execPopulate()
     }
     if (req.isAuthenticated()) {
-        if(!req.user.confirmed){
+        if (!req.user.confirmed) {
             res.render('error', {
-                title:"EMAIL NOT CONFIRMED!",
+                title: "EMAIL NOT CONFIRMED!",
                 error: 'Please confirm your email before using our services!',
             })
-        }
-        else{
+        } else {
             const isCommented = await Methods.isReviewed(req.user.id, CourseID)
             const isLiked = await Methods.isLiked(req.user.id, CourseID)
             const isRegistered = await Methods.isRegistered(req.user.id, CourseID)
             if (isCommented) {
                 await isCommented.populate("owner").execPopulate()
                 const date = isCommented.createdAt.toString().split("T")[0]
-                const userStar = []
-                for (let i = 0; i < isCommented.Star; i++) {
-                    userStar.push("fa-star");
-                }
+                // const userStar = []
+                // for (let i = 0; i < isCommented.Star; i++) {
+                //     userStar.push("fa-star");
+                // }
                 res.render("product-detail", {
                     course,
                     reviewList,
                     isCommented,
-                    userStar,
+                    // userStar,
                     date,
                     isLiked,
                     isRegistered,
@@ -574,7 +568,7 @@ router.get("/logout", async (req, res) => {
 
 router.get('*', (req, res) => {
     res.render('error', {
-        title:"404 NOT FOUND!",
+        title: "404 NOT FOUND!",
         error: 'The page you are trying to connect does not exist or you are not authorized to access!',
     })
 })

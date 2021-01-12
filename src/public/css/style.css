@@ -1080,7 +1080,7 @@ h2 {
 .product-detail .product-content .price,
 .product-detail .product-content .details,
 .product-detail .product-content .quantity,
-.product-detail .product-content .action{
+.product-detail .product-content .action {
     position: relative;
     width: 100%;
 }
@@ -1373,7 +1373,7 @@ h2 {
 }
 
 .sidebar-widget.brands ul li a::before {
-    content: '*';
+    content: '\f105';
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     padding-right: 5px;
@@ -1384,7 +1384,7 @@ h2 {
 }
 
 .sidebar-widget.brands ul li a:hover::before {
-    content: '**';
+    content: '\f101';
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
 }

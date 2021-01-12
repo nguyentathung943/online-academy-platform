@@ -18,7 +18,7 @@
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="/lib/slick/slick.css" rel="stylesheet">
     <link href="/lib/slick/slick-theme.css" rel="stylesheet">
 
@@ -72,7 +72,17 @@
                         <div class="col-md-7">
                             <div class="product-content">
                                 <div class="title">
-                                    <h2>{{course.name}}</h2>
+                                    <h2>{{course.name}} {{#if completed}}
+                                        <span style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                              class="rounded border-success text-success p-1">
+                                        Completed
+                                    </span>
+                                    {{else}}
+                                        <span style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                              class="rounded border-warning text-warning p-1">
+                                        Updating
+                                    </span>
+                                    {{/if}}</h2>
                                 </div>
                                 <p class="font-weight-bold">{{course.category.name}}</p>
                                 <p>Last updated {{course.date}}</p>
@@ -82,7 +92,7 @@
                                     <span class="font-weight-bold" style="color: #FF6F61">{{course.score}}</span>
                                     <div class="ratting d-inline">
                                         {{#each course.starArr}}
-                                            <i class="fa {{this}} "></i>
+                                            <i class="fa {{this}} " style="font-family: FontAwesome"></i>
                                         {{/each}}
 
                                     </div>
@@ -91,7 +101,7 @@
                                 </div>
                                 <div class="price">
                                     <h4>Price:</h4>
-                                    <p>${{course.price}} <span>$149</span></p>
+                                    <p>${{course.price}} <span>$???</span></p>
                                 </div>
 
                                 <div class="d-flex">
@@ -132,7 +142,7 @@
                                 <a class="nav-link" data-toggle="pill" href="#teacherInfo">Lecturer information</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews ( {{reviewList.length}}
+                                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews ({{reviewList.length}}
                                     )</a>
                             </li>
                         </ul>
@@ -162,8 +172,8 @@
                                                 <div class="reviewer">{{isCommented.owner.name}} - <span>{{date}}</span>
                                                 </div>
                                                 <div class="ratting">
-                                                    {{#each userStar}}
-                                                        <i class="fa {{this}}"></i>
+                                                    {{#each course.starArr}}
+                                                        <i class="fa {{this}}" style="font-family: FontAwesome"></i>
                                                     {{/each}}
                                                 </div>
                                                 <p>
@@ -248,36 +258,7 @@
                     <div class="row align-items-center product-slider product-slider-3">
                         {{#each course.relatedCourses}}
                             <div class="col-lg-4">
-                                <div class="product-item">
-
-                                    <div class="product-image">
-                                        <a href="/product-detail?id={{this._id}}">
-                                        <img src="{{this.avatar}}" alt="Product Image"/>
-                                        </a>
-                                    </div>
-                                    <div class="product-title">
-                                        <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
-                                        <p class="text-white m-0"
-                                           style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.name}}</p>
-                                        <p class="text-white m-0">{{this.category.name}}</p>
-                                        <p class="text-white m-0">{{this.owner.name}}</p>
-                                        </a>
-
-                                        <div style="text-align: left">
-                                            <span class="font-weight-bold" style="color: #FF6F61">{{this.score}}</span>
-                                            <div class="ratting d-inline">
-                                                {{#each this.starArr}}
-                                                    <i class="fa {{this}}"></i>
-                                                {{/each}}
-                                            </div>
-                                            <span class="text-white">({{this.number_of_reviewer}})</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <h3><span>$</span>{{this.price}}</h3>
-                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                                    </div>
-                                </div>
+                                {{>CourseItem}}
                             </div>
                         {{/each}}
                     </div>

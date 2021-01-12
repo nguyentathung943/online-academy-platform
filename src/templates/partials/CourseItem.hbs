@@ -1,0 +1,35 @@
+<div class="product-item">
+
+    <div class="product-image">
+        <a href="/product-detail?id={{this._id}}">
+        <img src="{{this.avatar}}"
+             alt="Product Image">
+        </a>
+    </div>
+    <div class="product-title">
+        <a href="/product-detail?id={{this._id}}" style="text-align:
+        left
+        !important;">
+        <p class="text-white m-0"
+           style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.name}}</p>
+        <p class="text-white m-0">{{this.category.name}}</p>
+        <p class="text-white m-0">{{this.owner.name}}</p>
+        </a>
+
+        <div style="text-align: left">
+            <span class="font-weight-bold text-white">{{this.score}}</span>
+            <div class="ratting d-inline">
+                {{#each this.starArr}}
+                    <i class="fa {{this}}"
+                       style="font-family: FontAwesome"></i>
+                {{/each}}
+            </div>
+            <span class="text-white">({{this.number_of_reviewer}})</span>
+        </div>
+    </div>
+    <div class="product-price">
+        <h3><span>$</span>{{this.price}}</h3>
+        <a class="btn" href="/product-detail?id={{this._id}}"><i class="fa fa-shopping-cart"></i>Buy
+        Now</a>
+    </div>
+</div>

@@ -17,7 +17,7 @@
 
     <!-- CSS Libraries -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="lib/slick/slick.css" rel="stylesheet">
     <link href="lib/slick/slick-theme.css" rel="stylesheet">
@@ -53,8 +53,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
-                    <div class="col-md-12 mb-4">
-                        <div class="col-md-4">
+                    <div class="col-md-12 mb-4 p-0">
+                        <div class="col-md-4 p-0">
                             <div class="product-short">
                                 <div class="dropdown bg-white">
                                     <div class="dropdown-toggle" data-toggle="dropdown">{{option}}</div>
@@ -79,49 +79,12 @@
                                         {{#each this.data}}
 
                                             <div class="col-md-3">
-                                                <div class="product-item">
-
-                                                    <div class="product-image">
-                                                        <a href="/product-detail?id={{this._id}}">
-                                                        <img src="{{this.avatar}}"
-                                                             alt="Product Image">
-                                                        </a>
-                                                    </div>
-                                                    <div class="product-title">
-                                                        <a href="/product-detail?id={{this._id}}" style="text-align:
-                                                        left
-                                                        !important;">
-                                                        <p class="text-white m-0"
-                                                           style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.name}}</p>
-                                                        <p class="text-white m-0">{{this.category.name}}</p>
-                                                        <p class="text-white m-0">{{this.owner.name}}</p>
-                                                        </a>
-
-                                                        <div style="text-align: left">
-                                                        <span class="font-weight-bold"
-                                                              style="color: #FF6F61">{{this.score}}</span>
-                                                            <div class="ratting d-inline">
-                                                                {{#each this.starArr}}
-                                                                    <i class="fa {{this}}"></i>
-                                                                {{/each}}
-                                                            </div>
-                                                            <span class="text-white">({{this.number_of_reviewer}}
-                                                                )</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-price">
-                                                        <h3><span>$</span>{{this.price}}</h3>
-                                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy
-                                                            Now</a>
-                                                    </div>
-                                                </div>
+                                                {{>CourseItem}}
                                             </div>
 
                                         {{/each}}
                                     </div>
-
                                 </div>
-
                             {{/each}}
                         </div>
 
@@ -172,8 +135,6 @@
 <script src="js/main.js"></script>
 <script>
     jQuery("#btn1").click();
-    var Hoa = $('#page1').html();
-    console.log(Hoa)
 </script>
 </body>
 
