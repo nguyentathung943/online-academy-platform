@@ -69,8 +69,20 @@
                                     <div class="product-title"
                                          style="height: 60%; display: flex; flex-direction: column; justify-content: center">
                                         <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
-                                        <p class="text-white m-0">{{this.name}}</p>
-                                        <p class="text-white m-0">{{this.category.name}}</p>
+                                        <p class="text-white m-0">{{this.name}} {{#if completed}}
+                                            <span
+                                                    style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                    class="rounded border-success text-success p-1">
+                                                Completed
+                                            </span>
+                                        {{else}}
+                                            <span
+                                                    style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                    class="rounded border-warning text-warning p-1">
+                                                Updating
+                                            </span>
+                                        {{/if}}</p>
+                                        <p class="text-white m-0 mt-1">{{this.category.name}}</p>
                                         <p class="text-white m-0">{{this.owner.name}}</p>
                                         </a>
 
@@ -87,7 +99,6 @@
                                     </div>
                                     <div class="product-price" style="height: 40%">
                                         <h3><span>$</span>{{this.price}}</h3>
-                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
                                     </div>
                                 </div>
                             </div>

@@ -8,10 +8,10 @@ const Send_Mail = require("../otp_confirm/otp")
 const passport = require("passport");
 const check = require("../middleware/middleware");
 const Category = require("../models/category");
+const Register = require("../models/register");
 const OS = require("os")
-const SessionVideos= require("../models/sessionvideos");
+const SessionVideos = require("../models/sessionvideos");
 const router = new express.Router();
-
 router.get("/", async (req, res) => {
     const courses = await Courses.find();
     for (const e of courses) {
@@ -22,20 +22,34 @@ router.get("/", async (req, res) => {
         courses[index].category = cate
         courses[index].starArr = GetStarArr(courses[index].score)
     }
-
-    let featuredCourses = JSON.parse(JSON.stringify(courses));
-    // featuredCourses = featuredCourses.filter((e) => new Date(e.createdAt).getTime() + 604800000 >= Date.now())
-    featuredCourses.sort(function (a, b) {
-        return b.number_of_student - a.number_of_student;
+    let featuredCourses = []
+    const now = new Date();
+    let registers = await Register.find({createdAt: {$gte: now - 604800000}})
+    for (let i = 0; i < registers.length; i++) {
+        await registers[i].populate("course").execPopulate();
+        await registers[i].course.populate("category").execPopulate();
+        await registers[i].course.populate("owner").execPopulate();
+    }
+    registers.forEach((e) => featuredCourses.push(e.course))
+    const seen = new Set();
+    featuredCourses = featuredCourses.filter(el => {
+        const duplicate = seen.has(el.id);
+        seen.add(el.id);
+        return !duplicate;
     });
+    featuredCourses.sort(function (a, b) {
+        return b.number_of_student - a.number_of_student
+    })
     let mostViewCourses = JSON.parse(JSON.stringify(courses));
     mostViewCourses.sort(function (a, b) {
         return b.number_of_student - a.number_of_student;
     });
+
     let newestCourses = JSON.parse(JSON.stringify(courses));
     newestCourses.sort(function (a, b) {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
+
     if (featuredCourses.length > 4) {
         featuredCourses = featuredCourses.slice(0, 4)
     }
@@ -236,7 +250,7 @@ router.get("/product-detail", async (req, res) => {
     const categories = await Category.find({})
     const CourseID = req.query.id;
     res.cookie("CourseID", CourseID)
-    const course = await Courses.findById(CourseID);
+    let course = await Courses.findById(CourseID);
     let reviewList = await Methods.ShowReviewList(CourseID)
     for (let e of reviewList) {
         const index = reviewList.indexOf(e)
@@ -249,7 +263,6 @@ router.get("/product-detail", async (req, res) => {
         temp.date = temp.createdAt.toString().split("T")[0]
         reviewList[i] = temp
     }
-    console.log("reviewlist", reviewList)
     var time = new Date(course.updatedAt);
     course.date = course.updatedAt.toLocaleDateString()
     course.number_of_student = course.number_of_student.toLocaleString()
@@ -262,6 +275,8 @@ router.get("/product-detail", async (req, res) => {
     if (course.relatedCourses.length > 5) {
         course.relatedCourses = course.relatedCourses.slice(0, 5)
     }
+
+
     for (let index = 0; index < course.relatedCourses.length; index++) {
         course.relatedCourses[index].starArr = GetStarArr(course.relatedCourses[index].score)
         await course.relatedCourses[index].populate("owner").execPopulate()
@@ -284,15 +299,10 @@ router.get("/product-detail", async (req, res) => {
             if (isCommented) {
                 await isCommented.populate("owner").execPopulate()
                 const date = isCommented.createdAt.toString().split("T")[0]
-                // const userStar = []
-                // for (let i = 0; i < isCommented.Star; i++) {
-                //     userStar.push("fa-star");
-                // }
                 res.render("product-detail", {
                     course,
                     reviewList,
                     isCommented,
-                    // userStar,
                     date,
                     isLiked,
                     isRegistered,
@@ -307,7 +317,7 @@ router.get("/product-detail", async (req, res) => {
                     isCommented: null,
                     isLiked,
                     isRegistered,
-                    categories
+                    categories,
                 });
             }
             res.render("product-detail", {
@@ -324,10 +334,10 @@ router.get("/product-detail", async (req, res) => {
                 role: req.user.role,
                 user: req.user
             });
-        } 
+        }
 
     } else {
-        res.render("product-detail", {course, reviewList, isCommented: null, categories,chapters,videolist});
+        res.render("product-detail", {course, reviewList, isCommented: null, categories, chapters, videolist});
     }
 });
 
@@ -466,7 +476,6 @@ router.get("/course-list", async (req, res) => {
         });
     } else if (req.query.searchValue) {
         host = host.split("&")[0] + "&";
-        console.log("Host", host)
         var courses = await Methods.searchCourseFullText(req.query.searchValue)
         var attri = null
         req.query.price ? (attri = "price") : (attri = "score")
@@ -481,7 +490,24 @@ router.get("/course-list", async (req, res) => {
             else
                 option = "Ascending Rate Score";
         }
-        courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
+        courses = await Methods.CourseSortAs(courses, attri, parseInt(req.query[attri]))
+        const allCourses = await Courses.find();
+        let mostViewCourses = JSON.parse(JSON.stringify(allCourses));
+        mostViewCourses = await Methods.CourseSortAs(mostViewCourses, "number_of_student", -1)
+        let newViewCourses = JSON.parse(JSON.stringify(allCourses));
+        newViewCourses = await Methods.CourseSortAs(newViewCourses, "createdAt", -1)
+        mostViewCourses = mostViewCourses.slice(0, 3);
+        newViewCourses = newViewCourses.slice(0, 3);
+        for (let i = 0; i < courses.length; i++) {
+            if (mostViewCourses.some(e => e._id == courses[i]._id)) {
+                courses[i].isBestseller = true;
+            }
+
+            if (newViewCourses.some(e => e._id == courses[i]._id)) {
+                courses[i].isNewest = true;
+            }
+
+        }
         if (courses.length === 0) {
             courses = null;
         } else {
@@ -505,7 +531,7 @@ router.get("/course-list", async (req, res) => {
     } else if (req.query.categoryName) {
         let courses = await Methods.FetchCourseByCateName(req.query.categoryName)
         host = host.split("&")[0] + "&";
-        console.log("Host", host)
+
         var attri = null
         req.query.price ? (attri = "price") : (attri = "score")
         if (attri === "price") {
@@ -519,7 +545,7 @@ router.get("/course-list", async (req, res) => {
             else
                 option = "Ascending Rate Score";
         }
-        courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
+        courses = await Methods.CourseSortAs(courses, attri, parseInt(req.query[attri]))
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -537,7 +563,6 @@ router.get("/course-list", async (req, res) => {
         });
     } else {
         host = host.split("?")[0] + "?";
-        console.log("Host", host)
         let courses = await Courses.find();
         var attri = null
         req.query.price ? (attri = "price") : (attri = "score")
@@ -552,7 +577,7 @@ router.get("/course-list", async (req, res) => {
             else
                 option = "Ascending Rate Score";
         }
-        courses = await Methods.CourseSortAs(courses, "price", parseInt(req.query[attri]))
+        courses = await Methods.CourseSortAs(courses, attri, parseInt(req.query[attri]))
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -571,7 +596,7 @@ router.get("/course-list", async (req, res) => {
     }
 });
 
-router.post("course-list", async (req, res) => {
+router.post("/course-list", async (req, res) => {
     if (req.body.searchValue) {
         return res.redirect("/course-list?searchValue=" + req.body.searchValue + "&score=-1")
     }

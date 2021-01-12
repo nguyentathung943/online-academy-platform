@@ -11,7 +11,20 @@
         left
         !important;">
         <p class="text-white m-0"
-           style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.name}}</p>
+           style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.name}} </p>
+        <p>{{#if completed}}
+            <span
+                    style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                    class="rounded border-success text-success p-1">
+                                                Completed
+                                            </span>
+        {{else}}
+            <span
+                    style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                    class="rounded border-warning text-warning p-1">
+                                                Updating
+                                            </span>
+        {{/if}}</p>
         <p class="text-white m-0">{{this.category.name}}</p>
         <p class="text-white m-0">{{this.owner.name}}</p>
         </a>
@@ -24,12 +37,20 @@
                        style="font-family: FontAwesome"></i>
                 {{/each}}
             </div>
-            <span class="text-white">({{this.number_of_reviewer}})</span>
+            <span class="text-white">({{this.number_of_reviewer}})</span> {{#if isBestseller}} <span
+                style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                class="rounded border-warning text-warning p-1 mx-1">
+                                                Bestseller
+                                            </span>{{/if}}
+            {{#if isNewest}} <span
+                    style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                    class="rounded border-success text-success p-1 mx-1">
+                                                New
+                                            </span>
+            {{/if}}
         </div>
     </div>
     <div class="product-price">
         <h3><span>$</span>{{this.price}}</h3>
-        <a class="btn" href="/product-detail?id={{this._id}}"><i class="fa fa-shopping-cart"></i>Buy
-        Now</a>
     </div>
 </div>
