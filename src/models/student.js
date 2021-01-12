@@ -3,6 +3,10 @@ const Users = require("./user")
 const extendSchema = require("mongoose-extend-schema")
 const bcrypt = require("bcrypt")
 const StudentSchema = extendSchema(Users,{
+    otp:{
+      type: Number,
+      required: true  
+    },
     role:{
         type:String,
         default: "Student",
