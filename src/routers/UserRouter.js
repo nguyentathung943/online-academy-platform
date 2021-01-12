@@ -191,10 +191,10 @@ router.get("/register", async (req, res) => {
 router.get("/confirm-email",async(req,res)=>{
     const student = await Students.findById(req.query.id)
     if(student.confirmed===false){
-        student.confirmed = true
         await student.save()
         res.render("confirm",{
-            message: "EMAIL CONFIRMED SUCCESSFULLY"
+            message: "INPUT YOUR OTP CODE TO CONFIRM YOUR ACCOUNT",
+            StuID: req.query.id
         })
     }
     else{
@@ -202,6 +202,16 @@ router.get("/confirm-email",async(req,res)=>{
             message: "YOUR EMAIL HAS ALREADY BEEN CONFIRMED"
         })
     }
+})
+router.post("/confirm-email",async(req,res)=>{
+    const id = req.body.ID
+    const OTP = req.body.OTP
+    const stu = await Students.findById(id)
+    if(stu.otp==OTP){
+        stu.confirmed = true
+        await stu.save()
+    }
+    return res.redirect("/confirm-email?id="+id)
 })
 router.post("/register", async (req, res) => {
     try {
@@ -213,16 +223,18 @@ router.post("/register", async (req, res) => {
                 });
             }
             else{
+                const OTP = getRandomInt(1111,9999)
                 const student = new Students({
                     name: req.body.name,
                     email: req.body.email,
                     phoneNumber: req.body.phone,
                     password: req.body.password,
+                    otp: OTP
                 });
                 await student.save();
                 const host = req.headers.host
                 const url = "http://"+host+"/confirm-email?id="+student._id.toString()
-                await Send_Mail(url,student.email)
+                await Send_Mail(url,student.email,OTP)
                 res.render("register", {
                     success_message: "Account created successfully, check your mailbox to confirm your email",
                 });
@@ -609,7 +621,11 @@ const GetStarArr = (score) => {
         starList.push("fa-star-o");
     return starList;
 }
-
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
 const GetPagination = (courses) => {
     let listPageCourses = [];
     let len = courses.length;
