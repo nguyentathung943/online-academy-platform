@@ -9,6 +9,7 @@ const passport = require("passport");
 const check = require("../middleware/middleware");
 const Category = require("../models/category");
 const OS = require("os")
+const SessionVideos= require("../models/sessionvideos");
 const router = new express.Router();
 
 router.get("/", async (req, res) => {
@@ -114,9 +115,6 @@ router.get("/profile", async (req, res) => {
         })
     } else {
         res.render("profile", {
-            name: req.user.name,
-            mobile: req.user.phoneNumber,
-            email: req.user.email,
             role: req.user.role,
             user: req.user
         });
@@ -248,7 +246,7 @@ router.get("/product-detail", async (req, res) => {
     for (let i = 0; i < reviewList.length; i++) {
         let temp = JSON.parse(JSON.stringify(reviewList[i]))
         temp.Star = GetStarArr(temp.Star)
-        temp.date = new Date(temp.updatedAt).toLocaleDateString()
+        temp.date = temp.createdAt.toString().split("T")[0]
         reviewList[i] = temp
     }
     console.log("reviewlist", reviewList)
@@ -269,6 +267,10 @@ router.get("/product-detail", async (req, res) => {
         await course.relatedCourses[index].populate("owner").execPopulate()
         await course.relatedCourses[index].populate("category").execPopulate()
     }
+    // Query chapters of course
+    const chapters = await Methods.viewChapterList(CourseID);
+    const videolist = await SessionVideos.getbyCourseID(CourseID);
+    console.log(chapters);
     if (req.isAuthenticated()) {
         if (!req.user.confirmed) {
             res.render('error', {
@@ -308,10 +310,24 @@ router.get("/product-detail", async (req, res) => {
                     categories
                 });
             }
-        }
+            res.render("product-detail", {
+                course,
+                reviewList,
+                isCommented,
+                userStar,
+                date,
+                isLiked,
+                isRegistered,
+                categories,
+                chapters,
+                videolist,
+                role: req.user.role,
+                user: req.user
+            });
+        } 
 
     } else {
-        res.render("product-detail", {course, reviewList, isCommented: null, categories});
+        res.render("product-detail", {course, reviewList, isCommented: null, categories,chapters,videolist});
     }
 });
 
