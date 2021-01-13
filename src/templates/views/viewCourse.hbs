@@ -20,9 +20,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="/lib/slick/slick.css" rel="stylesheet">
     <link href="/lib/slick/slick-theme.css" rel="stylesheet">
-
+    <!-- Video framework -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.3/plyr.css" />
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
+    <style>
+        
+    </style>
 </head>
 
 <body>
@@ -33,7 +37,13 @@
         <div class="container-fluid">
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="/admin/courses-management">Course Management</a></li>
+                <li class="breadcrumb-item">
+                    {{#ifEquals role "Administrator"}}
+                    <a href="/admin/courses-management">
+                    {{else}}
+                    <a href="/teacher/courses-management">
+                    {{/ifEquals}}
+                    Course Management</a></li>
                 <li class="breadcrumb-item active">Course Detail</li>
             </ul>
         </div>
@@ -48,12 +58,47 @@
         <div class="modal fade" id="renderVideoModal" tabindex="-1" role="dialog"
             aria-labelledby="renderVideoModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body" style="height: 600px">
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8RYslufQHlg"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
+                <div class="modal-content modal-vid">
+                    <div class="modal-header">
+                        <h3 class="modal-title vid-header">Course : {{course.name}}</h3>
+                        <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div style="width: 100%;" class="vid-container">
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8RYslufQHlg"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                        </div>
+                        <div class="mt-3">
+                            <div class="ls-vid-header"> List of videos :</div>
+                            {{#each chapters as |chapter ind|}}
+                            <div class="mt-3">
+                                <strong><a href="#" class="session session-vid" data-toggle="collapse"
+                                        data-target="#chapter_vid{{inc @index}}" aria-expanded="false"
+                                        aria-controls="collapseExample">Session {{inc
+                                        @index}}:
+                                        <span>{{chapter.name}}</span></a></strong>
+
+                                <div class="collapse" id="chapter_vid{{inc @index}}">
+                                    <!-- Add videos -->
+
+                                    {{#with (arrayof ../videolist @index)}}
+                                    {{#each this.videos}}
+                                    <div class="ml-3 mb-2 vid-div">
+                                        <a class="vid-btn ml-3" type="button" data-url="{{this.url}}"
+                                            onclick="changeVid('{{this.url}}')">{{this.name}}</a>
+
+                                    </div>
+                                    {{/each}}
+                                    {{/with}}
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -158,34 +203,93 @@
         </div>
 
         <div class="modal fade" id="rmSessionModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form id="rmSessionForm" method="POST" action="">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Remove session dialog</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <h4>Confirm to remove this session permanently.</h4>
-                                <input type="text" class="form-control" id="rmSessionIdInput"
-                                                                name="sessionIdInput" 
-                                                                style="display:none" required>
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form id="rmSessionForm" method="POST" action="">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Remove session dialog</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-outline-success" name="action" value="remove_session" type="submit"><i
-                                class="fa fa-check" aria-hidden="true"></i>
-                            Yes</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-danger"
-                                aria-hidden="true"></i>No</button>
-                    </div>
-                </form>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <h4>Confirm to remove this session permanently.</h4>
+                                <input type="text" class="form-control" id="rmSessionIdInput" name="sessionIdInput"
+                                    style="display:none" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-outline-success" name="action" value="remove_session"
+                                type="submit"><i class="fa fa-check" aria-hidden="true"></i>
+                                Yes</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-danger"
+                                    aria-hidden="true"></i>No</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div class="modal fade" id="changeVideoNameModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form id="changeVideoNameForm" method="POST" action="">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Change video's name</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="VideoIdInput" name="VideoIdInput"
+                                    value="" style="display:none" required>
+                                <label for="VideoName">Video name</label>
+                                <input type="text" class="form-control" id="changeVideoNameInput"
+                                    name="changeVideoNameInput" placeholder="Enter video's name" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-outline-success" name="action" value="change_video_name"
+                                type="submit"><i class="fa fa-check" aria-hidden="true"></i>
+                                Save</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-danger"
+                                    aria-hidden="true"></i>Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="rmVideoModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form id="rmVideoForm" method="POST" action="">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Remove video dialog</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <h4>Confirm to remove this video permanently.</h4>
+                                <input type="text" class="form-control" id="rmVideoIdInput" name="VideoIdInput"
+                                    style="display:none" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-outline-success" name="action" value="remove_video"
+                                type="submit"><i class="fa fa-check" aria-hidden="true"></i>
+                                Yes</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-danger"
+                                    aria-hidden="true"></i>No</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <!-- Modal End  -->
         <div class="container-fluid">
             <div class="row">
@@ -365,6 +469,16 @@
                                                                         data-target="#renderVideoModal"
                                                                         data-whatever="{{this.url}}">{{this.name}}</button>
 
+                                                                    <button class="rbtn" type="button" data-toggle="modal"
+                                                            data-target="#changeVideoNameModal" data-id="{{this._id}}"
+                                                            data-name="{{this.name}}"><i
+                                                                class="fas fa-pen"></i></button>
+
+                                                        <button class="rbtn" value="remove_video" type="button"
+                                                            data-toggle="modal" data-target="#rmVideoModal"
+                                                            data-id="{{this._id}}"><i class="fa fa-trash"></i></button>
+
+
                                                                 </div>
                                                                 {{/each}}
                                                                 {{/with}}
@@ -380,16 +494,15 @@
 
                                                     </td>
                                                     <td style="text-align: center;">
-                                                            <button class="rbtn" type="button" data-toggle="modal"
-                                                                data-target="#changeSessionNameModal"
-                                                                data-id="{{this._id}}" data-name="{{this.name}}"><i
-                                                                    class="fas fa-pen"></i></button>
+                                                        <button class="rbtn mb-2" type="button" data-toggle="modal"
+                                                            data-target="#changeSessionNameModal" data-id="{{this._id}}"
+                                                            data-name="{{this.name}}"><i
+                                                                class="fas fa-pen"></i></button>
 
-                                                            <button class="rbtn" value="remove_session"
-                                                                type="button" data-toggle="modal"
-                                                                data-target="#rmSessionModal"
-                                                                data-id="{{this._id}}"><i class="fa fa-trash"></i></button>
-                                                      
+                                                        <button class="rbtn mb-2" value="remove_session" type="button"
+                                                            data-toggle="modal" data-target="#rmSessionModal"
+                                                            data-id="{{this._id}}"><i class="fa fa-trash"></i></button>
+
 
                                                     </td>
                                                 </tr>
@@ -456,6 +569,7 @@
     </script>
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
+    <script src="https://cdn.plyr.io/3.6.3/plyr.polyfilled.js"></script>
     <script>
 
         var editor = $('.editor');
@@ -496,23 +610,26 @@
             $('#coursedetail').css("display", "none");
         })
         $('#renderVideoModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var link = button.data('whatever') // Extract info from data-* attributes
+            var button = $(event.relatedTarget) 
+            var link = button.data('whatever') 
 
             var modal = $(this)
-            modal.find('iframe').attr('src', link);
+            modal.find('iframe').first().attr('src', link);
         })
+        $("#renderVideoModal").on('hidden.bs.modal', function (e) {
+            $("#renderVideoModal iframe").attr("src", $("#renderVideoModal iframe").attr("src"));
+        });
         $('#addVideoModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var chapterid = button.data('whatever') // Extract info from data-* attributes
+            var button = $(event.relatedTarget) 
+            var chapterid = button.data('whatever') 
             var chaptername = button.data('name')
             var modal = $(this)
             modal.find('#ChapterIdInput').val(chapterid);
             modal.find('#sessionHeader').text(chaptername);
         })
         $('#changeSessionNameModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var chapterid = button.data('id') // Extract info from data-* attributes
+            var button = $(event.relatedTarget)
+            var chapterid = button.data('id')
             var chaptername = button.data('name')
             var modal = $(this)
 
@@ -526,6 +643,28 @@
 
             modal.find('#rmSessionIdInput').val(cateid);
         })
+
+        $('#changeVideoNameModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var videoid = button.data('id')
+            var videoname = button.data('name')
+            var modal = $(this)
+
+            modal.find('#VideoIdInput').val(videoid);
+            modal.find('#changeVideoNameInput').val(videoname);
+        })
+        $('#rmVideoModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var videoid = button.data('id');
+            var modal = $(this)
+
+            modal.find('#rmVideoIdInput').val(videoid);
+        })
+        function changeVid(url) {
+
+            var modal = $('#renderVideoModal')
+            modal.find('iframe').first().attr('src', url);
+        }
     </script>
 </body>
 
