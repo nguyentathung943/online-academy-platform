@@ -661,8 +661,6 @@ router.get("/course-list", async (req, res) => {
       courses,
       option,
       host,
-      role: req.user.role,
-      user: req.user,
     });
   }
 });
