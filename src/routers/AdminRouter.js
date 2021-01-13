@@ -34,7 +34,9 @@ router.get("/admin/courses-management",Validate.checkAdmin, async (req, res) => 
   const categories = await Cate.find({})
   res.render("manage-courses", {
     courses,
-    categories
+    categories,
+    role: req.user.role,
+    user: req.user
   });
 
 });
@@ -49,7 +51,7 @@ router.post("/admin/courses-management", async (req, res) => {
 
 });
 
-router.get("/admin/categories-management", async (req, res) => {
+router.get("/admin/categories-management",Validate.checkAdmin, async (req, res) => {
   const categories = await Category.find();
   const hasCourses = [];
   for (const cate of categories) {
@@ -59,7 +61,9 @@ router.get("/admin/categories-management", async (req, res) => {
     else hasCourses.push(false);
   }
   res.render("manage-categories", {
-    categories, hasCourses
+    categories, hasCourses,
+    role: req.user.role,
+    user: req.user
   });
 
 });
@@ -84,13 +88,15 @@ router.post("/admin/categories-management", async (req, res) => {
   }
   return res.redirect("/admin/categories-management");
 });
-router.get("/admin/users-management", async (req, res) => {
+router.get("/admin/users-management",Validate.checkAdmin, async (req, res) => {
   const teachers = await Teachers.find();
   const students = await Students.find();
 
   res.render("manage-users", {
     teachers,
-    students
+    students,
+    role: req.user.role,
+    user: req.user
   });
 
 });
@@ -182,7 +188,7 @@ router.post("/admin/view-course", async (req, res) => {
   return res.redirect("/admin/view-course?id=" + CourseID.toString());
 })
 
-router.get("/admin/view-course", async (req, res) => {
+router.get("/admin/view-course",Validate.checkAdmin, async (req, res) => {
   const categories = await Cate.find({})
   const CourseID = req.query.id;
   res.cookie("CourseID", CourseID)
@@ -191,11 +197,13 @@ router.get("/admin/view-course", async (req, res) => {
 
   // Check
   const videolist = await SessionVideos.getbyCourseID(CourseID);
-  res.render("viewCourse", { course, categories, chapters, videolist });
+  res.render("viewCourse", { course, categories, chapters, videolist,
+    role: req.user.role,
+    user: req.user });
 
 });
 
-router.get("/admin/course-list", async (req, res) => {
+router.get("/admin/course-list",Validate.checkAdmin, async (req, res) => {
   const categories = await Category.find({})
   let option = ""
   let host = req.originalUrl;
@@ -217,7 +225,9 @@ router.get("/admin/course-list", async (req, res) => {
           categories,
           courses,
           option,
-          host
+          host,
+          role: req.user.role,
+          user: req.user
       });
   } else if (req.query.sortRate) {
       host = host.split("?")[0] + "?";
@@ -237,7 +247,9 @@ router.get("/admin/course-list", async (req, res) => {
           categories,
           courses,
           option,
-          host
+          host,
+          role: req.user.role,
+          user: req.user
       });
   } else if (req.query.searchValue) {
       host = host.split("&")[0] + "&";
@@ -275,7 +287,9 @@ router.get("/admin/course-list", async (req, res) => {
           categories,
           courses,
           option,
-          host
+          host,
+          role: req.user.role,
+          user: req.user
       });
   } else if (req.query.categoryName) {
       let courses = await Methods.FetchCourseByCateName(req.query.categoryName)
@@ -308,7 +322,9 @@ router.get("/admin/course-list", async (req, res) => {
           categories,
           courses,
           option,
-          host
+          host,
+          role: req.user.role,
+          user: req.user
       });
   } else {
       host = host.split("?")[0] + "?";
@@ -341,7 +357,9 @@ router.get("/admin/course-list", async (req, res) => {
           categories,
           courses,
           option,
-          host
+          host,
+          role: req.user.role,
+          user: req.user
       });
   }
 });
