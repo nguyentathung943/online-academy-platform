@@ -7,7 +7,7 @@ const {Chapters, Videos} = require("../models/chapter");
 const Cate = require("../models/category");
 const Register = require("../models/register")
 //REGISTER 
-const PlaceAnOrder = async(StudentID, CourseID) =>{
+const PlaceAnOrder = async (StudentID, CourseID) => {
     const Regis = new Register({
         owner: StudentID,
         course: CourseID
@@ -23,7 +23,7 @@ const getCourseLecturer = async (CourseID) => {
 
 //GET TEACHER'S COURSES (TEACHER)
 const getCoursesOwned = async (TeacherID) => {
-    const teacher = await Teachers.findById(TeacherID);
+    const teacher = await Teachers.findById(TeacherID)
     await teacher.populate("CoursesOwned").execPopulate();
     return teacher.CoursesOwned;
 };
@@ -43,7 +43,7 @@ const registerCourse = async (StudentID, CourseID) => {
             student.CoursesRegistered = student.CoursesRegistered.concat(course.id);
             course.StudentsRegistered = course.StudentsRegistered.concat(student.id);
             course.number_of_student = course.number_of_student + 1;
-            await PlaceAnOrder(StudentID,CourseID)
+            await PlaceAnOrder(StudentID, CourseID)
             await student.save();
             await course.save();
         }
@@ -344,7 +344,7 @@ const GetCateName = async (CourseID) => {
 };
 const existCateName = async (CateName) => {
     const cate = await Cate.findOne({name: CateName});
-    return (cate.length != 0)? true: false;
+    return (cate.length != 0) ? true : false;
 };
 const ShowAllCategory = async () => {
     const cates = await Cate.find();
@@ -369,7 +369,7 @@ const UpdateDescription = async (CourseId, NewDesc) => {
     course.full_description = NewDesc;
     await course.save()
 }
-const UpdateCourseDetail = async (CourseId,avatar, Name, BriefDesc, Price, Status) => {
+const UpdateCourseDetail = async (CourseId, avatar, Name, BriefDesc, Price, Status) => {
     const course = await Courses.findById(CourseId);
     course.name = Name;
     if (avatar != null) {

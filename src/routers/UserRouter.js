@@ -16,6 +16,9 @@ const router = new express.Router();
 router.get("/", async (req, res) => {
     if (req.isAuthenticated() && req.user.role === "Teacher") {
         const courses = await Methods.getCoursesOwned(req.user.id)
+        courses.sort(function (a, b) {
+            return b.createdAt - a.createdAt;
+        });
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -37,8 +40,6 @@ router.get("/", async (req, res) => {
         const numStudent = await Students.countDocuments();
         const numReview = await Review.countDocuments();
         const numRegister = await Register.countDocuments();
-        // const course = await Courses.find({})
-        // const number_course = course.length
         res.render("index", {
             user: req.user,
             role: req.user.role,
@@ -517,13 +518,14 @@ router.get("/course-list", async (req, res) => {
             courses[index].starArr = GetStarArr(courses[index].score);
         }
         courses = GetPagination(courses);
+
         res.render("product-list", {
             categories,
             courses,
             option,
             host,
-            role: req.user.role,
-            user: req.user
+            role: req.isAuthenticated() ? req.user.role : null,
+            user: req.isAuthenticated() ? req.user : null,
         });
     } else if (req.query.sortRate) {
         host = host.split("?")[0] + "?";
@@ -546,8 +548,8 @@ router.get("/course-list", async (req, res) => {
             courses,
             option,
             host,
-            role: req.user.role,
-            user: req.user
+            role: req.isAuthenticated() ? req.user.role : null,
+            user: req.isAuthenticated() ? req.user : null,
         });
     } else if (req.query.searchValue) {
         host = host.split("&")[0] + "&";
@@ -609,8 +611,8 @@ router.get("/course-list", async (req, res) => {
             courses,
             option,
             host,
-            role: req.user.role,
-            user: req.user
+            role: req.isAuthenticated() ? req.user.role : null,
+            user: req.isAuthenticated() ? req.user : null,
         });
     } else if (req.query.categoryName) {
         let courses = await Methods.FetchCourseByCateName(req.query.categoryName);
@@ -644,8 +646,8 @@ router.get("/course-list", async (req, res) => {
             courses,
             option,
             host,
-            role: req.user.role,
-            user: req.user,
+            role: req.isAuthenticated() ? req.user.role : null,
+            user: req.isAuthenticated() ? req.user : null,
         });
     } else {
         host = host.split("?")[0] + "?";
@@ -678,8 +680,8 @@ router.get("/course-list", async (req, res) => {
             courses,
             option,
             host,
-            role: req.user.role,
-            user: req.user,
+            role: req.isAuthenticated() ? req.user.role : null,
+            user: req.isAuthenticated() ? req.user : null,
         });
     }
 });
