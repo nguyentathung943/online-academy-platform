@@ -517,14 +517,25 @@ router.get("/course-list", async (req, res) => {
             courses[index].starArr = GetStarArr(courses[index].score);
         }
         courses = GetPagination(courses);
-        res.render("product-list", {
-            categories,
-            courses,
-            option,
-            host,
-            role: req.user.role,
-            user: req.user
-        });
+        if(req.isAuthenticated()){
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+                role: req.user.role,
+                user: req.user
+            });
+        }
+        else{
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host
+            });
+        }
+
     } else if (req.query.sortRate) {
         host = host.split("?")[0] + "?";
         let status = null;
@@ -541,14 +552,24 @@ router.get("/course-list", async (req, res) => {
             courses[index].starArr = GetStarArr(courses[index].score);
         }
         courses = GetPagination(courses);
-        res.render("product-list", {
-            categories,
-            courses,
-            option,
-            host,
-            role: req.user.role,
-            user: req.user
-        });
+        if(req.isAuthenticated()){
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+                role: req.user.role,
+                user: req.user
+            });
+        }
+        else{
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+            });
+        }  
     } else if (req.query.searchValue) {
         host = host.split("&")[0] + "&";
         var courses = await Methods.searchCourseFullText(req.query.searchValue);
@@ -650,14 +671,25 @@ router.get("/course-list", async (req, res) => {
             courses[index].starArr = GetStarArr(courses[index].score);
         }
         courses = GetPagination(courses);
-        res.render("product-list", {
-            categories,
-            courses,
-            option,
-            host,
-            role: req.user.role,
-            user: req.user,
-        });
+        if(req.isAuthenticated()){
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+                role: req.user.role,
+                user: req.user,
+            });
+        }
+        else{
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+            });
+        }
+
     } else {
         host = host.split("?")[0] + "?";
         let courses = await Courses.find();
@@ -684,14 +716,25 @@ router.get("/course-list", async (req, res) => {
             courses[index].starArr = GetStarArr(courses[index].score);
         }
         courses = GetPagination(courses);
-        res.render("product-list", {
-            categories,
-            courses,
-            option,
-            host,
-            role: req.user.role,
-            user: req.user,
-        });
+        if(req.isAuthenticated()){
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+                role: req.user.role,
+                user: req.user,
+            });
+        }
+        else{
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+            });
+        }
+
     }
 });
 
