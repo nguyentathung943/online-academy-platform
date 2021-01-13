@@ -24,7 +24,6 @@
 
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
-<<<<<<< HEAD
     <style>
         .session::before {
             content: '\f105';
@@ -56,8 +55,6 @@
             }
         }
     </style>
-=======
->>>>>>> 92be201821ff53dd47cfa0aaffd7f77b0831b9e1
 </head>
 
 <body>
@@ -92,52 +89,59 @@
                         {{/with}}
                     {{else}}
                         <h3>No videos has been added yet!</h3>
-                        {{/if}}
-                    </div>
+                    {{/if}}
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="product-detail-top">
-                        <div class="row align-items-center">
-                            <div class="col-md-5">
-                                <div class="product-slider-single normal-slider">
-                                    <img src="{{course.avatar}}" alt="Product Image">
-                                </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="product-detail-top">
+                    <div class="row align-items-center">
+                        <div class="col-md-5">
+                            <div class="product-slider-single normal-slider">
+                                <img src="{{course.avatar}}" alt="Product Image">
                             </div>
-                            <div class="col-md-7">
-                                <div class="product-content">
-                                    <div class="title">
-                                        <h2>{{course.name}} {{#if completed}}
-                                            <span
+                        </div>
+                        <div class="col-md-7">
+                            <div class="product-content">
+                                <div class="title">
+                                    <h2>{{course.name}} {{#if completed}}
+                                        <span
                                                 style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
                                                 class="rounded border-success text-success p-1">
                                                 Completed
                                             </span>
-                                            {{else}}
-                                            <span
+                                    {{else}}
+                                        <span
                                                 style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
                                                 class="rounded border-warning text-warning p-1">
                                                 Updating
                                             </span>
-                                            {{/if}}
-                                        </h2>
-                                    </div>
-                                    <p class="font-weight-bold">{{course.category.name}}</p>
-                                    <p>Last updated {{course.date}}</p>
-                                    <p>{{course.brief_description}}</p>
+                                    {{/if}}
+                                    </h2>
+                                </div>
+                                <p class="font-weight-bold">{{course.category.name}}</p>
+                                <p>Last updated {{course.date}}</p>
+                                <p>{{course.brief_description}}</p>
 
-                                    <div>
-                                        <span class="font-weight-bold" style="color: #FF6F61">{{course.score}}</span>
-                                        <div class="ratting d-inline">
-                                            {{#each course.starArr}}
+                                <div>
+                                    <span class="font-weight-bold" style="color: #FF6F61">{{course.score}}</span>
+                                    <div class="ratting d-inline">
+                                        {{#each course.starArr}}
                                             <i class="fa {{this}} " style="font-family: FontAwesome"></i>
-                                            {{/each}}
+                                        {{/each}}
 
                                     </div>
+                                    <span style="color: gray">({{course.number_of_reviewer}} ratings)</span>
+                                    <span class="font-weight-bold">{{course.number_of_student}} students</span>
+                                </div>
+                                <div class="price">
+                                    <h4>Price:</h4>
+                                    <p>${{course.price}} <span>$???</span></p>
+                                </div>
 
                                 <div class="d-flex">
                                     <div class="">
@@ -149,10 +153,10 @@
                                             <a class="btn mr-5" href="/register-course"><i
                                                     class="fa fa-shopping-bag mr-2"></i>Register</a>
 
-                                            {{/if}}
-                                        </div>
-                                        <div class="">
-                                            {{#if isLiked}}
+                                        {{/if}}
+                                    </div>
+                                    <div class="">
+                                        {{#if isLiked}}
                                             <a class="btn" href="/remove-watchlist"><i
                                                     class="fa fa-plus mr-2"></i>Remove
                                                 from watch list</a>
@@ -168,27 +172,35 @@
                     </div>
                 </div>
 
-                    <div class="row product-detail-bottom">
-                        <div class="col-lg-12">
-                            <ul class="nav nav-pills nav-justified">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="pill" href="#teacherInfo">Lecturer information</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="pill" href="#reviews">Reviews
-                                        ({{reviewList.length}}
-                                        )</a>
-                                </li>
-                            </ul>
+                <div class="row product-detail-bottom">
+                    <div class="col-lg-12">
+                        <ul class="nav nav-pills nav-justified">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#teacherInfo">Lecturer information</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews
+                                    ({{reviewList.length}}
+                                    )</a>
+                            </li>
+                        </ul>
 
-                            <div class="tab-content">
-                                <div id="description" class="container tab-pane active">
-                                    <h4>Product description</h4>
-                                    <p>
-                                        {{{course.full_description}}}
+                        <div class="tab-content">
+                            <div id="description" class="container tab-pane active">
+                                <h4>Product description</h4>
+                                <p>
+                                    {{{course.full_description}}}
+                                </p>
+                            </div>
+                            <div id="teacherInfo" class="container tab-pane fade">
+                                <h4>Lecturer Infomation</h4>
+                                <div>
+                                    <p><span class="font-weight-bold">Name:</span> {{course.owner.name}}</p>
+                                    <p><span class="font-weight-bold">Phone number:</span>
+                                        {{course.owner.phoneNumber}}
                                     </p>
                                     <p><span class="font-weight-bold">Email:</span> {{course.owner.email}}</p>
                                 </div>
@@ -196,22 +208,20 @@
                             <div id="reviews" class="container tab-pane fade">
                                 {{#if isRegistered}}
                                     {{#if isCommented}}
-                                    <div class="p-3 mb-2 bg-light text-dark">
-                                        <div style="font-weight: bold">YOUR REVIEW</div>
-                                        <div class="reviews-submitted">
-                                            <div class="reviewer">{{isCommented.owner.name}} - <span>{{date}}</span>
+                                        <div class="p-3 mb-2 bg-light text-dark">
+                                            <div style="font-weight: bold">YOUR REVIEW</div>
+                                            <div class="reviews-submitted">
+                                                <div class="reviewer">{{isCommented.owner.name}} - <span>{{date}}</span>
+                                                </div>
+                                                <div class="ratting">
+                                                    {{#each course.starArr}}
+                                                        <i class="fa {{this}}" style="font-family: FontAwesome"></i>
+                                                    {{/each}}
+                                                </div>
+                                                <p>
+                                                    {{isCommented.comment}}
+                                                </p>
                                             </div>
-<<<<<<< HEAD
-=======
-                                            <div class="ratting">
-                                                {{#each course.starArr}}
-                                                <i class="fa {{this}}" style="font-family: FontAwesome"></i>
-                                                {{/each}}
-                                            </div>
-                                            <p>
-                                                {{isCommented.comment}}
-                                            </p>
->>>>>>> 92be201821ff53dd47cfa0aaffd7f77b0831b9e1
                                         </div>
                                     {{else}}
                                         <div class="reviews-submit">
@@ -287,8 +297,8 @@
                         <h1>Related Products</h1>
                     </div>
 
-                        <div class="row align-items-center product-slider product-slider-3">
-                            {{#each course.relatedCourses}}
+                    <div class="row align-items-center product-slider product-slider-3">
+                        {{#each course.relatedCourses}}
                             <div class="col-lg-12">
                                 {{>CourseItem}}
                             </div>
@@ -300,22 +310,21 @@
             <!-- Side Bar Start -->
             <div class="col-lg-4 sidebar">
 
-                    <div class="sidebar-widget widget-slider">
-                        <div class="w-100 text-center">
-                            <h3 class="font-weight-bold" style="color: #FF6F61">Preview this course</h3>
-                        </div>
-                        <div class="sidebar-slider normal-slider">
-                            <div class="product-item">
+                <div class="sidebar-widget widget-slider">
+                    <div class="w-100 text-center">
+                        <h3 class="font-weight-bold" style="color: #FF6F61">Preview this course</h3>
+                    </div>
+                    <div class="sidebar-slider normal-slider">
+                        <div class="product-item">
 
-                                <div class="product-image">
-                                    <a href="product-detail.hbs">
-                                        <img src="/img/product-7.jpg" alt="Product Image">
+                            <div class="product-image">
+                                <a href="product-detail.hbs">
+                                    <img src="/img/product-7.jpg" alt="Product Image">
+                                </a>
+                                <div class="product-action">
+                                    <a href="#" data-toggle="modal" data-target="#renderVideoModal">
+                                        <i class="fa fa-play"></i>
                                     </a>
-                                    <div class="product-action">
-                                        <a href="#" data-toggle="modal" data-target="#renderVideoModal">
-                                            <i class="fa fa-play"></i>
-                                        </a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -342,31 +351,33 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
                 <div class="sidebar-widget brands">
                     {{#each chapters as |chapter ind|}}
                         <h4><a href="#" class="session" data-toggle="collapse" data-target="#chapter_{{inc @index}}"
                                aria-expanded="false" aria-controls="collapseExample">Session {{inc
                                 @index}}:
-                                <span>{{chapter.name}}</span></a></h4>
+                            <span>{{chapter.name}}</span></a></h4>
                         {{#if isRegistered}}
-                        <div class="collapse" id="chapter_{{inc @index}}">
-                            <!-- Add videos -->
+                            <div class="collapse" id="chapter_{{inc @index}}">
+                                <!-- Add videos -->
 
-                            {{#with (arrayof ../videolist @index)}}
-                            {{#each this.videos}}
-                            <div class="mb-2">
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#renderVideoModal" data-whatever="{{this.url}}">{{this.name}}</button>
+                                {{#with (arrayof ../videolist @index)}}
+                                    {{#each this.videos}}
+                                        <div class="mb-2">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#renderVideoModal"
+                                                    data-whatever="{{this.url}}">{{this.name}}</button>
+
+                                        </div>
+                                    {{/each}}
+                                {{/with}}
+
 
                             </div>
-                            {{/each}}
-                            {{/with}}
-
-
-                        </div>
                         {{/if}}
-                        {{/each}}
+                    {{/each}}
 
 
                 </div>
@@ -389,7 +400,6 @@
             <div class="brand-item"><img src="/img/brand-6.png" alt=""></div>
         </div>
     </div>
-<<<<<<< HEAD
 </div>
 <!-- Brand End -->
 
@@ -413,38 +423,6 @@
     })
     $(".slick-track").addClass("ml-0")
 </script>
-=======
-    <!-- Brand End -->
-
-    {{>Footer}}
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="/lib/easing/easing.min.js"></script>
-    <script src="/lib/slick/slick.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="/js/main.js"></script>
-    <script>
-        $('#renderVideoModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var link = button.data('whatever')
-
-            var modal = $(this)
-            modal.find('iframe').attr('src', link);
-        })
-        $(".slick-track").addClass("ml-0")
-        $("#renderVideoModal").on('hidden.bs.modal', function (e) {
-            $("#renderVideoModal iframe").attr("src", $("#renderVideoModal iframe").attr("src"));
-        });
-        function changeVid(url) {
-
-            var modal = $('#renderVideoModal')
-            modal.find('iframe').first().attr('src', url);
-        }
-    </script>
->>>>>>> 92be201821ff53dd47cfa0aaffd7f77b0831b9e1
 </body>
 
 </html>
