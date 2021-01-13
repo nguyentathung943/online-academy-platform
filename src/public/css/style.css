@@ -2720,3 +2720,75 @@ h2 {
         /* New width for default modal */
     }
 }
+
+@media screen and (max-width: 832px) {
+    .vid-container{
+        height: 60vw;
+    }
+}
+
+@media screen and (min-width: 832px) {
+    .vid-container{
+        height: 560px;
+    }
+}
+
+.modal-vid {
+    background-color: #293039;
+    color: #fff;
+}
+
+.session-vid {
+    color: #93a0ae;
+    font-family: sf pro display, -apple-system, BlinkMacSystemFont, Roboto, segoe ui, Helvetica, Arial, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.02rem;
+    font-size: 1.3rem;
+}
+.session-vid:hover, .session-vid:active, .session-vid:focus {
+    color: #FF6F61;
+}
+
+.vid-header {
+    font-family: sf pro display, -apple-system, BlinkMacSystemFont, Roboto, segoe ui, Helvetica, Arial, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.02rem;
+    font-size: 1.9rem;
+}
+
+.ls-vid-header {
+    font-family: sf pro display, -apple-system, BlinkMacSystemFont, Roboto, segoe ui, Helvetica, Arial, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.02rem;
+    font-size: 1.6rem;
+    margin-left: 20px;
+}
+.vid-btn {
+    color: #93a0ae;
+    font-family: sf pro display, -apple-system, BlinkMacSystemFont, Roboto, segoe ui, Helvetica, Arial, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.02rem;
+    font-size: 1.0rem;
+}
+.close-btn, .close-btn:hover {
+        color: #fff;
+}
+.vid-div:hover {
+    background-color: #3c3b37;
+    color: #93a0ae;
+}
+.vid-div {
+    position: relative;
+}
+.vid-div:hover {
+    cursor: hand;
+    cursor: pointer;
+}
+.vid-btn {
+    width: 100%;
+    height: 100%;
+}
