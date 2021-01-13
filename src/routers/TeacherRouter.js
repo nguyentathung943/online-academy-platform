@@ -49,7 +49,6 @@ router.get("/teacher/courses-management", Authen.checkTeacher, async (req, res) 
     categories,
     role: req.user.role, user: req.user
   });
-
 });
 
 router.post("/teacher/courses-management", async (req, res) => {
@@ -99,19 +98,10 @@ router.post("/teacher/view-course", async (req, res) => {
   else if (req.body.action == "add_video") {
     await Methods.AddVideo(req.body.ChapterIdInput, req.body.VideoNameInput, req.body.url);
   }
-  else if (req.body.action == "change_video_name") {
-    const video = await Chapter.Videos.findById(req.body.VideoIdInput);
-    video.name = req.body.changeVideoNameInput;
-    await video.save();
-  }
-  else if (req.body.action == "remove_video") {
-    const video = await Chapter.Videos.findById(req.body.VideoIdInput);
-    await video.delete();
-  }
   return res.redirect("/teacher/view-course?id=" + CourseID.toString());
-})
+});
 
-router.get("/teacher/view-course", Authen.checkTeacher, async (req, res) => {
+router.get("/teacher/view-course", async (req, res) => {
   const categories = await Cate.find({})
   const CourseID = req.query.id;
   res.cookie("CourseID", CourseID)
@@ -126,9 +116,7 @@ router.get("/teacher/view-course", Authen.checkTeacher, async (req, res) => {
       const videolist = await SessionVideos.getbyCourseID(CourseID);
       res.render("viewCourse", { course, categories, chapters, videolist, role: req.user.role, user: req.user });
     }
-
   }
-
 });
 
-module.exports = router
+module.exports = router;

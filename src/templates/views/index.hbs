@@ -33,17 +33,17 @@
         <div class="featured-product product">
             <div class="container-fluid">
                 <div class="section-header">
-                    <h1>Your courses: {{course_owned}}</h1>
+                    <h1>Courses you are charging: {{course_owned}}</h1>
                 </div>
                 <div class="row align-items-center product-slider product-slider-4">
                     {{#each courses}}
                         <div class="col-lg-3">
-                            {{>CourseItem}}
+                            {{>CourseItem_admin}}
                         </div>
                     {{/each}}
                     {{#each courses}}
                         <div class="col-lg-3">
-                            {{>CourseItem}}
+                            {{>CourseItem_admin}}
                         </div>
                     {{/each}}
                 </div>

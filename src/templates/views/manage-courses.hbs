@@ -27,7 +27,7 @@
 <body>
 {{>Header}}
 
-<!-- Breadcrumb Start -->
+{{!-- <!-- Breadcrumb Start -->
 <div class="breadcrumb-wrap">
     <div class="container-fluid">
         <ul class="breadcrumb">
@@ -36,7 +36,7 @@
         </ul>
     </div>
 </div>
-<!-- Breadcrumb End -->
+<!-- Breadcrumb End --> --}}
 
 <!-- Modal Start -->
 <div class="modal fade" id="rmCourseModal" tabindex="-1" role="dialog">
@@ -89,17 +89,17 @@
                             <tr>
                                 <td>
                                     <div class="img">
-                                        <a href="#"><img src="{{this.avatar}}" alt="Image"/></a>
+                                        <a href="/admin/view-course?id={{this.id}}"><img src="{{this.avatar}}" alt="Image"/></a>
                                         <p>{{this.name}}</p>
                                     </div>
                                 </td>
                                 <td>${{this.price}}</td>
                                 <td>
-                                    <button value="remove_course" class="mb-2"
+                                   <button value="remove_course" class="mb-2"
                                                                 type="button" data-toggle="modal"
                                                                 data-target="#rmCourseModal"
                                                                 data-id="{{this._id}}"><i class="fa fa-trash"></i></button>
-                                    {{#ifEquals ../role "Administrator"}}
+                                   {{#ifEquals ../role "Administrator"}}
                                     <a href="/admin/view-course?id={{this._id}}">
                                     {{else}}
                                     <a href="/teacher/view-course?id={{this._id}}">
@@ -112,7 +112,7 @@
                             </tbody>
                         </table>
                     </div>
-                    {{#ifEquals role "Teacher"}}
+                     {{#ifEquals role "Teacher"}}
                      <div class="" align="right">
                         <a class="btn" href="/teacher/add-course"><i class="fa fa-plus mr-2"></i>Add new course</a>
                     </div>
