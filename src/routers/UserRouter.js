@@ -604,14 +604,25 @@ router.get("/course-list", async (req, res) => {
 
             courses = GetPagination(courses);
         }
-        res.render("product-list", {
-            categories,
-            courses,
-            option,
-            host,
-            role: req.user.role,
-            user: req.user
-        });
+        if(req.isAuthenticated()){
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+                role: req.user.role,
+                user: req.user
+            });
+        }
+        else{
+            res.render("product-list", {
+                categories,
+                courses,
+                option,
+                host,
+            });
+        }
+ 
     } else if (req.query.categoryName) {
         let courses = await Methods.FetchCourseByCateName(req.query.categoryName);
         host = host.split("&")[0] + "&";
