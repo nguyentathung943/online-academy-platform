@@ -13,7 +13,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Source+Code+Pro:700,900&display=swap"
-          rel="stylesheet">
+        rel="stylesheet">
 
     <!-- CSS Libraries -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -27,71 +27,81 @@
 </head>
 
 <body>
-{{>Header}}
+    {{>Header}}
+    {{#if role}}
+    {{#ifEquals role "Teacher"}}
+        <h1>Number of course you manage: {{course_owned}}</h1>
+    {{/ifEquals}}
+    {{#ifEquals role "Administrator"}}
+        <h1>All of courses in the system: {{all_course}}</h1>          
+    {{/ifEquals}}
+    {{#ifEquals role "Student"}}
+    <!-- Main Slider Start -->
+    <div class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 mb-0">
+                    <nav class="navbar bg-light">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#featured-courses"><i class="fa fa-home"></i>Feature
+                                    Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#most-view-course"><i class="fa fa-home"></i>Most View
+                                    Course</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#newest-course"><i class="fa fa-shopping-bag"></i>Newest
+                                    Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#hot-categories"><i class="fa fa-plus-square"></i>Hot
+                                    Categories</a>
+                            </li>
 
-<!-- Main Slider Start -->
-<div class="header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 mb-0">
-                <nav class="navbar bg-light">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#featured-courses"><i class="fa fa-home"></i>Feature Courses</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#most-view-course"><i class="fa fa-home"></i>Most View Course</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#newest-course"><i class="fa fa-shopping-bag"></i>Newest
-                                Courses</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#hot-categories"><i class="fa fa-plus-square"></i>Hot
-                                Categories</a>
-                        </li>
-
-                    </ul>
-                </nav>
-            </div>
-            <div class="col-md-9" id="featured-courses">
-                <div class="header-slider normal-slider">
-                    {{#each featuredCourses}}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-9" id="featured-courses">
+                    <div class="header-slider normal-slider">
+                        {{#each featuredCourses}}
                         <div class="header-slider-item">
                             <div class="product-item row">
 
                                 <div class="product-image col-5 pr-0">
                                     <a href="/product-detail?id={{this._id}}">
-                                    <img src="{{this.avatar}}" alt="Product Image"/>
+                                        <img src="{{this.avatar}}" alt="Product Image" />
                                     </a>
                                 </div>
                                 <div class="col-7 pl-0">
                                     <div class="product-title"
-                                         style="height: 60%; display: flex; flex-direction: column; justify-content: center">
+                                        style="height: 60%; display: flex; flex-direction: column; justify-content: center">
                                         <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
-                                        <p class="text-white m-0">{{this.name}} {{#if completed}}
-                                            <span
+                                            <p class="text-white m-0">{{this.name}} {{#if completed}}
+                                                <span
                                                     style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
                                                     class="rounded border-success text-success p-1">
-                                                Completed
-                                            </span>
-                                        {{else}}
-                                            <span
+                                                    Completed
+                                                </span>
+                                                {{else}}
+                                                <span
                                                     style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
                                                     class="rounded border-warning text-warning p-1">
-                                                Updating
-                                            </span>
-                                        {{/if}}</p>
-                                        <p class="text-white m-0 mt-1">{{this.category.name}}</p>
-                                        <p class="text-white m-0">{{this.owner.name}}</p>
+                                                    Updating
+                                                </span>
+                                                {{/if}}
+                                            </p>
+                                            <p class="text-white m-0 mt-1">{{this.category.name}}</p>
+                                            <p class="text-white m-0">{{this.owner.name}}</p>
                                         </a>
 
                                         <div style="text-align: left">
                                             <span class="font-weight-bold text-white"
-                                                  style="color: #FF6F61">{{this.score}}</span>
+                                                style="color: #FF6F61">{{this.score}}</span>
                                             <div class="ratting d-inline">
                                                 {{#each this.starArr}}
-                                                    <i class="fa {{this}}" style="font-family: FontAwesome"></i>
+                                                <i class="fa {{this}}" style="font-family: FontAwesome"></i>
                                                 {{/each}}
                                             </div>
                                             <span class="text-white">({{this.number_of_reviewer}})</span>
@@ -103,91 +113,247 @@
                                 </div>
                             </div>
                         </div>
-                    {{/each}}
+                        {{/each}}
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Main Slider End -->
+    <!-- Main Slider End -->
 
-<!-- Brand Start -->
-<div class="brand mt-4 mb-0">
-    <div class="container-fluid">
-        <div class="brand-slider">
-            <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
-            <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+    <!-- Brand Start -->
+    <div class="brand mt-4 mb-0">
+        <div class="container-fluid">
+            <div class="brand-slider">
+                <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+            </div>
         </div>
     </div>
-</div>
-<!-- Brand End -->
+    <!-- Brand End -->
 
 
-<!-- Featured Product Start -->
-<div id="most-view-course" class="featured-product product">
-    <div class="container-fluid">
-        <div class="section-header">
-            <h1>Most View Courses</h1>
-        </div>
-        <div class="row align-items-center product-slider product-slider-4">
-            {{#each mostViewCourses}}
+    <!-- Featured Product Start -->
+    <div id="most-view-course" class="featured-product product">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h1>Most View Courses</h1>
+            </div>
+            <div class="row align-items-center product-slider product-slider-4">
+                {{#each mostViewCourses}}
                 <div class="col-lg-3">
                     {{>CourseItem}}
                 </div>
-            {{/each}}
+                {{/each}}
+            </div>
         </div>
     </div>
-</div>
-<!-- Featured Product End -->
+    <!-- Featured Product End -->
 
 
-<!-- Recent Product Start -->
-<div class="recent-product product" id="newest-course">
-    <div class="container-fluid">
-        <div class="section-header">
-            <h1>Newest Courses</h1>
-        </div>
-        <div class="row align-items-center product-slider product-slider-4">
-            {{#each newestCourses}}
+    <!-- Recent Product Start -->
+    <div class="recent-product product" id="newest-course">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h1>Newest Courses</h1>
+            </div>
+            <div class="row align-items-center product-slider product-slider-4">
+                {{#each newestCourses}}
                 <div class="col-lg-3">
                     {{>CourseItem}}
                 </div>
-            {{/each}}
+                {{/each}}
+            </div>
         </div>
     </div>
-</div>
-<!-- Recent Product End -->
+    <!-- Recent Product End -->
 
-<div class="recent-product product" id="hot-categories">
-    <div class="container-fluid">
-        <div class="section-header">
-            <h1>Hot Categories</h1>
-        </div>
-        <div class="row align-items-center">
-            {{#each categories}}
+    <div class="recent-product product" id="hot-categories">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h1>Hot Categories</h1>
+            </div>
+            <div class="row align-items-center">
+                {{#each categories}}
                 {{>Category}}
-            {{/each}}
+                {{/each}}
+            </div>
         </div>
     </div>
-</div>
-</div>
+    </div>
 
 
-{{>Footer}}
+    {{/ifEquals}}
+    {{else}}
+    <!-- Main Slider Start -->
+    <div class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 mb-0">
+                    <nav class="navbar bg-light">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#featured-courses"><i class="fa fa-home"></i>Feature
+                                    Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#most-view-course"><i class="fa fa-home"></i>Most View
+                                    Course</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#newest-course"><i class="fa fa-shopping-bag"></i>Newest
+                                    Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#hot-categories"><i class="fa fa-plus-square"></i>Hot
+                                    Categories</a>
+                            </li>
 
-<!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<script src="lib/easing/easing.min.js"></script>
-<script src="lib/slick/slick.min.js"></script>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-9" id="featured-courses">
+                    <div class="header-slider normal-slider">
+                        {{#each featuredCourses}}
+                        <div class="header-slider-item">
+                            <div class="product-item row">
 
-<!-- Template Javascript -->
-<script src="js/main.js"></script>
+                                <div class="product-image col-5 pr-0">
+                                    <a href="/product-detail?id={{this._id}}">
+                                        <img src="{{this.avatar}}" alt="Product Image" />
+                                    </a>
+                                </div>
+                                <div class="col-7 pl-0">
+                                    <div class="product-title"
+                                        style="height: 60%; display: flex; flex-direction: column; justify-content: center">
+                                        <a href="/product-detail?id={{this._id}}" style="text-align: left !important;">
+                                            <p class="text-white m-0">{{this.name}} {{#if completed}}
+                                                <span
+                                                    style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                    class="rounded border-success text-success p-1">
+                                                    Completed
+                                                </span>
+                                                {{else}}
+                                                <span
+                                                    style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                    class="rounded border-warning text-warning p-1">
+                                                    Updating
+                                                </span>
+                                                {{/if}}
+                                            </p>
+                                            <p class="text-white m-0 mt-1">{{this.category.name}}</p>
+                                            <p class="text-white m-0">{{this.owner.name}}</p>
+                                        </a>
+
+                                        <div style="text-align: left">
+                                            <span class="font-weight-bold text-white"
+                                                style="color: #FF6F61">{{this.score}}</span>
+                                            <div class="ratting d-inline">
+                                                {{#each this.starArr}}
+                                                <i class="fa {{this}}" style="font-family: FontAwesome"></i>
+                                                {{/each}}
+                                            </div>
+                                            <span class="text-white">({{this.number_of_reviewer}})</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-price" style="height: 40%">
+                                        <h3><span>$</span>{{this.price}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Slider End -->
+
+    <!-- Brand Start -->
+    <div class="brand mt-4 mb-0">
+        <div class="container-fluid">
+            <div class="brand-slider">
+                <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
+                <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+            </div>
+        </div>
+    </div>
+    <!-- Brand End -->
+
+
+    <!-- Featured Product Start -->
+    <div id="most-view-course" class="featured-product product">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h1>Most View Courses</h1>
+            </div>
+            <div class="row align-items-center product-slider product-slider-4">
+                {{#each mostViewCourses}}
+                <div class="col-lg-3">
+                    {{>CourseItem}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <!-- Featured Product End -->
+
+
+    <!-- Recent Product Start -->
+    <div class="recent-product product" id="newest-course">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h1>Newest Courses</h1>
+            </div>
+            <div class="row align-items-center product-slider product-slider-4">
+                {{#each newestCourses}}
+                <div class="col-lg-3">
+                    {{>CourseItem}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <!-- Recent Product End -->
+
+    <div class="recent-product product" id="hot-categories">
+        <div class="container-fluid">
+            <div class="section-header">
+                <h1>Hot Categories</h1>
+            </div>
+            <div class="row align-items-center">
+                {{#each categories}}
+                {{>Category}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    {{/if}}
+
+    {{>Footer}}
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/slick/slick.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>

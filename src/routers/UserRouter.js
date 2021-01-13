@@ -13,89 +13,111 @@ const OS = require("os");
 const SessionVideos = require("../models/sessionvideos");
 const router = new express.Router();
 router.get("/", async (req, res) => {
-  const courses = await Courses.find();
-  for (const e of courses) {
-    let index = courses.indexOf(e);
-    const teacher = await Methods.getCourseLecturer(e.id);
-    courses[index].owner = teacher;
-    const cate = await Methods.GetCateName(e.id);
-    courses[index].category = cate;
-    courses[index].starArr = GetStarArr(courses[index].score);
+  if(req.isAuthenticated()&&req.user.role==="Teacher"){
+    const course = await Methods.getCoursesOwned(req.user.id)
+    const number_course = course.length
+    res.render("index", {
+      user: req.user,
+      role: req.user.role,
+      course_owned: number_course
+    });
   }
-  let featuredCourses = [];
-  const now = new Date();
-  let registers = await Register.find({ createdAt: { $gte: now - 604800000 } });
-  for (let i = 0; i < registers.length; i++) {
-    await registers[i].populate("course").execPopulate();
-    await registers[i].course.populate("category").execPopulate();
-    await registers[i].course.populate("owner").execPopulate();
+  else if(req.isAuthenticated()&&req.user.role==="Administrator"){
+    const course = await Courses.find({})
+    const number_course = course.length
+    res.render("index", {
+      user: req.user,
+      role: req.user.role,
+      all_course: number_course
+    });
   }
-  registers.forEach((e) => featuredCourses.push(e.course));
-  const seen = new Set();
-  featuredCourses = featuredCourses.filter((el) => {
-    const duplicate = seen.has(el.id);
-    seen.add(el.id);
-    return !duplicate;
-  });
-  featuredCourses.sort(function (a, b) {
-    return b.number_of_student - a.number_of_student;
-  });
-  let mostViewCourses = JSON.parse(JSON.stringify(courses));
-  mostViewCourses.sort(function (a, b) {
-    return b.number_of_student - a.number_of_student;
-  });
-
-  let newestCourses = JSON.parse(JSON.stringify(courses));
-  newestCourses.sort(function (a, b) {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-
-  if (featuredCourses.length > 4) {
-    featuredCourses = featuredCourses.slice(0, 4);
-  }
-  if (mostViewCourses.length > 10) {
-    mostViewCourses = mostViewCourses.slice(0, 10);
-  }
-  if (newestCourses.length > 10) {
-    newestCourses = newestCourses.slice(0, 10);
-  }
-  for (const e of featuredCourses) {
-    let index = featuredCourses.indexOf(e);
-    featuredCourses[index].starArr = GetStarArr(featuredCourses[index].score);
-  }
-  for (const e of mostViewCourses) {
-    let index = mostViewCourses.indexOf(e);
-    mostViewCourses[index].starArr = GetStarArr(mostViewCourses[index].score);
-  }
-  for (const e of newestCourses) {
-    let index = newestCourses.indexOf(e);
-    newestCourses[index].starArr = GetStarArr(newestCourses[index].score);
-  }
-  const categories = await Category.find({});
-  if (req.isAuthenticated()) {
-    if (!req.user.confirmed) {
-      res.render("error", {
-        title: "EMAIL NOT CONFIRMED!",
-        error: "Please confirm your email before using our services!",
-      });
+  else{
+    const courses = await Courses.find();
+    for (const e of courses) {
+      let index = courses.indexOf(e);
+      const teacher = await Methods.getCourseLecturer(e.id);
+      courses[index].owner = teacher;
+      const cate = await Methods.GetCateName(e.id);
+      courses[index].category = cate;
+      courses[index].starArr = GetStarArr(courses[index].score);
+    }
+    let featuredCourses = [];
+    const now = new Date();
+    let registers = await Register.find({ createdAt: { $gte: now - 604800000 } });
+    for (let i = 0; i < registers.length; i++) {
+      await registers[i].populate("course").execPopulate();
+      await registers[i].course.populate("category").execPopulate();
+      await registers[i].course.populate("owner").execPopulate();
+    }
+    registers.forEach((e) => featuredCourses.push(e.course));
+    const seen = new Set();
+    featuredCourses = featuredCourses.filter((el) => {
+      const duplicate = seen.has(el.id);
+      seen.add(el.id);
+      return !duplicate;
+    });
+    featuredCourses.sort(function (a, b) {
+      return b.number_of_student - a.number_of_student;
+    });
+    let mostViewCourses = JSON.parse(JSON.stringify(courses));
+    mostViewCourses.sort(function (a, b) {
+      return b.number_of_student - a.number_of_student;
+    });
+  
+    let newestCourses = JSON.parse(JSON.stringify(courses));
+    newestCourses.sort(function (a, b) {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+  
+    if (featuredCourses.length > 4) {
+      featuredCourses = featuredCourses.slice(0, 4);
+    }
+    if (mostViewCourses.length > 10) {
+      mostViewCourses = mostViewCourses.slice(0, 10);
+    }
+    if (newestCourses.length > 10) {
+      newestCourses = newestCourses.slice(0, 10);
+    }
+    for (const e of featuredCourses) {
+      let index = featuredCourses.indexOf(e);
+      featuredCourses[index].starArr = GetStarArr(featuredCourses[index].score);
+    }
+    for (const e of mostViewCourses) {
+      let index = mostViewCourses.indexOf(e);
+      mostViewCourses[index].starArr = GetStarArr(mostViewCourses[index].score);
+    }
+    for (const e of newestCourses) {
+      let index = newestCourses.indexOf(e);
+      newestCourses[index].starArr = GetStarArr(newestCourses[index].score);
+    }
+    const categories = await Category.find({});
+    if (req.isAuthenticated()) {
+      if ((!req.user.confirmed)&&req.user.role==="Student") {
+        res.render("error", {
+          title: "EMAIL NOT CONFIRMED!",
+          error: "Please confirm your email before using our services!",
+        });
+      } else {
+        console.log(req.user.role)
+        res.render("index", {
+          categories,
+          featuredCourses,
+          mostViewCourses,
+          newestCourses,
+          role: req.user.role,
+          user: req.user,
+        });
+      }
     } else {
       res.render("index", {
         categories,
         featuredCourses,
         mostViewCourses,
         newestCourses,
-        role: req.user.role,
-        user: req.user,
       });
     }
-  } else {
-    res.render("index", {
-      categories,
-      featuredCourses,
-      mostViewCourses,
-      newestCourses,
-    });
   }
+  
 });
 
 router.post("/test", async (req, res) => {
@@ -136,7 +158,6 @@ router.get("/profile", async (req, res) => {
 
 router.post("/profile", async (req, res) => {
   try {
-    console.log(typeof req.body.password);
     if (req.body.o_password.length == 0) {
       const user = req.user;
       user.email = req.body.email;
@@ -144,25 +165,22 @@ router.post("/profile", async (req, res) => {
       user.name = req.body.name;
       await user.save();
       res.render("profile", {
-        name: req.user.name,
-        mobile: req.user.phoneNumber,
-        email: req.user.email,
+        user: req.user,
+        role: req.user.role,
         success_message: "Information saved",
       });
     } else {
       const user = req.user;
       if (req.body.o_password !== user.password) {
         res.render("profile", {
-          name: req.user.name,
-          mobile: req.user.phoneNumber,
-          email: req.user.email,
+          user: req.user,
+          role: req.user.role,
           error_message: "Wrong password!",
         });
       } else if (req.body.new_password !== req.body.confirm_password) {
         res.render("profile", {
-          name: req.user.name,
-          mobile: req.user.phoneNumber,
-          email: req.user.email,
+          user: req.user,
+          role: req.user.role,
           error_message: "Confirm password does not match!",
         });
       } else if (
@@ -170,9 +188,8 @@ router.post("/profile", async (req, res) => {
         req.body.confirm_password === ""
       ) {
         res.render("profile", {
-          name: req.user.name,
-          mobile: req.user.phoneNumber,
-          email: req.user.email,
+          user: req.user,
+          role: req.user.role,
           error_message: "New password can not be blank",
         });
       } else if (
@@ -182,9 +199,8 @@ router.post("/profile", async (req, res) => {
         user.password = req.body.new_password;
         await user.save();
         res.render("profile", {
-          name: req.user.name,
-          mobile: req.user.phoneNumber,
-          email: req.user.email,
+          user: req.user,
+          role: req.user.role,
           success_message: "Information saved",
         });
       }
@@ -300,9 +316,8 @@ router.get("/product-detail", async (req, res) => {
   // Query chapters of course
   const chapters = await Methods.viewChapterList(CourseID);
   const videolist = await SessionVideos.getbyCourseID(CourseID);
-  console.log(chapters);
   if (req.isAuthenticated()) {
-    if (!req.user.confirmed) {
+    if ((!req.user.confirmed)&&(req.user.role==="Student")) {
       res.render("error", {
         title: "EMAIL NOT CONFIRMED!",
         error: "Please confirm your email before using our services!",
@@ -490,6 +505,8 @@ router.get("/course-list", async (req, res) => {
       courses,
       option,
       host,
+      role: req.user.role,
+      user: req.user
     });
   } else if (req.query.sortRate) {
     host = host.split("?")[0] + "?";
@@ -512,6 +529,8 @@ router.get("/course-list", async (req, res) => {
       courses,
       option,
       host,
+      role: req.user.role,
+      user: req.user
     });
   } else if (req.query.searchValue) {
     host = host.split("&")[0] + "&";
@@ -573,6 +592,8 @@ router.get("/course-list", async (req, res) => {
       courses,
       option,
       host,
+      role: req.user.role,
+      user: req.user
     });
   } else if (req.query.categoryName) {
     let courses = await Methods.FetchCourseByCateName(req.query.categoryName);
@@ -606,6 +627,8 @@ router.get("/course-list", async (req, res) => {
       courses,
       option,
       host,
+      role: req.user.role,
+      user: req.user,
     });
   } else {
     host = host.split("?")[0] + "?";
@@ -638,6 +661,8 @@ router.get("/course-list", async (req, res) => {
       courses,
       option,
       host,
+      role: req.user.role,
+      user: req.user,
     });
   }
 });

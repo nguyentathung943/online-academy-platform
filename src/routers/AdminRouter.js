@@ -11,6 +11,7 @@ const Chapter = require("../models/chapter")
 const SessionVideos = require("../models/sessionvideos");
 const Category = require("../models/category");
 
+const Validate = require("../middleware/middleware")
 //ADD CATEGORY
 router.post("/admin/add-category", async (req, res) => {
   const cate = new Cate({
@@ -21,7 +22,7 @@ router.post("/admin/add-category", async (req, res) => {
 })
 
 
-router.get("/admin/courses-management", async (req, res) => {
+router.get("/admin/courses-management",Validate.checkAdmin, async (req, res) => {
   const courses = await Courses.find();
   for (const e of courses) {
     let index = courses.indexOf(e);
