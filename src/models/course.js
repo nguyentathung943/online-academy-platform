@@ -61,7 +61,6 @@ const CourseSchema = new mongoose.Schema({
 CourseSchema.index({
     name: 'text',
     brief_description: 'text',
-    category: 'text'
 })
 //courses can be registered by many students
 CourseSchema.virtual('StudentsRegistered', {
