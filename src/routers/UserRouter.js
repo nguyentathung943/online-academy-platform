@@ -352,7 +352,9 @@ router.get("/product-detail", async (req, res) => {
     }
     // Query chapters of course
     const chapters = await Methods.viewChapterList(CourseID);
+
     const videolist = await SessionVideos.getbyCourseID(CourseID);
+    const previewVideos = videolist[0].videos;
     if (req.isAuthenticated()) {
         if (!req.user.confirmed && req.user.role === "Student") {
             res.render("error", {
@@ -380,6 +382,7 @@ router.get("/product-detail", async (req, res) => {
                     isRegistered,
                     categories,
                     chapters,
+                    previewVideos,
                     videolist,
                     role: req.user.role,
                     user: req.user,
@@ -393,6 +396,7 @@ router.get("/product-detail", async (req, res) => {
                     isRegistered,
                     categories,
                     chapters,
+                    previewVideos,
                     videolist,
                     role: req.user.role,
                     user: req.user,
@@ -406,6 +410,7 @@ router.get("/product-detail", async (req, res) => {
             isCommented: null,
             categories,
             chapters,
+            previewVideos,
             videolist,
         });
     }
