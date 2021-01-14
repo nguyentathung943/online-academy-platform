@@ -6,6 +6,7 @@ const CateSchema = new mongoose.Schema({
         required: true
     }
 })
+
 const MainCategory = mongoose.model("MCategories",CateSchema)
 
 module.exports = MainCategory

@@ -60,7 +60,7 @@ const CourseSchema = new mongoose.Schema({
 })
 CourseSchema.index({
     name: 'text',
-    full_description: 'text',
+    brief_description: 'text',
     category: 'text'
 })
 //courses can be registered by many students
