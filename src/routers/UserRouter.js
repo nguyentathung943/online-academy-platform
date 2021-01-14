@@ -14,145 +14,151 @@ const SessionVideos = require("../models/sessionvideos");
 const Review = require("../models/review");
 const router = new express.Router();
 router.get("/", async (req, res) => {
-    if (req.isAuthenticated() && req.user.role === "Teacher") {
-        const courses = await Methods.getCoursesOwned(req.user.id);
-        courses.sort(function (a, b) {
-            return b.createdAt - a.createdAt;
-        });
-        for (const e of courses) {
-            let index = courses.indexOf(e);
-            const teacher = await Methods.getCourseLecturer(e.id);
-            courses[index].owner = teacher;
-            const cate = await Methods.GetCateName(e.id);
-            courses[index].category = cate;
-            courses[index].starArr = GetStarArr(courses[index].score);
-        }
-        const number_course = courses.length;
-        res.render("index", {
-            user: req.user,
-            role: req.user.role,
-            course_owned: number_course,
-            courses,
-        });
-    } else if (req.isAuthenticated() && req.user.role === "Administrator") {
-        const numCourse = await Courses.countDocuments();
-        const numTeacher = await Teachers.countDocuments();
-        const numStudent = await Students.countDocuments();
-        const numReview = await Review.countDocuments();
-        const numRegister = await Register.countDocuments();
-        res.render("index", {
-            user: req.user,
-            role: req.user.role,
-            numCourse,
-            numTeacher,
-            numStudent,
-            numReview,
-            numRegister,
-        });
-    } else {
-        const courses = await Courses.find();
-        for (const e of courses) {
-            let index = courses.indexOf(e);
-            const teacher = await Methods.getCourseLecturer(e.id);
-            courses[index].owner = teacher;
-            const cate = await Methods.GetCateName(e.id);
-            courses[index].category = cate;
-            courses[index].starArr = GetStarArr(courses[index].score);
-        }
-        let featuredCourses = [];
-        const now = new Date();
-        let registers = await Register.find({
-            createdAt: {$gte: now - 604800000},
-        });
-        for (let i = 0; i < registers.length; i++) {
-            await registers[i].populate("course").execPopulate();
-            await registers[i].course.populate("category").execPopulate();
-            await registers[i].course.populate("owner").execPopulate();
-        }
-        let categories = await Category.find({});
-        for (let i = 0; i < categories.length; i++) {
-            let count = 0;
-            for (let j = 0; j < registers.length; j++) {
-                if (categories[i].id == registers[j].course.category.id) {
-                    count++;
-                }
-                categories[i].number_of_student = count;
+    if(req.isAuthenticated() && req.user.isBlocked){
+        res.render("error",{error : "Your account has been blocked!"})
+    }
+    else {
+        if (req.isAuthenticated() && req.user.role === "Teacher") {
+            const courses = await Methods.getCoursesOwned(req.user.id);
+            courses.sort(function (a, b) {
+                return b.createdAt - a.createdAt;
+            });
+            for (const e of courses) {
+                let index = courses.indexOf(e);
+                const teacher = await Methods.getCourseLecturer(e.id);
+                courses[index].owner = teacher;
+                const cate = await Methods.GetCateName(e.id);
+                courses[index].category = cate;
+                courses[index].starArr = GetStarArr(courses[index].score);
             }
-        }
-        categories.sort((a, b) => {
-            return b.number_of_student - a.number_of_student
-        })
-        if (categories.length > 5)
-            categories.slice(0, 5);
-        registers.forEach((e) => featuredCourses.push(e.course));
-
-        const seen = new Set();
-        featuredCourses = featuredCourses.filter((el) => {
-            const duplicate = seen.has(el.id);
-            seen.add(el.id);
-            return !duplicate;
-        });
-        featuredCourses.sort(function (a, b) {
-            return b.number_of_student - a.number_of_student;
-        });
-
-        let mostViewCourses = JSON.parse(JSON.stringify(courses));
-        mostViewCourses.sort(function (a, b) {
-            return b.number_of_student - a.number_of_student;
-        });
-
-        let newestCourses = JSON.parse(JSON.stringify(courses));
-        newestCourses.sort(function (a, b) {
-            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        });
-
-        if (featuredCourses.length > 3) {
-            featuredCourses = featuredCourses.slice(0, 3);
-        }
-        if (mostViewCourses.length > 10) {
-            mostViewCourses = mostViewCourses.slice(0, 10);
-        }
-        if (newestCourses.length > 10) {
-            newestCourses = newestCourses.slice(0, 10);
-        }
-        for (const e of featuredCourses) {
-            let index = featuredCourses.indexOf(e);
-            featuredCourses[index].starArr = GetStarArr(featuredCourses[index].score);
-        }
-        for (const e of mostViewCourses) {
-            let index = mostViewCourses.indexOf(e);
-            mostViewCourses[index].starArr = GetStarArr(mostViewCourses[index].score);
-        }
-        for (const e of newestCourses) {
-            let index = newestCourses.indexOf(e);
-            newestCourses[index].starArr = GetStarArr(newestCourses[index].score);
-        }
-
-        if (req.isAuthenticated()) {
-            if (!req.user.confirmed && req.user.role === "Student") {
-                res.render("error", {
-                    title: "EMAIL NOT CONFIRMED!",
-                    error: "Please confirm your email before using our services!",
-                });
-            } else {
+            const number_course = courses.length;
+            res.render("index", {
+                user: req.user,
+                role: req.user.role,
+                course_owned: number_course,
+                courses,
+            });
+        } else if (req.isAuthenticated() && req.user.role === "Administrator") {
+            const numCourse = await Courses.countDocuments();
+            const numTeacher = await Teachers.countDocuments();
+            const numStudent = await Students.countDocuments();
+            const numReview = await Review.countDocuments();
+            const numRegister = await Register.countDocuments();
+            res.render("index", {
+                user: req.user,
+                role: req.user.role,
+                numCourse,
+                numTeacher,
+                numStudent,
+                numReview,
+                numRegister,
+            });
+        } else {
+            const courses = await Courses.find();
+            for (const e of courses) {
+                let index = courses.indexOf(e);
+                const teacher = await Methods.getCourseLecturer(e.id);
+                courses[index].owner = teacher;
+                const cate = await Methods.GetCateName(e.id);
+                courses[index].category = cate;
+                courses[index].starArr = GetStarArr(courses[index].score);
+            }
+            let featuredCourses = [];
+            const now = new Date();
+            let registers = await Register.find({
+                createdAt: {$gte: now - 604800000},
+            });
+            for (let i = 0; i < registers.length; i++) {
+                await registers[i].populate("course").execPopulate();
+                await registers[i].course.populate("category").execPopulate();
+                await registers[i].course.populate("owner").execPopulate();
+            }
+            let categories = await Category.find({});
+            for (let i = 0; i < categories.length; i++) {
+                let count = 0;
+                for (let j = 0; j < registers.length; j++) {
+                    if (categories[i].id == registers[j].course.category.id) {
+                        count++;
+                    }
+                    categories[i].number_of_student = count;
+                }
+            }
+            categories.sort((a, b) => {
+                return b.number_of_student - a.number_of_student
+            })
+            if (categories.length > 5)
+                categories.slice(0, 5);
+            registers.forEach((e) => featuredCourses.push(e.course));
+    
+            const seen = new Set();
+            featuredCourses = featuredCourses.filter((el) => {
+                const duplicate = seen.has(el.id);
+                seen.add(el.id);
+                return !duplicate;
+            });
+            featuredCourses.sort(function (a, b) {
+                return b.number_of_student - a.number_of_student;
+            });
+    
+            let mostViewCourses = JSON.parse(JSON.stringify(courses));
+            mostViewCourses.sort(function (a, b) {
+                return b.number_of_student - a.number_of_student;
+            });
+    
+            let newestCourses = JSON.parse(JSON.stringify(courses));
+            newestCourses.sort(function (a, b) {
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            });
+    
+            if (featuredCourses.length > 3) {
+                featuredCourses = featuredCourses.slice(0, 3);
+            }
+            if (mostViewCourses.length > 10) {
+                mostViewCourses = mostViewCourses.slice(0, 10);
+            }
+            if (newestCourses.length > 10) {
+                newestCourses = newestCourses.slice(0, 10);
+            }
+            for (const e of featuredCourses) {
+                let index = featuredCourses.indexOf(e);
+                featuredCourses[index].starArr = GetStarArr(featuredCourses[index].score);
+            }
+            for (const e of mostViewCourses) {
+                let index = mostViewCourses.indexOf(e);
+                mostViewCourses[index].starArr = GetStarArr(mostViewCourses[index].score);
+            }
+            for (const e of newestCourses) {
+                let index = newestCourses.indexOf(e);
+                newestCourses[index].starArr = GetStarArr(newestCourses[index].score);
+            }
+    
+            if (req.isAuthenticated()) {
+                if (!req.user.confirmed && req.user.role === "Student") {
+                    res.render("error", {
+                        title: "EMAIL NOT CONFIRMED!",
+                        error: "Please confirm your email before using our services!",
+                    });
+                } else {
+                    res.render("index", {
+                        categories,
+                        featuredCourses,
+                        mostViewCourses,
+                        newestCourses,
+                    });
+                }
+            }
+            else {
                 res.render("index", {
                     categories,
                     featuredCourses,
                     mostViewCourses,
                     newestCourses,
-                    role: req.user.role,
-                    user: req.user,
                 });
             }
-        } else {
-            res.render("index", {
-                categories,
-                featuredCourses,
-                mostViewCourses,
-                newestCourses,
-            });
         }
     }
+    
+    
 });
 
 router.post("/test", async (req, res) => {
@@ -316,126 +322,129 @@ router.get("/product-detail", async (req, res) => {
     res.cookie("CourseID", CourseID);
     let course = await Courses.findById(CourseID);
     let reviewList = await Methods.ShowReviewList(CourseID);
-    for (let e of reviewList) {
-        const index = reviewList.indexOf(e);
-        const StudentComment = await Methods.getStudentSpecs(e.id);
-        reviewList[index] = StudentComment;
-    }
-    for (let i = 0; i < reviewList.length; i++) {
-        let temp = JSON.parse(JSON.stringify(reviewList[i]));
-        temp.Star = GetStarArr(temp.Star);
-        temp.createdAt.tostring
-        temp.date = new Date(temp.createdAt).toLocaleDateString(undefined, options);
-        reviewList[i] = temp;
-    }
-    var time = new Date(course.updatedAt);
-    course.date = new Date(course.updatedAt).toLocaleDateString(undefined, options);
-    course.number_of_student = course.number_of_student.toLocaleString();
-    course.starArr = GetStarArr(course.score);
-    await course.populate("owner").execPopulate();
-    await course.populate("category").execPopulate();
-    course.relatedCourses = await Methods.GetRelatedCourses(course.category);
-    let index = course.relatedCourses.findIndex(
-        (e) => e._id.toString() === course._id.toString()
-    );
-    course.relatedCourses.splice(index, 1);
-    if (course.relatedCourses.length > 5) {
-        course.relatedCourses = course.relatedCourses.slice(0, 5);
-    }
-
-    for (let index = 0; index < course.relatedCourses.length; index++) {
-        course.relatedCourses[index].starArr = GetStarArr(
-            course.relatedCourses[index].score
+    if (!course.isBlocked){
+        for (let e of reviewList) {
+            const index = reviewList.indexOf(e);
+            const StudentComment = await Methods.getStudentSpecs(e.id);
+            reviewList[index] = StudentComment;
+        }
+        for (let i = 0; i < reviewList.length; i++) {
+            let temp = JSON.parse(JSON.stringify(reviewList[i]));
+            temp.Star = GetStarArr(temp.Star);
+            temp.createdAt.tostring
+            temp.date = new Date(temp.createdAt).toLocaleDateString(undefined, options);
+            reviewList[i] = temp;
+        }
+        var time = new Date(course.updatedAt);
+        course.date = new Date(course.updatedAt).toLocaleDateString(undefined, options);
+        course.number_of_student = course.number_of_student.toLocaleString();
+        course.starArr = GetStarArr(course.score);
+        await course.populate("owner").execPopulate();
+        await course.populate("category").execPopulate();
+        course.relatedCourses = await Methods.GetRelatedCourses(course.category);
+        let index = course.relatedCourses.findIndex(
+            (e) => e._id.toString() === course._id.toString()
         );
-        await course.relatedCourses[index].populate("owner").execPopulate();
-        await course.relatedCourses[index].populate("category").execPopulate();
-    }
-    // Query chapters of course
-    const chapters = await Methods.viewChapterList(CourseID);
-
-    const videolist = await SessionVideos.getbyCourseID(CourseID);
-    let previewVideos = [];
-    if (videolist.length > 0)
-        previewVideos = videolist[0].videos;
-    const allCourses = await Courses.find();
-    let mostViewCourses = JSON.parse(JSON.stringify(allCourses));
-    mostViewCourses = await Methods.CourseSortAs(
-        mostViewCourses,
-        "number_of_student",
-        -1
-    );
-    let newViewCourses = JSON.parse(JSON.stringify(allCourses));
-    newViewCourses = await Methods.CourseSortAs(
-        newViewCourses,
-        "createdAt",
-        -1
-    );
-    mostViewCourses = mostViewCourses.slice(0, 3);
-    newViewCourses = newViewCourses.slice(0, 3);
-    if (mostViewCourses.some((e) => e._id == course._id))
-        course.isBestseller = true;
-
-    if (newViewCourses.some((e) => e._id == course._id))
-        course.isNewest = true;
-    if (req.isAuthenticated()) {
-        if (!req.user.confirmed && req.user.role === "Student") {
-            res.render("error", {
-                title: "EMAIL NOT CONFIRMED!",
-                error: "Please confirm your email before using our services!",
-            });
-        } else {
-            const isCommented = await Methods.isReviewed(req.user.id, CourseID);
-            const isLiked = await Methods.isLiked(req.user.id, CourseID);
-            const isRegistered = await Methods.isRegistered(req.user.id, CourseID);
-            if (isCommented) {
-                await isCommented.populate("owner").execPopulate();
-                isCommented.starArr = GetStarArr(isCommented.Star)
-                console.log("isCommtented", isCommented)
-                const date = new Date(isCommented.createdAt).toLocaleDateString(undefined, options);
-                let userStar = await Review.find({owner: req.user.id});
-                userStar = GetStarArr(userStar)
-                res.render("product-detail", {
-                    course,
-                    userStar,
-                    reviewList,
-                    isCommented,
-                    date,
-                    isLiked,
-                    isRegistered,
-                    categories,
-                    chapters,
-                    previewVideos,
-                    videolist,
-                    role: req.user.role,
-                    user: req.user,
+        course.relatedCourses.splice(index, 1);
+        if (course.relatedCourses.length > 5) {
+            course.relatedCourses = course.relatedCourses.slice(0, 5);
+        }
+    
+        for (let index = 0; index < course.relatedCourses.length; index++) {
+            course.relatedCourses[index].starArr = GetStarArr(
+                course.relatedCourses[index].score
+            );
+            await course.relatedCourses[index].populate("owner").execPopulate();
+            await course.relatedCourses[index].populate("category").execPopulate();
+        }
+        // Query chapters of course
+        const chapters = await Methods.viewChapterList(CourseID);
+    
+        const videolist = await SessionVideos.getbyCourseID(CourseID);
+        let previewVideos = [];
+        if (videolist.length > 0)
+            previewVideos = videolist[0].videos;
+        const allCourses = await Courses.find();
+        let mostViewCourses = JSON.parse(JSON.stringify(allCourses));
+        mostViewCourses = await Methods.CourseSortAs(
+            mostViewCourses,
+            "number_of_student",
+            -1
+        );
+        let newViewCourses = JSON.parse(JSON.stringify(allCourses));
+        newViewCourses = await Methods.CourseSortAs(
+            newViewCourses,
+            "createdAt",
+            -1
+        );
+        mostViewCourses = mostViewCourses.slice(0, 3);
+        newViewCourses = newViewCourses.slice(0, 3);
+        if (mostViewCourses.some((e) => e._id == course._id))
+            course.isBestseller = true;
+    
+        if (newViewCourses.some((e) => e._id == course._id))
+            course.isNewest = true;
+        if (req.isAuthenticated()) {
+            if (!req.user.confirmed && req.user.role === "Student") {
+                res.render("error", {
+                    title: "EMAIL NOT CONFIRMED!",
+                    error: "Please confirm your email before using our services!",
                 });
             } else {
-                res.render("product-detail", {
-                    course,
-                    reviewList,
-                    isCommented: null,
-                    isLiked,
-                    isRegistered,
-                    categories,
-                    chapters,
-                    previewVideos,
-                    videolist,
-                    role: req.user.role,
-                    user: req.user,
-                });
+                const isCommented = await Methods.isReviewed(req.user.id, CourseID);
+                const isLiked = await Methods.isLiked(req.user.id, CourseID);
+                const isRegistered = await Methods.isRegistered(req.user.id, CourseID);
+                if (isCommented) {
+                    await isCommented.populate("owner").execPopulate();
+                    isCommented.starArr = GetStarArr(isCommented.Star)
+                    console.log("isCommtented", isCommented)
+                    const date = new Date(isCommented.createdAt).toLocaleDateString(undefined, options);
+                    let userStar = await Review.find({owner: req.user.id});
+                    userStar = GetStarArr(userStar)
+                    res.render("product-detail", {
+                        course,
+                        userStar,
+                        reviewList,
+                        isCommented,
+                        date,
+                        isLiked,
+                        isRegistered,
+                        categories,
+                        chapters,
+                        previewVideos,
+                        videolist,
+                        role: req.user.role,
+                        user: req.user,
+                    });
+                } else {
+                    res.render("product-detail", {
+                        course,
+                        reviewList,
+                        isCommented: null,
+                        isLiked,
+                        isRegistered,
+                        categories,
+                        chapters,
+                        previewVideos,
+                        videolist,
+                        role: req.user.role,
+                        user: req.user,
+                    });
+                }
             }
+        } else {
+            res.render("product-detail", {
+                course,
+                reviewList,
+                isCommented: null,
+                categories,
+                chapters,
+                previewVideos,
+                videolist,
+            });
         }
-    } else {
-        res.render("product-detail", {
-            course,
-            reviewList,
-            isCommented: null,
-            categories,
-            chapters,
-            previewVideos,
-            videolist,
-        });
     }
+   
 });
 
 router.get("/register-course", check.CheckAuthenticated, async (req, res) => {

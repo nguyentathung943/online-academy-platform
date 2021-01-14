@@ -74,6 +74,8 @@
                     {{#if courses}}
                         <div class="tab-content w-100">
                             {{#each courses}}
+                            {{#if this.isBlocked}}
+                            {{else}}
                                 <div class="tab-pane fade" id="page{{this.id}}">
                                     <div class="row">
                                         {{#each this.data}}
@@ -85,6 +87,7 @@
                                         {{/each}}
                                     </div>
                                 </div>
+                            {{/if}}
                             {{/each}}
                         </div>
 
@@ -98,9 +101,12 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center nav">
                             {{#each courses}}
+                            {{#if this.isBlocked}}
+                            {{else}}
                                 <li class="page-item">
                                     <a class="page-link nav-link" id="btn{{this.id}}" data-toggle="pill"
                                        href="#page{{this.id}}" aria-selected="false" role="tab">{{this.id}}</a></li>
+                            {{/if}}
                             {{/each}}
                         </ul>
                     </nav>

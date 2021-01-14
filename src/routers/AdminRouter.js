@@ -47,6 +47,16 @@ router.post("/admin/courses-management", async (req, res) => {
     console.log("Pass");
     await Methods.DeleteCourse(req.body.courseIdInput);
   }
+  else if (req.body.action == "block_course"){
+    const course = await Courses.findById(req.body.courseIdInput);
+    course.isBlocked = true;
+    await course.save();
+  }
+  else if (req.body.action == "unblock_course"){
+    const course = await Courses.findById(req.body.courseIdInput);
+    course.isBlocked = false;
+    await course.save();
+  }
   return res.redirect("/admin/courses-management");
 
 });
@@ -154,6 +164,44 @@ router.post("/admin/users-management", async (req, res) => {
       const student = await Students.findById(req.body.UserIdInput);
       await student.delete();
     }
+  } else if (req.body.action == "block_user"){
+    if (req.body.UserRoleInput == "Teacher") {
+      const teacher = await Teachers.findById(req.body.UserIdInput);
+      teacher.isBlocked = true;
+      const courses = await Methods.getCoursesOwned(req.body.UserIdInput);
+      for (let index = 0; index < courses.length; index++) {
+        const course = courses[index];
+        course.isBlocked = true;
+        await course.save();
+        
+      }
+      await teacher.save();
+
+    }
+    else {
+      const student = await Students.findById(req.body.UserIdInput);
+      student.isBlocked = true;
+      await student.save();
+    }
+  }
+  else if (req.body.action == "unblock_user"){
+    if (req.body.UserRoleInput == "Teacher") {
+      const teacher = await Teachers.findById(req.body.UserIdInput);
+      teacher.isBlocked = false;
+      const courses = await Methods.getCoursesOwned(req.body.UserIdInput);
+      for (let index = 0; index < courses.length; index++) {
+        const course = courses[index];
+        course.isBlocked = false;
+        await course.save();
+        
+      }
+      await teacher.save();
+    }
+    else {
+      const student = await Students.findById(req.body.UserIdInput);
+      student.isBlocked = false;
+      await student.save();
+    }
   }
   return res.redirect("/admin/users-management");
 });
@@ -203,13 +251,20 @@ router.get("/admin/view-course",Validate.checkAdmin, async (req, res) => {
   const CourseID = req.query.id;
   res.cookie("CourseID", CourseID)
   const course = await Courses.findById(CourseID);
-  const chapters = await Methods.viewChapterList(CourseID);
+  if (!course.isBlocked){
+    const chapters = await Methods.viewChapterList(CourseID);
 
-  // Check
-  const videolist = await SessionVideos.getbyCourseID(CourseID);
-  res.render("viewCourse", { course, categories, chapters, videolist,
-    role: req.user.role,
-    user: req.user });
+    // Check
+    const videolist = await SessionVideos.getbyCourseID(CourseID);
+    res.render("viewCourse", { course, categories, chapters, videolist,
+      role: req.user.role,
+      user: req.user });
+  }
+  else {
+    const error ="Cannot access to this course!";
+    res.render("error",{error});
+  }
+  
 
 });
 

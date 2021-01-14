@@ -57,6 +57,8 @@
                             </thead>
                             <tbody class="align-middle">
                             {{#each courses}}
+                            {{#if this.isBlocked}}
+                            {{else}}
                                 <tr>
                                     <td>
                                         <div class="img">
@@ -77,6 +79,7 @@
                                         </a>
                                     </td>
                                 </tr>
+                                {{/if}}
                             {{/each}}
                             </tbody>
                         </table>

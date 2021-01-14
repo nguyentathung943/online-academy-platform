@@ -65,6 +65,8 @@
                     </div>
                     {{#if courses}}
                         {{#each courses}}
+                        {{#if this.isBlocked}}
+                            {{else}}
                             <div class="col-md-3">
                                 <div class="product-item">
 
@@ -98,6 +100,7 @@
                                     </div>
                                 </div>
                             </div>
+                        {{/if}}
                         {{/each}}
                     {{else}}
                         <div> COURSE YOU ARE SEARCHING NOT FOUND</div>

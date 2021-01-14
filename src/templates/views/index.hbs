@@ -37,14 +37,20 @@
                 </div>
                 <div class="row align-items-center product-slider product-slider-4">
                     {{#each courses}}
+                    {{#if this.isBlocked}}
+                            {{else}}
                         <div class="col-lg-3">
                             {{>CourseItem_teacher}}
                         </div>
+                        {{/if}}
                     {{/each}}
                     {{#each courses}}
+                    {{#if this.isBlocked}}
+                            {{else}}
                         <div class="col-lg-3">
                             {{>CourseItem_teacher}}
                         </div>
+                        {{/if}}
                     {{/each}}
                 </div>
             </div>
@@ -125,6 +131,8 @@
                     <div class="col-md-9" id="featured-courses">
                         <div class="header-slider normal-slider">
                             {{#each featuredCourses}}
+                            {{#if this.isBlocked}}
+                            {{else}}
                                 <div class="header-slider-item">
                                     <div class="product-item row">
 
@@ -173,6 +181,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{/if}}
                             {{/each}}
 
                         </div>
@@ -206,9 +215,12 @@
                 </div>
                 <div class="row align-items-center product-slider product-slider-4">
                     {{#each mostViewCourses}}
+                    {{#if this.isBlocked}}
+                            {{else}}
                         <div class="col-lg-3">
                             {{>CourseItem}}
                         </div>
+                        {{/if}}
                     {{/each}}
                 </div>
             </div>
@@ -224,9 +236,12 @@
                 </div>
                 <div class="row align-items-center product-slider product-slider-4">
                     {{#each newestCourses}}
+                    {{#if this.isBlocked}}
+                            {{else}}
                         <div class="col-lg-3">
                             {{>CourseItem}}
                         </div>
+                        {{/if}}
                     {{/each}}
                 </div>
             </div>
@@ -280,6 +295,8 @@
                 <div class="col-md-9" id="featured-courses">
                     <div class="header-slider normal-slider">
                         {{#each featuredCourses}}
+                        {{#if this.isBlocked}}
+                            {{else}}
                             <div class="header-slider-item">
                                 <div class="product-item row">
 
@@ -328,6 +345,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {{/if}}
                         {{/each}}
 
                     </div>
@@ -361,9 +379,12 @@
             </div>
             <div class="row align-items-center product-slider product-slider-4">
                 {{#each mostViewCourses}}
+                {{#if this.isBlocked}}
+                            {{else}}
                     <div class="col-lg-3">
                         {{>CourseItem}}
                     </div>
+                    {{/if}}
                 {{/each}}
             </div>
         </div>
@@ -379,9 +400,12 @@
             </div>
             <div class="row align-items-center product-slider product-slider-4">
                 {{#each newestCourses}}
+                {{#if this.isBlocked}}
+                {{else}}
                     <div class="col-lg-3">
                         {{>CourseItem}}
                     </div>
+                    {{/if}}
                 {{/each}}
             </div>
         </div>
