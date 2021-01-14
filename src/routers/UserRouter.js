@@ -352,10 +352,13 @@ router.get("/product-detail", async (req, res) => {
           course,
           reviewList,
           isCommented,
+          userStar,
           date,
           isLiked,
           isRegistered,
           categories,
+          chapters,
+          videolist,
           role: req.user.role,
           user: req.user,
         });
@@ -364,9 +367,14 @@ router.get("/product-detail", async (req, res) => {
           course,
           reviewList,
           isCommented: null,
+          userStar,
           isLiked,
           isRegistered,
           categories,
+          chapters,
+          videolist,
+          role: req.user.role,
+          user: req.user,
         });
       }
       res.render("product-detail", {
@@ -389,9 +397,12 @@ router.get("/product-detail", async (req, res) => {
       course,
       reviewList,
       isCommented: null,
+      userStar,
       categories,
       chapters,
       videolist,
+      role: req.user.role,
+      user: req.user,
     });
   }
 });
