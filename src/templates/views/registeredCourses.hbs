@@ -59,8 +59,15 @@
                                 <tr>
                                     <td>
                                         <div class="img">
-                                            <a href="#"><img src="{{this.avatar}}" alt="Image"></a>
-                                            <p>{{this.name}}</p>
+                                            <a style="cursor: pointer" href="/product-detail?id={{this.id}}"><img
+                                                src="{{this.avatar}}" alt="Image"></a>
+                                            <p>{{this.name}} {{#unless course.completed}}
+                                                <span
+                                                        style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                        class="rounded border-warning text-warning p-1">
+                                                Updating
+                                            </span>
+                                            {{/unless}}</p>
                                         </div>
                                     </td>
                                     <td>{{this.price}}$</td>

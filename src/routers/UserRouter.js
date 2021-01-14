@@ -51,21 +51,6 @@ router.get("/", async (req, res) => {
         });
     } else {
         const courses = await Courses.find();
-        let categories = await Category.find({});
-        for (let i = 0; i < categories.length; i++) {
-            let sum = 0;
-            for (let j = 0; j < courses.length; j++) {
-                if (categories[i].id == courses[j].category) {
-                    sum += courses[j].number_of_student
-                }
-                categories[i].number_of_student = sum;
-            }
-        }
-        categories.sort((a, b) => {
-            return b.number_of_student - a.number_of_student
-        })
-        if (categories.length > 4)
-            categories.slice(0, 4);
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -84,6 +69,21 @@ router.get("/", async (req, res) => {
             await registers[i].course.populate("category").execPopulate();
             await registers[i].course.populate("owner").execPopulate();
         }
+        let categories = await Category.find({});
+        for (let i = 0; i < categories.length; i++) {
+            let count = 0;
+            for (let j = 0; j < registers.length; j++) {
+                if (categories[i].id == registers[j].course.category.id) {
+                    count++;
+                }
+                categories[i].number_of_student = count;
+            }
+        }
+        categories.sort((a, b) => {
+            return b.number_of_student - a.number_of_student
+        })
+        if (categories.length > 5)
+            categories.slice(0, 5);
         registers.forEach((e) => featuredCourses.push(e.course));
 
         const seen = new Set();
@@ -95,6 +95,7 @@ router.get("/", async (req, res) => {
         featuredCourses.sort(function (a, b) {
             return b.number_of_student - a.number_of_student;
         });
+
         let mostViewCourses = JSON.parse(JSON.stringify(courses));
         mostViewCourses.sort(function (a, b) {
             return b.number_of_student - a.number_of_student;
@@ -105,8 +106,8 @@ router.get("/", async (req, res) => {
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
 
-        if (featuredCourses.length > 4) {
-            featuredCourses = featuredCourses.slice(0, 4);
+        if (featuredCourses.length > 3) {
+            featuredCourses = featuredCourses.slice(0, 3);
         }
         if (mostViewCourses.length > 10) {
             mostViewCourses = mostViewCourses.slice(0, 10);
@@ -134,7 +135,6 @@ router.get("/", async (req, res) => {
                     error: "Please confirm your email before using our services!",
                 });
             } else {
-                console.log(req.user.role);
                 res.render("index", {
                     categories,
                     featuredCourses,
@@ -354,7 +354,9 @@ router.get("/product-detail", async (req, res) => {
     const chapters = await Methods.viewChapterList(CourseID);
 
     const videolist = await SessionVideos.getbyCourseID(CourseID);
-    const previewVideos = videolist[0].videos;
+    let previewVideos = [];
+    if (videolist.length > 0)
+        previewVideos = videolist[0].videos;
     const allCourses = await Courses.find();
     let mostViewCourses = JSON.parse(JSON.stringify(allCourses));
     mostViewCourses = await Methods.CourseSortAs(
