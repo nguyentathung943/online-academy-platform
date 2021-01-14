@@ -4,8 +4,7 @@ const extendSchema = require("mongoose-extend-schema")
 const bcrypt = require("bcrypt")
 const StudentSchema = extendSchema(Users,{
     otp:{
-      type: Number,
-      required: true  
+      type: Number
     },
     role:{
         type:String,

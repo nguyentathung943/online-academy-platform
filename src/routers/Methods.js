@@ -343,8 +343,16 @@ const GetCateName = async (CourseID) => {
     return course.category;
 };
 const existCateName = async (CateName) => {
-    const cate = await Cate.findOne({name: CateName});
-    return (cate.length != 0) ? true : false;
+    const cates = await Cate.find();
+    for (let index = 0; index < cates.length; index++) {
+        const cate = cates[index];
+        if (cate.name == CateName){
+            console.log(cate.name);
+            console.log(CateName);
+            return true;
+        }
+    }
+    return false;
 };
 const ShowAllCategory = async () => {
     const cates = await Cate.find();
