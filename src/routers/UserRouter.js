@@ -51,6 +51,21 @@ router.get("/", async (req, res) => {
         });
     } else {
         const courses = await Courses.find();
+        let categories = await Category.find({});
+        for (let i = 0; i < categories.length; i++) {
+            let sum = 0;
+            for (let j = 0; j < courses.length; j++) {
+                if (categories[i].id == courses[j].category) {
+                    sum += courses[j].number_of_student
+                }
+                categories[i].number_of_student = sum;
+            }
+        }
+        categories.sort((a, b) => {
+            return b.number_of_student - a.number_of_student
+        })
+        if (categories.length > 4)
+            categories.slice(0, 4);
         for (const e of courses) {
             let index = courses.indexOf(e);
             const teacher = await Methods.getCourseLecturer(e.id);
@@ -70,6 +85,7 @@ router.get("/", async (req, res) => {
             await registers[i].course.populate("owner").execPopulate();
         }
         registers.forEach((e) => featuredCourses.push(e.course));
+
         const seen = new Set();
         featuredCourses = featuredCourses.filter((el) => {
             const duplicate = seen.has(el.id);
@@ -110,7 +126,7 @@ router.get("/", async (req, res) => {
             let index = newestCourses.indexOf(e);
             newestCourses[index].starArr = GetStarArr(newestCourses[index].score);
         }
-        const categories = await Category.find({});
+
         if (req.isAuthenticated()) {
             if (!req.user.confirmed && req.user.role === "Student") {
                 res.render("error", {
