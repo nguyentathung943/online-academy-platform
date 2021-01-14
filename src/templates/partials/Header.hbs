@@ -18,7 +18,7 @@
     {{#ifEquals role "Student"}}
         <!-- Nav Bar Start -->
         <div class="nav">
-            <div class="container-fluid">
+            <div class="container-fluid p-0">
                 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
@@ -26,7 +26,7 @@
 
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto">
-                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/" class="nav-item nav-link">Home</a>
                             <div class="nav-item dropdown">
                                 <a href="/course-list" class="nav-link dropdown-toggle"
                                    data-toggle="dropdown">Category</a>
@@ -80,7 +80,7 @@
     <!-- Nav Bar End -->
     {{#ifEquals role "Teacher"}}
         <div class="nav">
-            <div class="container-fluid">
+            <div class="container-fluid p-0">
                 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
@@ -88,9 +88,9 @@
 
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto">
-                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/" class="nav-item nav-link>Home</a>
                             <a href="/teacher/courses-management" class="nav-item nav-link">Courses
-                                Management</a>
+                            Management</a>
                             <a href="/teacher/add-course" class="nav-item nav-link">Add course</a>
                         </div>
                         <div class="navbar-nav ml-auto">
@@ -109,7 +109,7 @@
     {{/ifEquals}}
     {{#ifEquals role "Administrator"}}
         <div class="nav">
-            <div class="container-fluid">
+            <div class="container-fluid p-0">
                 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
@@ -117,7 +117,7 @@
 
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto">
-                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/" class="nav-item nav-link">Home</a>
                             <a href="/admin/categories-management" class="nav-item nav-link">Category Management</a>
                             <a href="/admin/courses-management" class="nav-item nav-link">Course Management</a>
                             <a href="/admin/users-management" class="nav-item nav-link">User Management</a>
@@ -139,7 +139,7 @@
 {{else}}
     <!-- Nav Bar Start -->
     <div class="nav">
-        <div class="container-fluid">
+        <div class="container-fluid p-0">
             <nav class="navbar navbar-expand-md bg-dark navbar-dark">
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
@@ -147,7 +147,7 @@
 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto">
-                        <a href="/" class="nav-item nav-link active">Home</a>
+                        <a href="/" class="nav-item nav-link">Home</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
                             <div class="dropdown-menu">
