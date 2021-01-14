@@ -70,11 +70,21 @@ router.get("/admin/categories-management",Validate.checkAdmin, async (req, res) 
 router.post("/admin/categories-management", async (req, res) => {
   console.log(req.body);
   if (req.body.action == "add_category") {
-    if (!Methods.existCateName(req.body.CategoryNameInput)) {
+    const cates = await Category.find();
+    const existed = false;
+    for (let index = 0; index < cates.length; index++) {
+        const cate = cates[index];
+        if (cate.name == req.body.CategoryNameInput){
+            existed = true;
+            break;
+        }
+    }
+    if (!existed) {
       const cate = new Category({
         name: req.body.CategoryNameInput
       });
       await cate.save();
+      
     }
   }
   else if (req.body.action == "remove_cate") {
@@ -253,7 +263,6 @@ router.get("/admin/course-list",Validate.checkAdmin, async (req, res) => {
       });
   } else if (req.query.searchValue) {
       host = host.split("&")[0] + "&";
-      console.log("Host", host)
       var courses = await Methods.searchCourseFullText(req.query.searchValue)
       var attri = null
       req.query.price ? (attri = "price") : (attri = "score")

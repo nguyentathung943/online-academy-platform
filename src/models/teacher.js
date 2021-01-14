@@ -3,6 +3,10 @@ const Users = require("./user")
 const extendSchema = require("mongoose-extend-schema")
 const bcrypt = require("bcrypt")
 const TeacherSchema = extendSchema(Users,{
+    isBlocked:{
+        type: Boolean,
+        default: false
+    },
     role:{
         type:String,
         default: "Teacher",

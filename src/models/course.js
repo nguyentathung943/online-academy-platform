@@ -15,6 +15,10 @@ const CourseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    isBlocked:{
+        type: Boolean,
+        default: false
+    },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Categories"
