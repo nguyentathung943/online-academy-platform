@@ -355,6 +355,26 @@ router.get("/product-detail", async (req, res) => {
 
     const videolist = await SessionVideos.getbyCourseID(CourseID);
     const previewVideos = videolist[0].videos;
+    const allCourses = await Courses.find();
+    let mostViewCourses = JSON.parse(JSON.stringify(allCourses));
+    mostViewCourses = await Methods.CourseSortAs(
+        mostViewCourses,
+        "number_of_student",
+        -1
+    );
+    let newViewCourses = JSON.parse(JSON.stringify(allCourses));
+    newViewCourses = await Methods.CourseSortAs(
+        newViewCourses,
+        "createdAt",
+        -1
+    );
+    mostViewCourses = mostViewCourses.slice(0, 3);
+    newViewCourses = newViewCourses.slice(0, 3);
+    if (mostViewCourses.some((e) => e._id == course._id))
+        course.isBestseller = true;
+
+    if (newViewCourses.some((e) => e._id == course._id))
+        course.isNewest = true;
     if (req.isAuthenticated()) {
         if (!req.user.confirmed && req.user.role === "Student") {
             res.render("error", {
