@@ -15,6 +15,7 @@ const Review = require("../models/review");
 const router = new express.Router();
 router.get("/", async (req, res) => {
     if(req.isAuthenticated() && req.user.isBlocked){
+        req.logOut();
         res.render("error",{error : "Your account has been blocked!"})
     }
     else {
