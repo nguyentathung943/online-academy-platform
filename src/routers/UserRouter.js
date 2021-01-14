@@ -369,20 +369,20 @@ router.get("/product-detail", async (req, res) => {
           categories,
         });
       }
-      res.render("product-detail", {
-        course,
-        reviewList,
-        isCommented,
-        userStar,
-        date,
-        isLiked,
-        isRegistered,
-        categories,
-        chapters,
-        videolist,
-        role: req.user.role,
-        user: req.user,
-      });
+      // res.render("product-detail", {
+      //   course,
+      //   reviewList,
+      //   isCommented,
+      //   // userStar,
+      //   date,
+      //   isLiked,
+      //   isRegistered,
+      //   categories,
+      //   chapters,
+      //   videolist,
+      //   role: req.user.role,
+      //   user: req.user,
+      // });
     }
   } else {
     res.render("product-detail", {
