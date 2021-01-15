@@ -243,6 +243,13 @@ router.post("/admin/view-course", async (req, res) => {
   else if (req.body.action == "add_video") {
     await Methods.AddVideo(req.body.ChapterIdInput, req.body.VideoNameInput, req.body.url);
   }
+  else if(req.body.action=="remove_video"){
+    await Methods.DeleteVideo(req.body.VideoIdInput)
+  }else if(req.body.action=="change_video_name"){
+    const video = await Videos.findById(req.body.VideoIdInput)
+    video.name = req.body.changeVideoNameInput
+    await video.save()
+  }
   return res.redirect("/admin/view-course?id=" + CourseID.toString());
 })
 
