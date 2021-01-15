@@ -37,19 +37,19 @@
                 </div>
                 <div class="row align-items-center product-slider product-slider-4">
                     {{#each courses}}
-                    {{#if this.isBlocked}}
-                            {{else}}
-                        <div class="col-lg-3">
-                            {{>CourseItem_teacher}}
-                        </div>
+                        {{#if this.isBlocked}}
+                        {{else}}
+                            <div class="col-lg-3">
+                                {{>CourseItem_teacher}}
+                            </div>
                         {{/if}}
                     {{/each}}
                     {{#each courses}}
-                    {{#if this.isBlocked}}
-                            {{else}}
-                        <div class="col-lg-3">
-                            {{>CourseItem_teacher}}
-                        </div>
+                        {{#if this.isBlocked}}
+                        {{else}}
+                            <div class="col-lg-3">
+                                {{>CourseItem_teacher}}
+                            </div>
                         {{/if}}
                     {{/each}}
                 </div>
@@ -131,56 +131,59 @@
                     <div class="col-md-9" id="featured-courses">
                         <div class="header-slider normal-slider">
                             {{#each featuredCourses}}
-                            {{#if this.isBlocked}}
-                            {{else}}
-                                <div class="header-slider-item">
-                                    <div class="product-item row">
+                                {{#if this.isBlocked}}
+                                {{else}}
+                                    <div class="header-slider-item">
+                                        <div class="product-item row">
 
-                                        <div class="product-image col-5 pr-0">
-                                            <a href="/product-detail?id={{this._id}}">
-                                            <img src="{{this.avatar}}" alt="Product Image"/>
-                                            </a>
-                                        </div>
-                                        <div class="col-7 pl-0">
-                                            <div class="product-title"
-                                                 style="height: 60%; display: flex; flex-direction: column; justify-content: center">
-                                                <a href="/product-detail?id={{this._id}}" style="text-align: left
-                                                !important;">
-                                                <p class="text-white m-0">{{this.name}} {{#if completed}}
-                                                    <span
-                                                            style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
-                                                            class="rounded border-success text-success p-1">
+                                            <div class="product-image col-5 pr-0">
+                                                <a href="/product-detail?id={{this._id}}">
+                                                <img src="{{this.avatar}}" alt="Product Image"/>
+                                                </a>
+                                            </div>
+                                            <div class="col-7 pl-0">
+                                                <div class="product-title"
+                                                     style="height: 60%; display: flex; flex-direction: column; justify-content: center">
+                                                    <a href="/product-detail?id={{this._id}}" style="text-align: left
+                                                    !important;">
+                                                    <p class="text-white m-0">{{this.name}} {{#if completed}}
+                                                        <span
+                                                                style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                                class="rounded border-success text-success p-1">
                                                     Completed
                                                 </span>
-                                                {{else}}
-                                                    <span
-                                                            style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
-                                                            class="rounded border-warning text-warning p-1">
+                                                    {{else}}
+                                                        <span
+                                                                style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                                class="rounded border-warning text-warning p-1">
                                                     Updating
                                                 </span>
-                                                {{/if}}
-                                                </p>
-                                                <p class="text-white m-0 mt-1">{{this.category.name}}</p>
-                                                <p class="text-white m-0">{{this.owner.name}}</p>
-                                                </a>
+                                                    {{/if}}
+                                                    </p>
+                                                    <p class="text-white m-0 mt-1">{{this.category.name}}</p>
+                                                    <p class="text-white m-0">{{this.owner.name}}</p>
+                                                    </a>
 
-                                                <div style="text-align: left">
+                                                    <div style="text-align: left">
                                             <span class="font-weight-bold text-white"
                                                   style="color: #FF6F61">{{this.score}}</span>
-                                                    <div class="ratting d-inline">
-                                                        {{#each this.starArr}}
-                                                            <i class="fa {{this}}" style="font-family: FontAwesome"></i>
-                                                        {{/each}}
+                                                        <div class="ratting d-inline">
+                                                            {{#each this.starArr}}
+                                                                <i class="fa {{this}}"
+                                                                   style="font-family: FontAwesome"></i>
+                                                            {{/each}}
+                                                        </div>
+                                                        <span class="text-white">({{this.number_of_reviewer}}) <span
+                                                                class="font-weight-bold">({{this.number_of_student}}
+                                                            students)</span></span>
                                                     </div>
-                                                    <span class="text-white">({{this.number_of_reviewer}})</span>
                                                 </div>
-                                            </div>
-                                            <div class="product-price" style="height: 40%">
-                                                <h3><span>$</span>{{this.price}}</h3>
+                                                <div class="product-price" style="height: 40%">
+                                                    <h3><span>$</span>{{this.price}}</h3>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 {{/if}}
                             {{/each}}
 
@@ -215,11 +218,11 @@
                 </div>
                 <div class="row align-items-center product-slider product-slider-4">
                     {{#each mostViewCourses}}
-                    {{#if this.isBlocked}}
-                            {{else}}
-                        <div class="col-lg-3">
-                            {{>CourseItem}}
-                        </div>
+                        {{#if this.isBlocked}}
+                        {{else}}
+                            <div class="col-lg-3">
+                                {{>CourseItem}}
+                            </div>
                         {{/if}}
                     {{/each}}
                 </div>
@@ -236,11 +239,11 @@
                 </div>
                 <div class="row align-items-center product-slider product-slider-4">
                     {{#each newestCourses}}
-                    {{#if this.isBlocked}}
-                            {{else}}
-                        <div class="col-lg-3">
-                            {{>CourseItem}}
-                        </div>
+                        {{#if this.isBlocked}}
+                        {{else}}
+                            <div class="col-lg-3">
+                                {{>CourseItem}}
+                            </div>
                         {{/if}}
                     {{/each}}
                 </div>
@@ -295,56 +298,58 @@
                 <div class="col-md-9" id="featured-courses">
                     <div class="header-slider normal-slider">
                         {{#each featuredCourses}}
-                        {{#if this.isBlocked}}
+                            {{#if this.isBlocked}}
                             {{else}}
-                            <div class="header-slider-item">
-                                <div class="product-item row">
+                                <div class="header-slider-item">
+                                    <div class="product-item row">
 
-                                    <div class="product-image col-5 pr-0">
-                                        <a href="/product-detail?id={{this._id}}">
-                                        <img src="{{this.avatar}}" alt="Product Image"/>
-                                        </a>
-                                    </div>
-                                    <div class="col-7 pl-0">
-                                        <div class="product-title"
-                                             style="height: 60%; display: flex; flex-direction: column; justify-content: center">
-                                            <a href="/product-detail?id={{this._id}}" style="text-align: left
-                                            !important;">
-                                            <p class="text-white m-0">{{this.name}} {{#if completed}}
-                                                <span
-                                                        style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
-                                                        class="rounded border-success text-success p-1">
+                                        <div class="product-image col-5 pr-0">
+                                            <a href="/product-detail?id={{this._id}}">
+                                            <img src="{{this.avatar}}" alt="Product Image"/>
+                                            </a>
+                                        </div>
+                                        <div class="col-7 pl-0">
+                                            <div class="product-title"
+                                                 style="height: 60%; display: flex; flex-direction: column; justify-content: center">
+                                                <a href="/product-detail?id={{this._id}}" style="text-align: left
+                                                !important;">
+                                                <p class="text-white m-0">{{this.name}} {{#if completed}}
+                                                    <span
+                                                            style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                            class="rounded border-success text-success p-1">
                                                     Completed
                                                 </span>
-                                            {{else}}
-                                                <span
-                                                        style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
-                                                        class="rounded border-warning text-warning p-1">
+                                                {{else}}
+                                                    <span
+                                                            style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                                                            class="rounded border-warning text-warning p-1">
                                                     Updating
                                                 </span>
-                                            {{/if}}
-                                            </p>
-                                            <p class="text-white m-0 mt-1">{{this.category.name}}</p>
-                                            <p class="text-white m-0">{{this.owner.name}}</p>
-                                            </a>
+                                                {{/if}}
+                                                </p>
+                                                <p class="text-white m-0 mt-1">{{this.category.name}}</p>
+                                                <p class="text-white m-0">{{this.owner.name}}</p>
+                                                </a>
 
-                                            <div style="text-align: left">
+                                                <div style="text-align: left">
                                             <span class="font-weight-bold text-white"
                                                   style="color: #FF6F61">{{this.score}}</span>
-                                                <div class="ratting d-inline">
-                                                    {{#each this.starArr}}
-                                                        <i class="fa {{this}}" style="font-family: FontAwesome"></i>
-                                                    {{/each}}
+                                                    <div class="ratting d-inline">
+                                                        {{#each this.starArr}}
+                                                            <i class="fa {{this}}" style="font-family: FontAwesome"></i>
+                                                        {{/each}}
+                                                    </div>
+                                                    <span class="text-white">({{this.number_of_reviewer}}) <span
+                                                            class="font-weight-bold">({{this.number_of_student}}
+                                                        students)</span></span>
                                                 </div>
-                                                <span class="text-white">({{this.number_of_reviewer}})</span>
                                             </div>
-                                        </div>
-                                        <div class="product-price" style="height: 40%">
-                                            <h3><span>$</span>{{this.price}}</h3>
+                                            <div class="product-price" style="height: 40%">
+                                                <h3><span>$</span>{{this.price}}</h3>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             {{/if}}
                         {{/each}}
 
@@ -379,11 +384,11 @@
             </div>
             <div class="row align-items-center product-slider product-slider-4">
                 {{#each mostViewCourses}}
-                {{#if this.isBlocked}}
-                            {{else}}
-                    <div class="col-lg-3">
-                        {{>CourseItem}}
-                    </div>
+                    {{#if this.isBlocked}}
+                    {{else}}
+                        <div class="col-lg-3">
+                            {{>CourseItem}}
+                        </div>
                     {{/if}}
                 {{/each}}
             </div>
@@ -400,11 +405,11 @@
             </div>
             <div class="row align-items-center product-slider product-slider-4">
                 {{#each newestCourses}}
-                {{#if this.isBlocked}}
-                {{else}}
-                    <div class="col-lg-3">
-                        {{>CourseItem}}
-                    </div>
+                    {{#if this.isBlocked}}
+                    {{else}}
+                        <div class="col-lg-3">
+                            {{>CourseItem}}
+                        </div>
                     {{/if}}
                 {{/each}}
             </div>

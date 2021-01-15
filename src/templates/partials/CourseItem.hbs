@@ -37,9 +37,11 @@
                        style="font-family: FontAwesome"></i>
                 {{/each}}
             </div>
-            <span class="text-white">({{this.number_of_reviewer}})</span> {{#if isBestseller}} <span
-                style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
-                class="rounded border-warning text-warning p-1 mx-1">
+            <span class="text-white">({{this.number_of_reviewer}}) <span
+                    class="font-weight-bold">({{this.number_of_student}} students)</span></span> {{#if isBestseller}}
+            <span
+                    style="border: solid 2px !important; font-size: 12px; font-family: 'Open Sans', sans-serif"
+                    class="rounded border-warning text-warning p-1 mx-1">
                                                 Bestseller
                                             </span>{{/if}}
             {{#if isNewest}} <span
