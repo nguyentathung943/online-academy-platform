@@ -135,6 +135,7 @@ router.get("/", async (req, res) => {
     
             if (req.isAuthenticated()) {
                 if (!req.user.confirmed && req.user.role === "Student") {
+                    req.logOut();
                     res.render("error", {
                         title: "EMAIL NOT CONFIRMED!",
                         error: "Please confirm your email before using our services!",
@@ -145,6 +146,8 @@ router.get("/", async (req, res) => {
                         featuredCourses,
                         mostViewCourses,
                         newestCourses,
+                        user: req.user,
+                        role: req.user.role
                     });
                 }
             }
@@ -186,6 +189,7 @@ router.get("/profile", async (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect("/login");
     } else if (req.user.role === "Student" && !req.user.confirmed) {
+        req.logOut();
         res.render("error", {
             title: "EMAIL NOT CONFIRMED!",
             error: "Please confirm your email before using our services!",
@@ -387,6 +391,7 @@ router.get("/product-detail", async (req, res) => {
             course.isNewest = true;
         if (req.isAuthenticated()) {
             if (!req.user.confirmed && req.user.role === "Student") {
+                req.logOut();
                 res.render("error", {
                     title: "EMAIL NOT CONFIRMED!",
                     error: "Please confirm your email before using our services!",
