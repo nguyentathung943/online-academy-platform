@@ -4,7 +4,8 @@
   "description": "Members: <br>\r Name - ID <br>\r Nguyễn Văn Hoàng - 18127102 <br>\r Nguyễn Tất Hưng - 18127104 <br>\r Nguyễn Tấn Lộc - 18127129 <br>",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon -e .handlebars,.hbs,.js src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon -e .handlebars,.hbs,.js src/index.js"
   },
   "repository": {
     "type": "git",
