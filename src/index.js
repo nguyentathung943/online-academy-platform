@@ -14,7 +14,7 @@ hbs.registerHelper('ifEquals', function(arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
 
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser")
 
 const flash = require("express-flash")
@@ -58,5 +58,5 @@ app.use(UserRouter)
 
 
 app.listen(port, () => {
-    console.log("Server is running on port 3000");
+    console.log("Server is running on port "+port);
 })
