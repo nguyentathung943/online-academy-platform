@@ -11,7 +11,7 @@ const Users = new mongoose.Schema({
             type: String,
             strim: true,
             checkIsEmail(value){
-                if(!validator.isEmail(valie)){
+                if(!validator.isEmail(value)){
                     throw new Error("Not an email")
                 }
             }
