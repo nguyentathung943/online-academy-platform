@@ -7,3 +7,7 @@ Name - ID <br>
 Nguyễn Văn Hoàng - 18127102 <br>
 Nguyễn Tất Hưng - 18127104 <br>
 Nguyễn Tấn Lộc - 18127129 <br>
+
+#Account for testing (Student role only)
+username: tathung@github.io
+password: aaaaaa
